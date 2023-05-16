@@ -19,6 +19,8 @@ public class UserEntity extends Base{
 
     private Double budget;
 
+    private Integer years;
+
     @ManyToMany
     private List<RoleEntity> roles;
 
@@ -26,11 +28,12 @@ public class UserEntity extends Base{
     private List<RentalEntity> rentals;
 
     public UserEntity(String username, String email, String password,
-                      Double budget, List<RoleEntity> roles, List<RentalEntity> rentals) {
+                      Double budget, Integer years, List<RoleEntity> roles, List<RentalEntity> rentals) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.budget = budget;
+        this.years = years;
         this.roles = roles;
         this.rentals = rentals;
     }
@@ -81,5 +84,13 @@ public class UserEntity extends Base{
 
     public void setRentals(List<RentalEntity> rentals) {
         this.rentals = rentals;
+    }
+
+    public Integer getYears() {
+        return years;
+    }
+
+    public void setYears(Integer years) {
+        this.years = years;
     }
 }

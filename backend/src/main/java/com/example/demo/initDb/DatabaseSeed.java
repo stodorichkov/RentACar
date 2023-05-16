@@ -1,6 +1,6 @@
 package com.example.demo.initDb;
 
-import com.example.demo.service.RoleService;
+import com.example.demo.service.service.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

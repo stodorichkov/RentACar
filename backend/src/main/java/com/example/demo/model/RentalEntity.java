@@ -18,12 +18,15 @@ public class RentalEntity extends Base{
     @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm:ss")
     private LocalDateTime endTime;
 
+    private Double totalPrice;
+
     @ManyToMany(mappedBy = "carRental")
     List<CarEntity> rentedCars;
 
-    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, List<CarEntity> rentedCars) {
+    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice, List<CarEntity> rentedCars) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.totalPrice = totalPrice;
         this.rentedCars = rentedCars;
     }
 
@@ -49,5 +52,13 @@ public class RentalEntity extends Base{
 
     public void setRentedCars(List<CarEntity> rentedCars) {
         this.rentedCars = rentedCars;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

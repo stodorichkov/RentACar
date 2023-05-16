@@ -4,12 +4,13 @@ package com.example.demo.service;
 import com.example.demo.model.RoleEntity;
 import com.example.demo.model.enums.RoleEnum;
 import com.example.demo.repository.RoleRepository;
+import com.example.demo.service.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RoleServiceImpl implements  RoleService{
+public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
 
