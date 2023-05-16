@@ -16,6 +16,10 @@ public class RoleEntity extends Base{
         this.role = role;
     }
 
+    public RoleEntity() {
+
+    }
+
     public RoleEnum getRole() {
         return role;
     }

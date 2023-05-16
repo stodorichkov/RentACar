@@ -30,6 +30,10 @@ public class RentalEntity extends Base{
         this.rentedCars = rentedCars;
     }
 
+    public RentalEntity() {
+
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
     }

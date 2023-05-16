@@ -54,6 +54,10 @@ public class CarEntity extends Base{
         this.carRental = carRental;
     }
 
+    public CarEntity() {
+
+    }
+
     public String getMake() {
         return make;
     }

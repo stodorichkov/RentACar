@@ -38,6 +38,10 @@ public class UserEntity extends Base{
         this.rentals = rentals;
     }
 
+    public UserEntity() {
+
+    }
+
     public String getUsername() {
         return username;
     }
