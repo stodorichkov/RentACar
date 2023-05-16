@@ -39,13 +39,64 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileDto getUserProfileInfo(Long id) {
+    public UserProfileDto getUserProfileInfo(String username) {
 
-        UserEntity currentUser = this.userRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("User with requested id:" + id + " not found.")
-        );
+        UserEntity currentUser = this.findUserByName(username);
 
         return this.modelMapper.map(currentUser,UserProfileDto.class);
 
     }
+
+    @Override
+    public void deleteUser(Long id) {
+        this.userRepository.deleteById(id);
+    }
+
+
+    @Override
+    public String editUserProfile(String username,UserProfileDto userProfileDto) {
+
+        UserEntity editUser = this.findUserByName(username);
+
+        if(editUser.getUsername().equals(userProfileDto.getUsername())){
+            return "Username already exists.";
+        }else{
+            editUser.setUsername(userProfileDto.getUsername());
+        }
+
+        if(editUser.getEmail().equals(userProfileDto.getEmail())){
+            return "Email already exists!";
+        }else {
+            editUser.setEmail(userProfileDto.getEmail());
+        }
+
+        if(editUser.getBudget().equals(userProfileDto.getBudget())){
+            return "Budget already exists!";
+        }else {
+            editUser.setBudget(userProfileDto.getBudget());
+        }
+
+        if(editUser.getYears().equals(userProfileDto.getYears())){
+            return "Budget already exists!";
+        }else {
+            editUser.setYears(userProfileDto.getYears());
+        }
+
+        this.userRepository.save(editUser);
+
+        return "Edit is successful";
+
+    }
+
+    @Override
+    public UserEntity findUserByName(String username) {
+
+        return this.userRepository.findByUsername(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException("User with requested name:" + username + " not found.")
+                );
+    }
+
+
+
 }

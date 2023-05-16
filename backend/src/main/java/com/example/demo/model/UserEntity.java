@@ -29,6 +29,7 @@ public class UserEntity extends Base{
 
     public UserEntity(String username, String email, String password,
                       Double budget, Integer years, List<RoleEntity> roles, List<RentalEntity> rentals) {
+
         this.username = username;
         this.email = email;
         this.password = password;

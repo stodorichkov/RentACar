@@ -3,6 +3,7 @@ package com.example.demo.model;
 import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.TransmissionEnum;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 
 import java.util.List;
@@ -16,9 +17,8 @@ public class CarEntity extends Base{
 
     private String registrationPlate;
 
+    @Lob
     private String imageUrl;
-
-    private Double pricePerHour;
 
     private Double pricePerDay;
 
@@ -40,11 +40,11 @@ public class CarEntity extends Base{
     public CarEntity(String make, String model, String registrationPlate, String imageUrl, Double pricePerHour,
                      Double pricePerDay, Integer capacity, TransmissionEnum transmission, EngineEnum engine,
                      String fuelConsumption, Boolean isRented, List<RentalEntity> carRental) {
+
         this.make = make;
         this.model = model;
         this.registrationPlate = registrationPlate;
         this.imageUrl = imageUrl;
-        this.pricePerHour = pricePerHour;
         this.pricePerDay = pricePerDay;
         this.capacity = capacity;
         this.transmission = transmission;
@@ -55,7 +55,6 @@ public class CarEntity extends Base{
     }
 
     public CarEntity() {
-
     }
 
     public String getMake() {
@@ -88,14 +87,6 @@ public class CarEntity extends Base{
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Double getPricePerHour() {
-        return pricePerHour;
-    }
-
-    public void setPricePerHour(Double pricePerHour) {
-        this.pricePerHour = pricePerHour;
     }
 
     public Double getPricePerDay() {

@@ -5,11 +5,14 @@ import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.service.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -21,8 +24,25 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/user/{id}/profile")
-    public ResponseEntity<UserProfileDto> userProfile(@PathVariable Long id){
-        return ResponseEntity.ok(this.userService.getUserProfileInfo(id));
+    @GetMapping("/{username}/profile")
+    public ResponseEntity<UserProfileDto> userProfile(String username){
+        return ResponseEntity.ok(this.userService.getUserProfileInfo(username));
+
     }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+        this.userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/{username}/edit")
+    public ResponseEntity<String> editProfile(
+            @PathVariable String username,
+            @RequestBody UserProfileDto userProfileDto
+    ){
+        return ResponseEntity.ok(this.userService.editUserProfile(username,userProfileDto));
+    }
+
 }

@@ -24,15 +24,15 @@ public class RentalEntity extends Base{
     List<CarEntity> rentedCars;
 
     public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice, List<CarEntity> rentedCars) {
+
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalPrice = totalPrice;
         this.rentedCars = rentedCars;
     }
 
-    public RentalEntity() {
+    public RentalEntity() {}
 
-    }
 
     public LocalDateTime getStartTime() {
         return startTime;
