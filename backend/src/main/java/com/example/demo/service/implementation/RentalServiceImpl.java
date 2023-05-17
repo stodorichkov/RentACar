@@ -45,10 +45,10 @@ public class RentalServiceImpl implements RentalService {
         rental.setTotalPrice(rentalDto.getTotalPrice());
 
         CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
-                .orElseThrow(() -> new RuntimeException("Car not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
 
         UserEntity user = userRepository.findById(rentalDto.getRenterId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         rental.setRentedCar(car);
         rental.setRenter(user);
@@ -59,17 +59,17 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public RentalEntity updateRental(Long id, RentalDto rentalDto) {
         RentalEntity rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rental not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
 
         rental.setStartTime(rentalDto.getStartTime());
         rental.setEndTime(rentalDto.getEndTime());
         rental.setTotalPrice(rentalDto.getTotalPrice());
 
         CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
-                .orElseThrow(() -> new RuntimeException("Car not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
 
         UserEntity user = userRepository.findById(rentalDto.getRenterId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         rental.setRentedCar(car);
         rental.setRenter(user);
