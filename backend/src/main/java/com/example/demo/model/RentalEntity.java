@@ -72,7 +72,11 @@ public class RentalEntity extends Base{
         return renter;
     }
 
-    public void setRenter(RentalEntity renter) {
+    public CarEntity getRentedCar() {
+        return rentedCar;
+    }
+
+    public void setRenter(UserEntity renter) {
         this.renter = renter;
     }
 

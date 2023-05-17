@@ -2,15 +2,16 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.CarEntity;
+import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.RentalService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -18,9 +19,12 @@ public class RentalServiceImpl implements RentalService {
     private final RentalRepository rentalRepository;
     private final CarRepository carRepository;
 
-    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository) {
+    private final UserRepository userRepository;
+
+    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserRepository userRepository) {
         this.rentalRepository = rentalRepository;
         this.carRepository = carRepository;
+        this.userRepository = userRepository;
     }
     @Override
     public List<RentalEntity> getAllRentals() {
@@ -40,29 +44,38 @@ public class RentalServiceImpl implements RentalService {
         rental.setEndTime(rentalDto.getEndTime());
         rental.setTotalPrice(rentalDto.getTotalPrice());
 
-        List<CarEntity> cars = rentalDto.getRentedCars().stream()
-                .map(carDto -> carRepository.findById(carDto.getId()).orElseThrow(() -> new RuntimeException("Car not found")))
-                .collect(Collectors.toList());
+        CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
+                .orElseThrow(() -> new RuntimeException("Car not found"));
 
-        rental.setRentedCars(cars);
+        UserEntity user = userRepository.findById(rentalDto.getRenterId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        rental.setRentedCar(car);
+        rental.setRenter(user);
+
         return rentalRepository.save(rental);
     }
 
     @Override
     public RentalEntity updateRental(Long id, RentalDto rentalDto) {
-        RentalEntity rental = rentalRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
+        RentalEntity rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rental not found"));
+
         rental.setStartTime(rentalDto.getStartTime());
         rental.setEndTime(rentalDto.getEndTime());
         rental.setTotalPrice(rentalDto.getTotalPrice());
 
-        List<CarEntity> cars = rentalDto.getRentedCars().stream()
-                .map(carDto -> carRepository.findById(carDto.getId()).orElseThrow(() -> new ObjectNotFoundException("Car not found")))
-                .collect(Collectors.toList());
+        CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
+                .orElseThrow(() -> new RuntimeException("Car not found"));
 
-        rental.setRentedCars(cars);
+        UserEntity user = userRepository.findById(rentalDto.getRenterId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        rental.setRentedCar(car);
+        rental.setRenter(user);
+
         return rentalRepository.save(rental);
     }
-
 
     @Override
     public void deleteRental(Long id) {

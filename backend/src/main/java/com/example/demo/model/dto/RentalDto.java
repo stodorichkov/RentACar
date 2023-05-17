@@ -7,7 +7,8 @@ public class RentalDto {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Double totalPrice;
-    private List<CarDto> rentedCars;
+    private Long rentedCarId;
+    private Long renterId;
 
     public LocalDateTime getStartTime() {
         return startTime;
@@ -33,11 +34,20 @@ public class RentalDto {
         this.totalPrice = totalPrice;
     }
 
-    public List<CarDto> getRentedCars() {
-        return rentedCars;
+
+    public Long getRentedCarId() {
+        return rentedCarId;
     }
 
-    public void setRentedCars(List<CarDto> rentedCars) {
-        this.rentedCars = rentedCars;
+    public void setRentedCarId(Long rentedCarId) {
+        this.rentedCarId = rentedCarId;
+    }
+
+    public Long getRenterId() {
+        return renterId;
+    }
+
+    public void setRenterId(Long renterId) {
+        this.renterId = renterId;
     }
 }
