@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Button, Stack, Typography, Grid, Avatar}  from '@mui/m
 const Bar = () => {
 	return (
 		<>
-			<AppBar position="relative" color="background" sx={{padding: '1rem'}}>
+			<AppBar position="fixed" color="background" sx={{padding: '1rem'}}>
 				<Toolbar>
 					<Grid container direction="row" justifyContent="space-between">
 						<Button sx={{textTransform: "none"}} href="/">

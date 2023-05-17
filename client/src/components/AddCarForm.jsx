@@ -5,8 +5,8 @@ const AddCarForm = () => {
 
     return (
         <>
-            <Grid container sx={{backgroundSize: 'cover', background: 'linear-gradient(rgba(48,94,171, 0.7), rgba(115, 35, 101, 0.7))', height: "200%"}} justifyContent={"center"}>
-                <Container maxWidth="sm" sx={{marginTop: "1rem", marginBottom: '1rem'}}>
+            <Grid container sx={{backgroundSize: 'cover', background: 'linear-gradient(rgba(48,94,171, 0.7), rgba(115, 35, 101, 0.7))'}}>
+                <Container maxWidth="sm" sx={{marginTop: "7.5rem", marginBottom: '1rem'}}>
                     <Paper elevation={12} sx={{padding: '3rem'}}>
                         <Grid container direction="column"  spacing={3}>
                             <Grid item xs={12} sm={6} md={6}>
@@ -34,7 +34,7 @@ const AddCarForm = () => {
                                 />
                             </Grid>
                             <Grid item >
-                                <Button variant="contained" size="large" fullWidth>
+                                <Button variant="contained" size="large" color="button_secondary" fullWidth>
                                     Upload Image
                                 </Button>
                             </Grid>
@@ -87,7 +87,7 @@ const AddCarForm = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6} md={10} alignSelf={'center'}>
-                                <Button variant="contained" size="large">
+                                <Button variant="contained" size="large" color="button_primary">
                                     Add car
                                 </Button>
                             </Grid>
