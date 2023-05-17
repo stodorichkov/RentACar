@@ -28,7 +28,7 @@ public class RentalEntity extends Base{
     private UserEntity renter;
 
 
-    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice, List<CarEntity> rentedCars) {
+    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice,List<CarEntity> rentedCars) {
 
         this.startTime = startTime;
         this.endTime = endTime;

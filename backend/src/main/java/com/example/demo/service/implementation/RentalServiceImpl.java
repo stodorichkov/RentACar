@@ -11,7 +11,10 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.RentalService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -80,6 +83,22 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public void deleteRental(Long id) {
         rentalRepository.deleteById(id);
+    }
+
+    @Override
+    public Double calculateRentalPrice(double pricePerDay, LocalDateTime startDate, LocalDateTime endDate) {
+
+        double rentalDays = getRentalDays(startDate,endDate);
+        LocalDateTime currentDate = LocalDateTime.now();
+        double totalPrice = pricePerDay * rentalDays;
+        if(currentDate.isAfter(endDate)){
+            totalPrice += pricePerDay;
+        }
+        return totalPrice;
+    }
+    private long getRentalDays(LocalDateTime startDate, LocalDateTime endDate) {
+        long diff = endDate.getDayOfYear() - startDate.getDayOfYear();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 }
 
