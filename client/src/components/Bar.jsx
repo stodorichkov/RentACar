@@ -3,11 +3,11 @@ import { AppBar, Toolbar, Button, Stack, Typography, Grid, Avatar}  from '@mui/m
 const Bar = () => {
 	return (
 		<>
-			<AppBar position="absolute" color="background" sx={{padding: '1rem'}}>
+			<AppBar position="relative" color="background" sx={{padding: '1rem'}}>
 				<Toolbar>
 					<Grid container direction="row" justifyContent="space-between">
 						<Button sx={{textTransform: "none"}} href="/">
-							<Avatar alt="Remy Sharp" src="logo.png" sx={{ width: 45, height: 45 }}/>
+							<Avatar alt="Remy Sharp" src="/logo.png" sx={{ width: 45, height: 45 }}/>
 							<Typography variant="h4" color="white">
 								odexio Cruisers
 							</Typography>

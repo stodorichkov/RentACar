@@ -8,6 +8,7 @@ import { BrowserRouter as Router ,Routes, Route, Navigate } from 'react-router-d
 import Bar from './components/Bar';
 import SignInForm from './components/SignInForm';
 import SignUpForm from './components/SIgnUpForm';
+import AddCarForm from './components/AddCarForm';
 
 const App = () => {
 	return (
@@ -20,6 +21,7 @@ const App = () => {
 						<Route path='/'/>
 						<Route path='/signin' element={<SignInForm />}/>
 						<Route path='/signup' element={<SignUpForm />}/>
+						<Route path='/car/add' element={<AddCarForm />}/>
 						<Route path="*" element={<Navigate to="/" />} />
 					</Routes>
 				</ThemeProvider>  
