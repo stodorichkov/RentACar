@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/{username}/profile")
-    public ResponseEntity<UserProfileDto> userProfile(String username){
+    public ResponseEntity<UserProfileDto> userProfile(@PathVariable String username){
         return ResponseEntity.ok(this.userService.getUserProfileInfo(username));
 
     }
@@ -42,7 +42,8 @@ public class UserController {
             @PathVariable String username,
             @RequestBody UserProfileDto userProfileDto
     ){
-        return ResponseEntity.ok(this.userService.editUserProfile(username,userProfileDto));
+        String returnStatement = this.userService.editUserProfile(username,userProfileDto);
+        return ResponseEntity.ok(returnStatement);
     }
 
 }
