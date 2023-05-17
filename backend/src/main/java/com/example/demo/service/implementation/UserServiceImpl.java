@@ -58,25 +58,25 @@ public class UserServiceImpl implements UserService {
 
         UserEntity editUser = this.findUserByName(username);
 
-        if(editUser.getUsername().equals(userProfileDto.getUsername())){
+        if(editUser.getUsername()!=null && editUser.getUsername().equals(userProfileDto.getUsername())){
             return "Username already exists.";
         }else{
             editUser.setUsername(userProfileDto.getUsername());
         }
 
-        if(editUser.getEmail().equals(userProfileDto.getEmail())){
+        if(editUser.getEmail()!=null && editUser.getEmail().equals(userProfileDto.getEmail())){
             return "Email already exists!";
         }else {
             editUser.setEmail(userProfileDto.getEmail());
         }
 
-        if(editUser.getBudget().equals(userProfileDto.getBudget())){
+        if(editUser.getBudget()!=null && editUser.getBudget().equals(userProfileDto.getBudget())){
             return "Budget already exists!";
         }else {
             editUser.setBudget(userProfileDto.getBudget());
         }
 
-        if(editUser.getYears().equals(userProfileDto.getYears())){
+        if(editUser.getYears()!=null &&  editUser.getYears().equals(userProfileDto.getYears())){
             return "Budget already exists!";
         }else {
             editUser.setYears(userProfileDto.getYears());
