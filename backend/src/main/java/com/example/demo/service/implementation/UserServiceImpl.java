@@ -1,14 +1,19 @@
 package com.example.demo.service.implementation;
 
 import com.example.demo.exception.ObjectNotFoundException;
+import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.UserProfileDto;
+import com.example.demo.model.enums.RoleEnum;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -85,7 +90,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(editUser);
 
         return "Edit is successful";
-
     }
 
     @Override
@@ -99,7 +103,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String addUser(UserProfileDto userProfileDto) {
-        return null;
+
+        UserEntity user = new UserEntity();
+        user.setBudget(0.00);
+
+        if(this.userRepository.findByUsername(userProfileDto.getUsername()).isEmpty()){
+            user.setUsername(userProfileDto.getUsername());
+        }else{
+            return "Username already existed.";
+        }
+
+        if(this.userRepository.findByEmail(userProfileDto.getEmail()).isEmpty()){
+            user.setUsername(userProfileDto.getEmail());
+        }else{
+            return "Email already exists.";
+        }
+
+        if(this.userRepository.findByMobilePhone(userProfileDto.getMobilePhone()).isEmpty()){
+            user.setMobilePhone(userProfileDto.getMobilePhone());
+        }else{
+            return "Mobile phone already exists.";
+        }
+        RoleEntity userRole = new RoleEntity(RoleEnum.USER);
+        user.setRoles(List.of(userRole));
+
+        this.userRepository.save(user);
+
+        return "Registration was successful";
+
     }
 
 

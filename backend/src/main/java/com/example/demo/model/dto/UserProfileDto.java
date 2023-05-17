@@ -12,13 +12,16 @@ public class UserProfileDto {
 
     private Integer years;
 
+    private String mobilePhone;
 
-    public UserProfileDto(Long id, String username, String email, Double budget, Integer years) {
+
+    public UserProfileDto(Long id, String username, String email, Double budget, Integer years, String mobilePhone) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.budget = budget;
         this.years = years;
+        this.mobilePhone = mobilePhone;
     }
 
     public UserProfileDto(){}
@@ -61,5 +64,13 @@ public class UserProfileDto {
 
     public void setYears(Integer years) {
         this.years = years;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 }

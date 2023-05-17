@@ -4,6 +4,7 @@ package com.example.demo.web;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.service.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,23 @@ public class UserController {
             @PathVariable String username,
             @RequestBody UserProfileDto userProfileDto
     ){
+
         String returnStatement = this.userService.editUserProfile(username,userProfileDto);
+        if(!returnStatement.equals("Edit is successful")){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
+        }
+        return ResponseEntity.ok(returnStatement);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(
+            @RequestBody UserProfileDto userProfileDto
+    ){
+
+        String returnStatement = this.userService.addUser(userProfileDto);
+        if(!returnStatement.equals("Registration was successful")){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
+        }
         return ResponseEntity.ok(returnStatement);
     }
 
