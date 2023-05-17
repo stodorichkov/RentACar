@@ -25,7 +25,7 @@ public class RoleServiceImpl implements RoleService {
         long count = this.roleRepository.count();
 
         if(count != 0){
-           return;
+            return;
         }
 
         RoleEntity adminRole = new RoleEntity(RoleEnum.ADMIN);

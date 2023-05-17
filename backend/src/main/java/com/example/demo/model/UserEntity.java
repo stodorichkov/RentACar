@@ -27,8 +27,11 @@ public class UserEntity extends Base{
     @OneToMany
     private List<RentalEntity> rentals;
 
+    @OneToMany
+    private List<CarEntity> addedByAdmin;
+
     public UserEntity(String username, String email, String password,
-                      Double budget, Integer years, List<RoleEntity> roles, List<RentalEntity> rentals) {
+                      Double budget, Integer years, List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
 
         this.username = username;
         this.email = email;
@@ -37,6 +40,7 @@ public class UserEntity extends Base{
         this.years = years;
         this.roles = roles;
         this.rentals = rentals;
+        this.addedByAdmin = addedByAdmin;
     }
 
     public UserEntity() {
@@ -97,5 +101,13 @@ public class UserEntity extends Base{
 
     public void setYears(Integer years) {
         this.years = years;
+    }
+
+    public List<CarEntity> getAddedByAdmin() {
+        return addedByAdmin;
+    }
+
+    public void setAddedByAdmin(List<CarEntity> addedByAdmin) {
+        this.addedByAdmin = addedByAdmin;
     }
 }
