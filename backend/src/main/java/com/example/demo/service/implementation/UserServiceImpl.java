@@ -97,6 +97,10 @@ public class UserServiceImpl implements UserService {
                 );
     }
 
+    @Override
+    public String addUser(UserProfileDto userProfileDto) {
+        return null;
+    }
 
 
 }

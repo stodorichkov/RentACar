@@ -15,5 +15,7 @@ public interface UserService {
 
     UserEntity findUserByName(String username);
 
+    String addUser(UserProfileDto userProfileDto);
+
 
 }
