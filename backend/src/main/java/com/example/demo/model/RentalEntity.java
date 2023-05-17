@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +21,7 @@ public class RentalEntity extends Base{
 
     private Double totalPrice;
 
-    @ManyToMany(mappedBy = "carRental")
+    @ManyToMany(mappedBy = "carRental",cascade = CascadeType.ALL)
     List<CarEntity> rentedCars;
 
     public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice, List<CarEntity> rentedCars) {

@@ -11,4 +11,6 @@ public interface CarRepository extends JpaRepository<CarEntity, Long> {
    List<CarEntity> findCarByIsRented(Boolean isRented);
 
    Optional<CarEntity> findByMakeAndModel(String brand, String model);
+
+   Optional<CarEntity> findByRegistrationPlate(String registrationPlate);
 }

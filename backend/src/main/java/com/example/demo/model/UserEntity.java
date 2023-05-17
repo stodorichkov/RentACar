@@ -21,6 +21,8 @@ public class UserEntity extends Base{
 
     private Integer years;
 
+    private String mobilePhone;
+
     @ManyToMany
     private List<RoleEntity> roles;
 
@@ -31,13 +33,14 @@ public class UserEntity extends Base{
     private List<CarEntity> addedByAdmin;
 
     public UserEntity(String username, String email, String password,
-                      Double budget, Integer years, List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
+                      Double budget, Integer years, String mobilePhone, List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
 
         this.username = username;
         this.email = email;
         this.password = password;
         this.budget = budget;
         this.years = years;
+        this.mobilePhone = mobilePhone;
         this.roles = roles;
         this.rentals = rentals;
         this.addedByAdmin = addedByAdmin;
@@ -109,5 +112,13 @@ public class UserEntity extends Base{
 
     public void setAddedByAdmin(List<CarEntity> addedByAdmin) {
         this.addedByAdmin = addedByAdmin;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 }

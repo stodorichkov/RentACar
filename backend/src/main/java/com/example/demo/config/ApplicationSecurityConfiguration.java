@@ -18,24 +18,23 @@ public class ApplicationSecurityConfiguration{
         http
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-             //   .requestMatchers("/","/users/register","/users/login").permitAll()
-             //   .requestMatchers("/about","/services").permitAll()
+                .requestMatchers("/","/user/register","/user/login").permitAll()
                 .requestMatchers("/**").permitAll()
-                .requestMatchers("/**").permitAll()
-                .and().csrf().disable();
-//                and()
-//                .formLogin()
-//                .loginPage("/users/login")
-//                .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
-//                .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
-//                .defaultSuccessUrl("/")
-//                .failureForwardUrl("/users/login-error").
-//                and()
-//                .logout()
-//                .logoutUrl("/users/logout")
-//                .logoutSuccessUrl("/")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID");
+                //add this when connection with front end is ready
+                //.antMatchers("/**").authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/user/login")
+                .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+                .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
+                .defaultSuccessUrl("/")
+                .failureForwardUrl("/user/login-error").
+                and()
+                .logout()
+                .logoutUrl("/user/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
         return http.build();
     }
 

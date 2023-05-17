@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.TransmissionEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
@@ -32,7 +33,7 @@ public class CarEntity extends Base{
 
     private Boolean isRented;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<RentalEntity> carRental;
 
 
