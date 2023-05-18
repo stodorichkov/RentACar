@@ -123,24 +123,21 @@ public class UserServiceImpl implements UserService {
             return "Username already existed.";
         }
 
-        if(this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty()){
-            user.setUsername(userRegisterDto.getEmail());
-        }else{
+        if(this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty() &&
+                (userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
+            user.setEmail(userRegisterDto.getEmail());
+        }else if(!(userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
+            return "Wrong email format.";
+        } else if(!this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty()){
             return "Email already exists.";
         }
-        if (!(userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
-            return "Wrong email format";
-        }
-        else {
-            user.setEmail(userRegisterDto.getEmail());
-        }
 
-        if(this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
+        if(this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty() &&
+                (userRegisterDto.getMobilePhone()).matches("^\\d{10}$")){
             user.setMobilePhone(userRegisterDto.getMobilePhone());
-        }else if (!(userRegisterDto.getMobilePhone()).matches("(^$|[0-9]{10})")){
+        }else if (!(userRegisterDto.getMobilePhone()).matches("^\\d{10}$")){
             return "Wrong phone number";
-        }
-        else{
+        } else if(!this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
             return "Mobile phone already exists.";
         }
 
