@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
         if(this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
             user.setMobilePhone(userRegisterDto.getMobilePhone());
-        }else if (!(userRegisterDto.getMobilePhone()).matches("(^$|[0-9]{10})")){
+        }else if (!(userRegisterDto.getMobilePhone()).matches("^$|[0-9]{10}")){
             return "Wrong phone number";
         }
         else{
