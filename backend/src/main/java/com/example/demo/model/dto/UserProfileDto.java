@@ -1,9 +1,12 @@
 package com.example.demo.model.dto;
 
+import jakarta.validation.constraints.*;
+
 public class UserProfileDto {
 
     private Long id;
 
+    @NotEmpty(message="Username field empty");
     private String username;
 
     private String email;
