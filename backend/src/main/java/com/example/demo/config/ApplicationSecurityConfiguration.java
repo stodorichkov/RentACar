@@ -23,6 +23,7 @@ public class ApplicationSecurityConfiguration{
                 //add this when connection with front end is ready
                 //.antMatchers("/**").authenticated()
                 .and()
+                .csrf().disable()
                 .cors()
                 .and()
                 .formLogin()

@@ -53,15 +53,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:8086")
     public ResponseEntity<String> registerUser(
             @RequestBody UserRegisterDto userRegisterDto
     ){
 
         String returnStatement = this.userService.addUser(userRegisterDto);
-        if(!returnStatement.equals("Registration was successful")){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
-        }
+//        if(!returnStatement.equals("Registration was successful")){
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
+//        }
         return ResponseEntity.ok(returnStatement);
     }
 
