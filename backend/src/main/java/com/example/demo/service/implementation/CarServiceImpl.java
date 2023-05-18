@@ -66,11 +66,6 @@ public class CarServiceImpl implements CarService {
     @Transactional
     public void deleteCar(Long id) {
         CarEntity carToDelete = this.getCarById(id);
-//        List<RentalEntity> carRentals = carToDelete.getCarRental();
-//        for(RentalEntity r : carRentals){
-//            r.getRentedCars().remove(carToDelete);
-//            this.rentalRepository.save(r);
-//        }
         this.carRepository.deleteById(id);
     }
 

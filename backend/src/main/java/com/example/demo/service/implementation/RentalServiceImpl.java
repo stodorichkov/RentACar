@@ -52,7 +52,8 @@ public class RentalServiceImpl implements RentalService {
         rental.setStartTime(addRentalDto.getStartTime());
         rental.setEndTime(addRentalDto.getEndTime());
         UserEntity renter = this.userService.findUserByName(principal.getName());
-        //rental.set
+        rental.setRenter(renter);
+
 
         return "";
     }
