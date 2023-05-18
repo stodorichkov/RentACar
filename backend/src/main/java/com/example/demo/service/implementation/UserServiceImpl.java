@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
             return "Email already exists.";
         }
         if (!(userRegisterDto.getEmail()).matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")){
-            return "Wrong format";
+            return "Wrong email format";
         }
         else {
             user.setEmail(userRegisterDto.getEmail());
@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         if(this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
             user.setMobilePhone(userRegisterDto.getMobilePhone());
         }else if (!(userRegisterDto.getMobilePhone()).matches("(^$|[0-9]{10})")){
-            return "Wrong format";
+            return "Wrong phone number";
         }
         else{
             return "Mobile phone already exists.";
