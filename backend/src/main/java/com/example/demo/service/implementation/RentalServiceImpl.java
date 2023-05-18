@@ -7,10 +7,8 @@ import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.UserService;
 import org.springframework.stereotype.Service;
@@ -120,6 +118,31 @@ public class RentalServiceImpl implements RentalService {
             );
         }
         return userRentalHistory;
+
+    }
+
+    @Override
+    public Double calculateMonthlyRevenue(int month, int year) {
+        List<RentalEntity> rentals = rentalRepository.findAll();
+
+        double total = rentals.stream()
+                .filter(rental -> rental.getStartTime().getMonthValue() == month && rental.getStartTime().getYear() == year)
+                .mapToDouble(RentalEntity::getTotalPrice)
+                .sum();
+
+        return total;
+    }
+
+
+
+    @Override
+    public void addTestRental() {
+
+            RentalEntity rental = new RentalEntity();
+            rental.setStartTime(LocalDateTime.parse("2023-05-18T12:00:00"));
+            rental.setEndTime(LocalDateTime.parse("2023-05-20T15:00:00"));
+            rental.setTotalPrice(200.00);
+            this.rentalRepository.save(rental);
 
     }
 

@@ -5,6 +5,7 @@ import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.dto.UserProfileDto;
+import org.springframework.cglib.core.Local;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -20,4 +21,9 @@ public interface RentalService {
 
     List<RentalCarDto> getUserRentalHistory(String username);
 
+    void addTestRental();
+
+    Double calculateMonthlyRevenue(int month, int year);
+
 }
+

@@ -34,6 +34,12 @@ public class RentalController {
         return ResponseEntity.ok(rental);
     }
 
+    @GetMapping("/monthly-revenue/{year}/{month}")
+    public ResponseEntity<Double> getMonthlyRevenue(@PathVariable int year, @PathVariable int month) {
+        double monthlyRevenue = rentalService.calculateMonthlyRevenue(month, year);
+        return new ResponseEntity<>(monthlyRevenue, HttpStatus.OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<RentalEntity> addRental(@RequestBody RentalDto rentalDto) {
         //return new ResponseEntity<>(rentalService.addRental(rentalDto), HttpStatus.CREATED);
