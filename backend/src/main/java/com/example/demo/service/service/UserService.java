@@ -2,6 +2,7 @@ package com.example.demo.service.service;
 
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.UserProfileDto;
+import com.example.demo.model.dto.UserRegisterDto;
 
 public interface UserService {
 
@@ -15,7 +16,8 @@ public interface UserService {
 
     UserEntity findUserByName(String username);
 
-    String addUser(UserProfileDto userProfileDto);
+    String addUser(UserRegisterDto userRegisterDto);
+
 
 
 }

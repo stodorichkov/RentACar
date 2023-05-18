@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 
 import com.example.demo.model.dto.UserProfileDto;
+import com.example.demo.model.dto.UserRegisterDto;
 import com.example.demo.service.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -52,11 +53,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
+    @CrossOrigin(origins = "http://localhost:8086")
     public ResponseEntity<String> registerUser(
-            @RequestBody UserProfileDto userProfileDto
+            @RequestBody UserRegisterDto userRegisterDto
     ){
 
-        String returnStatement = this.userService.addUser(userProfileDto);
+        String returnStatement = this.userService.addUser(userRegisterDto);
         if(!returnStatement.equals("Registration was successful")){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
         }

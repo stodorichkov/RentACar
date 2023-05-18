@@ -23,6 +23,8 @@ public class ApplicationSecurityConfiguration{
                 //add this when connection with front end is ready
                 //.antMatchers("/**").authenticated()
                 .and()
+                .cors()
+                .and()
                 .formLogin()
                 .loginPage("/user/login")
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
