@@ -6,7 +6,7 @@ public class UserProfileDto {
 
     private Long id;
 
-    @NotEmpty(message="Username field empty");
+
     private String username;
 
     private String email;
