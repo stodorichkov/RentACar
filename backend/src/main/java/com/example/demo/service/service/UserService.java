@@ -28,6 +28,6 @@ public interface UserService {
 
     AuthenticatedUserDto authUser(String username);
 
-    boolean validateUser(LoginUserDto loginUserDto);
+    String validateUser(LoginUserDto loginUserDto);
 
 }

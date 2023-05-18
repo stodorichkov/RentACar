@@ -76,15 +76,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticatedUserDto> authInfo(@RequestBody LoginUserDto loginUserDto){
-        AuthenticatedUserDto auth = new AuthenticatedUserDto();
-        if(this.userService.validateUser(loginUserDto)){
-            auth = this.userService.authUser(loginUserDto.getUsername());
-        }
-        if(auth == null){
-            return ResponseEntity.internalServerError().build();
-        }
-        return  ResponseEntity.ok(auth);
+    public ResponseEntity<String> authInfo(@RequestBody LoginUserDto loginUserDto){
+//        AuthenticatedUserDto auth = new AuthenticatedUserDto();
+//        if(this.userService.validateUser(loginUserDto)){
+//            auth = this.userService.authUser(loginUserDto.getUsername());
+//        }
+//        if(auth == null){
+//            return ResponseEntity.internalServerError().build();
+//        }
+        String response = this.userService.validateUser(loginUserDto);
+        return  ResponseEntity.ok(response);
     }
 
 

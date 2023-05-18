@@ -184,12 +184,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean validateUser(LoginUserDto loginUserDto) {
-        if(this.userRepository.findByUsername(loginUserDto.getUsername()).isEmpty() &&
-        this.userRepository.findByPassword(loginUserDto.getPassword()).isEmpty()){
-            return false;
+    public String validateUser(LoginUserDto loginUserDto) {
+        if(!this.userRepository.findByUsername(loginUserDto.getUsername()).isEmpty()){
+            return "This username seems not to be correct.";
+        }else if(!this.userRepository.findByPassword(loginUserDto.getPassword()).isEmpty()){
+            return "This password seems not to be correct";
         }
-        return true;
+        return "Everything is ok, you can go!";
     }
 
 
