@@ -5,6 +5,7 @@ import com.example.demo.model.CarEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.UserRepository;
@@ -44,11 +45,10 @@ public class RentalServiceImpl implements RentalService {
         rental.setStartTime(rentalDto.getStartTime());
         rental.setEndTime(rentalDto.getEndTime());
 
-
         CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
                 .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
         rental.setTotalPrice(calculateRentalPrice(rental,car.getPricePerDay()));
-        UserEntity user = userRepository.findById(rentalDto.getRenterId())
+        UserEntity user = userRepository.findByUsername(rentalDto.getRenterUsername())
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         rental.setRentedCar(car);
@@ -57,7 +57,6 @@ public class RentalServiceImpl implements RentalService {
         return rentalRepository.save(rental);
 
     }
-
     @Override
     public RentalEntity updateRental(Long id, RentalDto rentalDto) {
         RentalEntity rental = rentalRepository.findById(id)

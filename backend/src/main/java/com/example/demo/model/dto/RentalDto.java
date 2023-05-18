@@ -1,14 +1,23 @@
 package com.example.demo.model.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class RentalDto {
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Double totalPrice;
     private Long rentedCarId;
     private Long renterId;
+    private String renterUsername;
+
+    public String getRenterUsername() {
+        return renterUsername;
+    }
+
+    public void setRenterUsername(String renterUsername) {
+        this.renterUsername = renterUsername;
+    }
 
     public LocalDateTime getStartTime() {
         return startTime;

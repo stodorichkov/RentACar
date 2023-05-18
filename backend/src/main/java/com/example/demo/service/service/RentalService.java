@@ -2,6 +2,7 @@ package com.example.demo.service.service;
 
 import com.example.demo.model.RentalEntity;
 import com.example.demo.model.dto.RentalDto;
+import com.example.demo.model.dto.UserProfileDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
