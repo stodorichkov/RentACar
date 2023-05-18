@@ -53,6 +53,10 @@ public class RentalServiceImpl implements RentalService {
         CarEntity currentCar = this.carService.findCarById(carId);
         rental.setStartTime(addRentalDto.getStartTime());
         rental.setEndTime(addRentalDto.getEndTime());
+        LocalDateTime currentTime = LocalDateTime.now();
+        if(rental.getStartTime().plusHours(1).isAfter(currentTime)){
+            return "Cannot make reservation 1 hour prior your current time!";
+        }
         UserEntity renter = this.userService.findUserByName(principal.getName());
         rental.setRenter(renter);
         rental.setTotalPrice(calculateRentalPrice(
