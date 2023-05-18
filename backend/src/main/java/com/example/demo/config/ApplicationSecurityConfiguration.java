@@ -27,7 +27,7 @@ public class ApplicationSecurityConfiguration{
                 .cors()
                 .and()
                 .formLogin()
-                .loginPage("/user/login")
+                .loginProcessingUrl("/user/login")
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                 .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                 .defaultSuccessUrl("/user/login-success")
