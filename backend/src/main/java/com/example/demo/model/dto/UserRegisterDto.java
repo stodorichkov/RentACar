@@ -1,16 +1,26 @@
 package com.example.demo.model.dto;
 
+import jakarta.validation.constraints.*;
+
+
 public class UserRegisterDto {
 
     private Long id;
 
+
+    @NotEmpty(message = "Username must not be empty")
+
     private String username;
+
+
 
     private String email;
 
     private Integer years;
 
     private String mobilePhone;
+
+
 
     private String password;
 

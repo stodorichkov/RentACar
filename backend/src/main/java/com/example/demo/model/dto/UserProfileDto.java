@@ -1,8 +1,11 @@
 package com.example.demo.model.dto;
 
+import jakarta.validation.constraints.*;
+
 public class UserProfileDto {
 
     private Long id;
+
 
     private String username;
 

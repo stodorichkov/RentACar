@@ -2,13 +2,14 @@ package com.example.demo.model.dto;
 
 import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.TransmissionEnum;
+import jakarta.validation.constraints.*;
 
 public class CarDto {
 
  private Long id;
 
  private String imageUrl;
-
+ @NotNull(message="Username field empty")
  private String model;
 
  private String make;
