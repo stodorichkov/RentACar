@@ -22,4 +22,6 @@ public interface CarService {
     String addCar(CarDto carDto, Principal principal);
 
     CarEnumDto findCarEnumInfo();
+
+    CarEntity findCarById(Long id);
 }

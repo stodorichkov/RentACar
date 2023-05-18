@@ -7,10 +7,9 @@ import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.UserService;
 import org.springframework.stereotype.Service;
@@ -29,10 +28,12 @@ public class RentalServiceImpl implements RentalService {
 
     private final UserService userService;
 
-    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserService userService) {
+    private final CarService carService;
+    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserService userService, CarService carService) {
         this.rentalRepository = rentalRepository;
         this.carRepository = carRepository;
         this.userService = userService;
+        this.carService = carService;
     }
     @Override
     public List<RentalEntity> getAllRentals() {
@@ -46,16 +47,21 @@ public class RentalServiceImpl implements RentalService {
 
 
     @Override
-    public String addRental(AddRentalDto addRentalDto, Principal principal) {
+    public String addRental(AddRentalDto addRentalDto,Long carId, Principal principal) {
 
         RentalEntity rental = new RentalEntity();
+        CarEntity currentCar = this.carService.findCarById(carId);
         rental.setStartTime(addRentalDto.getStartTime());
         rental.setEndTime(addRentalDto.getEndTime());
         UserEntity renter = this.userService.findUserByName(principal.getName());
         rental.setRenter(renter);
+        rental.setTotalPrice(calculateRentalPrice(
+                addRentalDto.getStartTime(),
+                addRentalDto.getEndTime(),
+                currentCar.getPricePerDay()
+                ));
 
-
-        return "";
+        return "Everything was successful.";
     }
     @Override
     public RentalEntity updateRental(Long id, RentalDto rentalDto) {
@@ -82,12 +88,12 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public Double calculateRentalPrice(RentalEntity rental, double pricePerDay) {
-        LocalDateTime endTimeWithGracePeriod = rental.getEndTime().plusHours(2);
+    public double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime, double pricePerDay) {
+        LocalDateTime endTimeWithGracePeriod = endTime.plusHours(2);
         LocalDateTime currentTime = LocalDateTime.now();
 
-        long rentalDays = rental.getStartTime().until(endTimeWithGracePeriod, ChronoUnit.DAYS);
-        if (rental.getStartTime().plusDays(rentalDays).isBefore(endTimeWithGracePeriod)) {
+        long rentalDays = startTime.until(endTimeWithGracePeriod, ChronoUnit.DAYS);
+        if (startTime.plusDays(rentalDays).isBefore(endTimeWithGracePeriod)) {
             rentalDays++;
         }
 
