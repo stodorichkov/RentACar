@@ -121,13 +121,19 @@ public class UserServiceImpl implements UserService {
 
         if(this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty()){
             user.setUsername(userRegisterDto.getEmail());
-        }else{
+        }else if (!(userRegisterDto.getEmail()).matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")){
+            return "Wrong format";
+        }
+        else{
             return "Email already exists.";
         }
 
         if(this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
             user.setMobilePhone(userRegisterDto.getMobilePhone());
-        }else{
+        }else if (!(userRegisterDto.getMobilePhone()).matches("(^$|[0-9]{10})")){
+            return "Wrong format";
+        }
+        else{
             return "Mobile phone already exists.";
         }
 

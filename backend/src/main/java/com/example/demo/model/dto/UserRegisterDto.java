@@ -13,15 +13,14 @@ public class UserRegisterDto {
     private String username;
 
 
-    @NotEmpty(message = "Email must not be empty")
-    @Email(message = "Email should be valid")
+
     private String email;
 
     private Integer years;
-    @Pattern(regexp="(^\\d{10}$)", message="Phone number should be valid")
+
     private String mobilePhone;
 
-    @NotEmpty(message = "Password must not be empty")
+
 
     private String password;
 
