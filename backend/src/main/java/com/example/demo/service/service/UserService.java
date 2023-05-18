@@ -2,6 +2,7 @@ package com.example.demo.service.service;
 
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.AuthenticatedUserDto;
+import com.example.demo.model.dto.LoginUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
 
@@ -25,6 +26,8 @@ public interface UserService {
 
     boolean isAdmin(Principal principal);
 
-    AuthenticatedUserDto authUser(Principal principal);
+    AuthenticatedUserDto authUser(String username);
+
+    String validateUser(LoginUserDto loginUserDto);
 
 }

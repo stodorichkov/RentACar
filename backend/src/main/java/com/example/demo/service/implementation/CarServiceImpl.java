@@ -144,4 +144,11 @@ public class CarServiceImpl implements CarService {
 
     }
 
+    @Override
+    public CarEntity findCarById(Long id) {
+        return this.carRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Car with requested id:" + id + " not found.")
+        );
+    }
+
 }

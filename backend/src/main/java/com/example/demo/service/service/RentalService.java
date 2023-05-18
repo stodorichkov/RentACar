@@ -14,10 +14,10 @@ import java.util.List;
 public interface RentalService {
     List<RentalEntity> getAllRentals();
     RentalEntity getRentalById(Long id);
-    String addRental(AddRentalDto addRentalDto, Principal principal);
+    String addRental(AddRentalDto addRentalDto,Long carId, Principal principal);
     RentalEntity updateRental(Long id, RentalDto rentalDto);
     void deleteRental(Long id);
-    Double calculateRentalPrice(RentalEntity rental,double pricePerDay);
+    double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
 
     List<RentalCarDto> getUserRentalHistory(String username);
 

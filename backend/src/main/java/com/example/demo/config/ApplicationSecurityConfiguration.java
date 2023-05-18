@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableMethodSecurity
@@ -23,12 +24,18 @@ public class ApplicationSecurityConfiguration{
                 //add this when connection with front end is ready
                 //.antMatchers("/**").authenticated()
                 .and()
-                .cors().disable()
                 .csrf().disable()
+                .cors().configurationSource(request -> {
+                    CorsConfiguration corsConfig = new CorsConfiguration();
+                    corsConfig.addAllowedOrigin("http://localhost:3000");
+                    corsConfig.addAllowedMethod("*");
+                    corsConfig.addAllowedHeader("*");
+                    return corsConfig;
+                }).and()
                 .formLogin()
                 .loginProcessingUrl("/user/login")
-                .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
-                .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/user/login-success")
                 .failureForwardUrl("/user/login-error").
                 and()
