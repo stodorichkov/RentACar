@@ -56,32 +56,25 @@ public class CarServiceImpl implements CarService {
         if(displayCarsByAvailability(result).isEmpty()){
             throw new IllegalArgumentException("There are no available cars!");
         }
-        return carRepository.findCarByIsRented(result);
+        return carRepository.findByIsRented(result);
     }
 
-    @Override
-    public void createCar(CarEntity car) {
-        this.carRepository.save(car);
-    }
+
 
     //ToDo: maybe i need to delete this later
     @Override
     @Transactional
     public void deleteCar(Long id) {
         CarEntity carToDelete = this.getCarById(id);
-        List<RentalEntity> carRentals = carToDelete.getCarRental();
-        for(RentalEntity r : carRentals){
-            r.getRentedCars().remove(carToDelete);
-            this.rentalRepository.save(r);
-        }
+//        List<RentalEntity> carRentals = carToDelete.getCarRental();
+//        for(RentalEntity r : carRentals){
+//            r.getRentedCars().remove(carToDelete);
+//            this.rentalRepository.save(r);
+//        }
         this.carRepository.deleteById(id);
     }
 
-    @Override
-    public CarEntity findCarByMakeAndModel(String brand,String model) {
-        return this.carRepository.findByMakeAndModel(brand,model).
-                orElseThrow(()-> new RuntimeException("There is no car with requested brand!"));
-    }
+
 
     @Override
     public CarDto getCarInfo(Long id) {

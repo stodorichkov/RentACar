@@ -2,10 +2,7 @@ package com.example.demo.model;
 
 import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.TransmissionEnum;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -33,10 +30,8 @@ public class CarEntity extends Base{
 
     private Boolean isRented;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rentedCar",cascade = CascadeType.ALL)
     private List<RentalEntity> carRental;
-
-
 
     public CarEntity(String make, String model, String registrationPlate, String imageUrl, Double pricePerHour,
                      Double pricePerDay, Integer capacity, TransmissionEnum transmission, EngineEnum engine,

@@ -26,7 +26,7 @@ public class UserEntity extends Base{
     @ManyToMany
     private List<RoleEntity> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "renter")
     private List<RentalEntity> rentals;
 
     @OneToMany

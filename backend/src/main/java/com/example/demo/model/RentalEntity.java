@@ -22,9 +22,6 @@ public class RentalEntity extends Base{
 
     private Double totalPrice;
 
-    @ManyToMany(mappedBy = "carRental",cascade = CascadeType.ALL)
-    List<CarEntity> rentedCars;
-
     @ManyToOne
     private CarEntity rentedCar;
 
@@ -32,7 +29,7 @@ public class RentalEntity extends Base{
     private UserEntity renter;
 
 
-    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice,List<CarEntity> rentedCars) {
+    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice,CarEntity rentedCar,UserEntity renter) {
 
         this.startTime = startTime;
         this.endTime = endTime;
@@ -58,14 +55,6 @@ public class RentalEntity extends Base{
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public List<CarEntity> getRentedCars() {
-        return rentedCars;
-    }
-
-    public void setRentedCars(List<CarEntity> rentedCars) {
-        this.rentedCars = rentedCars;
     }
 
     public Double getTotalPrice() {

@@ -11,11 +11,7 @@ public interface CarService {
     List<CarDto> getAllCars();
     List<CarEntity> displayCarsByAvailability(Boolean result);
 
-    void createCar(CarEntity car);
-
     void deleteCar(Long id);
-
-    CarEntity findCarByMakeAndModel(String brand, String model);
 
     CarDto getCarInfo(Long id);
 
