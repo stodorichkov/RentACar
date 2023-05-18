@@ -34,14 +34,10 @@ public class RentalController {
         return ResponseEntity.ok(rental);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RentalEntity> getRentalById(@PathVariable Long id) {
-        return new ResponseEntity<>(rentalService.getRentalById(id), HttpStatus.OK);
-    }
-
     @PostMapping("/add")
     public ResponseEntity<RentalEntity> addRental(@RequestBody RentalDto rentalDto) {
-        return new ResponseEntity<>(rentalService.addRental(rentalDto), HttpStatus.CREATED);
+        //return new ResponseEntity<>(rentalService.addRental(rentalDto), HttpStatus.CREATED);
+        return null;
     }
 
     @PutMapping("/{id}/edit")
