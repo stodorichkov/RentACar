@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -86,33 +85,24 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public Double calculateRentalPrice(RentalEntity rental,double pricePerDay) {
+    public Double calculateRentalPrice(RentalEntity rental, double pricePerDay) {
+        LocalDateTime endTimeWithGracePeriod = rental.getEndTime().plusHours(2);
+        LocalDateTime currentTime = LocalDateTime.now();
 
-       /* long rentalDays = getRentalDays(startDate,endDate);
-        LocalDateTime currentDate = LocalDateTime.now();
-        long overdueDays = getOverdueDays(currentDate,endDate);
-        double totalPrice = pricePerDay * rentalDays;
-        if(currentDate.isAfter(endDate) ){
-            totalPrice += overdueDays * pricePerDay;
+        long rentalDays = rental.getStartTime().until(endTimeWithGracePeriod, ChronoUnit.DAYS);
+        if (rental.getStartTime().plusDays(rentalDays).isBefore(endTimeWithGracePeriod)) {
+            rentalDays++;
         }
 
-        return totalPrice;*/
-
-        long days = rental.getStartTime().until(rental.getEndTime(), ChronoUnit.DAYS);
-        if (rental.getStartTime().plusDays(days).isBefore(rental.getEndTime())) {
-            days++; // Round up to the next full day
+        long overdueDays = 0;
+        if (currentTime.isAfter(endTimeWithGracePeriod)) {
+            overdueDays = endTimeWithGracePeriod.until(currentTime, ChronoUnit.DAYS);
+            if (endTimeWithGracePeriod.plusDays(overdueDays).isBefore(currentTime)) {
+                overdueDays++;
+            }
         }
-        return days * pricePerDay;
+
+        return (rentalDays + overdueDays) * pricePerDay;
     }
-    @Override
-    public long getRentalDays(LocalDateTime startDate, LocalDateTime endDate) {
-        long diff = endDate.getDayOfMonth() - startDate.getDayOfMonth();
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-    }
-    @Override
-    public long getOverdueDays(LocalDateTime currDay, LocalDateTime endDate){
-        long diff = currDay.getDayOfMonth() - endDate.getDayOfMonth();
-        return  TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
-    }
+
 }
-

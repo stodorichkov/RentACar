@@ -1,6 +1,5 @@
 package com.example.demo.web;
 
-import com.example.demo.model.dto.MyDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
 import com.example.demo.service.service.RentalService;

@@ -12,10 +12,6 @@ public interface RentalService {
     RentalEntity addRental(RentalDto rentalDto);
     RentalEntity updateRental(Long id, RentalDto rentalDto);
     void deleteRental(Long id);
-
     Double calculateRentalPrice(RentalEntity rental,double pricePerDay);
 
-    long getRentalDays(LocalDateTime startDate, LocalDateTime endDate);
-
-    long getOverdueDays(LocalDateTime currDay, LocalDateTime endDate);
 }
