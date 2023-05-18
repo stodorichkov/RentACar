@@ -15,6 +15,7 @@ import com.example.demo.service.service.UserService;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -108,6 +109,19 @@ public class RentalServiceImpl implements RentalService {
 
         UserEntity currentUser = this.userService.findUserByName(username);
         List<RentalEntity> currentRental = currentUser.getRentals();
+        List<RentalCarDto> userRentalHistory = new ArrayList<>();
+        for(RentalEntity r : currentRental){
+            userRentalHistory.add(
+                    new RentalCarDto(
+                            r.getRentedCar().getMake(),
+                            r.getRentedCar().getModel(),
+                            r.getStartTime(),
+                            r.getEndTime(),
+                            r.getTotalPrice()
+                    )
+            );
+        }
+        return userRentalHistory;
 
     }
 

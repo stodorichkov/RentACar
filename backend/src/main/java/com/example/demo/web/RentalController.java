@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
 import com.example.demo.service.service.RentalService;
@@ -22,6 +23,15 @@ public class RentalController {
     @GetMapping("/all")
     public ResponseEntity<List<RentalEntity>> getAllRentals() {
         return ResponseEntity.ok(this.rentalService.getAllRentals());
+    }
+
+    @GetMapping("/{username}/history")
+    public ResponseEntity<List<RentalCarDto>> getUserHistory(@PathVariable String username){
+        List<RentalCarDto> rental = this.rentalService.getUserRentalHistory(username);
+        if(rental.isEmpty()){
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(rental);
     }
 
     @GetMapping("/{id}")
