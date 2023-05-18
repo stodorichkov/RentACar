@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
         }else{
             return "Email already exists.";
         }
-        if (!(userRegisterDto.getEmail()).matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")){
+        if (!(userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
             return "Wrong email format";
         }
         else {
