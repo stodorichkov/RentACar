@@ -144,5 +144,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserEntity findById(Long id) {
+        return this.userRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("User with requested id:" + id + " not found");
+        )
+    }
+
 
 }

@@ -18,6 +18,6 @@ public interface UserService {
 
     String addUser(UserRegisterDto userRegisterDto);
 
-
+    UserEntity findById(Long id);
 
 }

@@ -46,9 +46,11 @@ public class UserController {
     ){
 
         String returnStatement = this.userService.editUserProfile(username,userProfileDto);
+
         if(!returnStatement.equals("Edit is successful")){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
+            return ResponseEntity.internalServerError().body(returnStatement);
         }
+
         return ResponseEntity.ok(returnStatement);
     }
 
@@ -56,11 +58,12 @@ public class UserController {
     public ResponseEntity<String> registerUser(
             @RequestBody UserRegisterDto userRegisterDto
     ){
-
         String returnStatement = this.userService.addUser(userRegisterDto);
-//        if(!returnStatement.equals("Registration was successful")){
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnStatement);
-//        }
+
+        if(!returnStatement.equals("Registration was successful")){
+            return ResponseEntity.internalServerError().body(returnStatement);
+        }
+
         return ResponseEntity.ok(returnStatement);
     }
 

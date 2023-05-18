@@ -1,6 +1,7 @@
 package com.example.demo.service.service;
 
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.dto.UserProfileDto;
 
@@ -14,5 +15,7 @@ public interface RentalService {
     RentalEntity updateRental(Long id, RentalDto rentalDto);
     void deleteRental(Long id);
     Double calculateRentalPrice(RentalEntity rental,double pricePerDay);
+
+    List<RentalCarDto> getUserRentalHistory(String username);
 
 }

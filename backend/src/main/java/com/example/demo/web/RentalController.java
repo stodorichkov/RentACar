@@ -21,7 +21,7 @@ public class RentalController {
 
     @GetMapping("/all")
     public ResponseEntity<List<RentalEntity>> getAllRentals() {
-        return new ResponseEntity<>(rentalService.getAllRentals(), HttpStatus.OK);
+        return ResponseEntity.ok(this.rentalService.getAllRentals());
     }
 
     @GetMapping("/{id}")
