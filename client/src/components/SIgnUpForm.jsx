@@ -1,7 +1,8 @@
 import { Grid, Paper, Typography, TextField, Divider, Button, Container, Alert } from '@mui/material';
 import { useState } from 'react';
-import { hashString } from 'react-hash-string';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { SHA256 } from 'crypto-js';
 
 
 const SignUpForm = () => {
@@ -11,42 +12,59 @@ const SignUpForm = () => {
     const [phone, SetPhone] = useState('');
     const [password, SetPassword] = useState('');
     const [confirmPassword, SetConfirmPassword] = useState('');
-    const [alert, setAlert] = useState('')
+    const [alert, setAlert] = useState('');
 
     const handleChangeUsername = (event) => {
-        SetUsername(event.target.value)
+        SetUsername(event.target.value);
     }
     const handleChangeAge = (event) => {
-        SetAge(event.target.value)
+        SetAge(event.target.value);
     }
     const handleChangeEmail = (event) => {
-        SetEmail(event.target.value)
+        SetEmail(event.target.value);
     }
     const handleChangePhone = (event) => {
-        SetPhone(event.target.value)
+        SetPhone(event.target.value);
     }
     const handleChangePassword = (event) => {
-        SetPassword(event.target.value)
+        SetPassword(event.target.value);
     }
     const handleChangeConfirmPassword = (event) => {
-        SetConfirmPassword(event.target.value)
+        SetConfirmPassword(event.target.value);
     }
 
+    const navigate = useNavigate();
+
     const addUser = async () => {
-        if (username === '' || age === '' || email === '' || phone === '' || password === '') {
-            setAlert('The form must be completed!')
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*].{7,}$/;
+        if (username === '' || age === '' || email === '' || phone === '' || password === '' || confirmPassword === '') {
+            setAlert('The form must be completed!');
+        }
+        else if (!passwordRegex.test(password)) {
+            setAlert('Password is not valid! It must containst min 8 charecters, one special and numbers');
+        }
+        else if (password !== confirmPassword) {
+            setAlert('Password not confirmed!');
         }
         else {
             const content = {
                 username: username,
                 email: email,
-                phone: phone,
-                password: hashString(password)
+                years: age,
+                mobilePhone: phone,
+                password: SHA256(password).toString()
+            };
+            try {
+                const response = await axios.post('http://localhost:8086/user/register', content);
+                if (response.status === 200) {
+                    console.log(response.data);
+                    navigate('/signin');
+                }
+                
             }
-            const response = await axios.post('http://localhost:8086/user/register', content)
-            if (response.data !== "Registration was successful") {
-                setAlert(response.data)
-            }
+            catch (error) {
+                setAlert(error.response.data)
+            } 
         }
     }
 
@@ -78,6 +96,12 @@ const SignUpForm = () => {
                             <Grid item xs={12} sm={6} md={6}>
                                 <TextField
                                     fullWidth
+                                    type="number"
+                                    InputProps={{
+                                        inputProps: { 
+                                            max: 65, min: 18 
+                                        }
+                                    }}
                                     label="Age"
                                     value = {age}
                                     onChange ={handleChangeAge}

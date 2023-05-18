@@ -45,16 +45,16 @@ const AddCarForm = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6} md={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="seats-label">Seats number</InputLabel>
-                                    <Select
-                                        labelId="seats-label"
-                                        id="demo-simple-select"
-                                        label="Seats number"
-                                    >
-                                        {Array.from({length: 9}, (_, i) => i + 2).map(el => <MenuItem value={el}>{el}</MenuItem>)}
-                                    </Select>
-                                </FormControl>
+                                <TextField
+                                    fullWidth
+                                    type="number"
+                                    InputProps={{
+                                        inputProps: { 
+                                            max: 10, min: 2 
+                                        }
+                                    }}
+                                    label="Seats number"
+                                />
                             </Grid>
                             <Grid item xs={12} sm={6} md={6}>
                                 <FormControl fullWidth>
