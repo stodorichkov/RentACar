@@ -3,6 +3,7 @@ package com.example.demo.service.implementation;
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.CarEntity;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
@@ -13,6 +14,8 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.UserService;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -43,21 +46,15 @@ public class RentalServiceImpl implements RentalService {
 
 
     @Override
-    public RentalEntity addRental(RentalDto rentalDto) {
+    public String addRental(AddRentalDto addRentalDto, Principal principal) {
+
         RentalEntity rental = new RentalEntity();
-        rental.setStartTime(rentalDto.getStartTime());
-        rental.setEndTime(rentalDto.getEndTime());
+        rental.setStartTime(addRentalDto.getStartTime());
+        rental.setEndTime(addRentalDto.getEndTime());
+        UserEntity renter = this.userService.findUserByName(principal.getName());
+        //rental.set
 
-        CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
-                .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
-        rental.setTotalPrice(calculateRentalPrice(rental,car.getPricePerDay()));
-        UserEntity user = this.userService.findUserByName(rentalDto.getRenterUsername());
-
-        rental.setRentedCar(car);
-        rental.setRenter(user);
-
-        return rentalRepository.save(rental);
-
+        return "";
     }
     @Override
     public RentalEntity updateRental(Long id, RentalDto rentalDto) {

@@ -3,17 +3,21 @@ package com.example.demo.service.implementation;
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.dto.AuthenticatedUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
+import com.example.demo.model.enums.RoleEnum;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -125,6 +129,8 @@ public class UserServiceImpl implements UserService {
             return "Wrong format";
         }
         else{
+            user.setEmail(userRegisterDto.getEmail());
+        }else{
             return "Email already exists.";
         }
 
@@ -143,6 +149,7 @@ public class UserServiceImpl implements UserService {
         );
         user.setRoles(List.of(userRole));
         user.setPassword(userRegisterDto.getPassword());
+        user.setYears(userRegisterDto.getYears());
 
         this.userRepository.save(user);
 
@@ -155,6 +162,26 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("User with requested id:" + id + " not found")
         );
+    }
+
+    @Override
+    public boolean isAdmin(Principal principal) {
+        return principal != null && principal instanceof Authentication &&
+                ((Authentication) principal).getAuthorities().stream()
+                        .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+    }
+
+    @Override
+    public AuthenticatedUserDto authUser(Principal principal) {
+        AuthenticatedUserDto auth = new AuthenticatedUserDto();
+        UserEntity authUser = this.findUserByName(principal.getName());
+        auth.setUsername(authUser.getUsername());
+        auth.setId(authUser.getId());
+        auth.setYears(authUser.getYears());
+        auth.setEmail(authUser.getEmail());
+        auth.setAdmin(this.isAdmin(principal));
+        return auth;
     }
 
 

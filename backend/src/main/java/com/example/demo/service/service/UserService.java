@@ -1,8 +1,11 @@
 package com.example.demo.service.service;
 
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.dto.AuthenticatedUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
+
+import java.security.Principal;
 
 public interface UserService {
 
@@ -19,5 +22,9 @@ public interface UserService {
     String addUser(UserRegisterDto userRegisterDto);
 
     UserEntity findById(Long id);
+
+    boolean isAdmin(Principal principal);
+
+    AuthenticatedUserDto authUser(Principal principal);
 
 }
