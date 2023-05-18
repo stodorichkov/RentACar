@@ -4,6 +4,7 @@ package com.example.demo.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -24,12 +25,20 @@ public class RentalEntity extends Base{
     @ManyToMany(mappedBy = "carRental",cascade = CascadeType.ALL)
     List<CarEntity> rentedCars;
 
-    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice, List<CarEntity> rentedCars) {
+    @ManyToOne
+    private CarEntity rentedCar;
+
+    @ManyToOne
+    private UserEntity renter;
+
+
+    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice,List<CarEntity> rentedCars) {
 
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalPrice = totalPrice;
-        this.rentedCars = rentedCars;
+        this.rentedCar = rentedCar;
+        this.renter = renter;
     }
 
     public RentalEntity() {}
@@ -65,5 +74,26 @@ public class RentalEntity extends Base{
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+
+    public UserEntity getRenter() {
+        return renter;
+    }
+
+    public CarEntity getRentedCar() {
+        return rentedCar;
+    }
+
+    public void setRenter(UserEntity renter) {
+        this.renter = renter;
+    }
+
+    public CarEntity getRenterCar() {
+        return rentedCar;
+    }
+
+    public void setRentedCar(CarEntity rentedCar) {
+        this.rentedCar = rentedCar;
     }
 }
