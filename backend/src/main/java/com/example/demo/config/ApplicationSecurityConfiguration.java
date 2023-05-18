@@ -34,8 +34,8 @@ public class ApplicationSecurityConfiguration{
                 }).and()
                 .formLogin()
                 .loginProcessingUrl("/user/login")
-                .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
-                .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/user/login-success")
                 .failureForwardUrl("/user/login-error").
                 and()

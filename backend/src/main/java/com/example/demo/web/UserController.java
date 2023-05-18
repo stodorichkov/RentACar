@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 
 import com.example.demo.model.dto.AuthenticatedUserDto;
+import com.example.demo.model.dto.LoginUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
 import com.example.demo.service.service.UserService;
@@ -68,14 +69,18 @@ public class UserController {
         return ResponseEntity.ok(returnStatement);
     }
 
-    @PostMapping("/user/login-error")
+
+    @PostMapping("/login-error")
     public ResponseEntity<String> loginError(){
         return ResponseEntity.internalServerError().body("Wrong username or password.");
     }
 
-    @PostMapping("/user/login-success")
-    public ResponseEntity<AuthenticatedUserDto> authInfo(Principal principal){
-        AuthenticatedUserDto auth = this.userService.authUser(principal);
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticatedUserDto> authInfo(@RequestBody LoginUserDto loginUserDto){
+        AuthenticatedUserDto auth = new AuthenticatedUserDto();
+        if(this.userService.validateUser(loginUserDto)){
+            auth = this.userService.authUser(loginUserDto.getUsername());
+        }
         if(auth == null){
             return ResponseEntity.internalServerError().build();
         }

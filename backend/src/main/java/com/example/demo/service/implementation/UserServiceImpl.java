@@ -4,6 +4,7 @@ import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.AuthenticatedUserDto;
+import com.example.demo.model.dto.LoginUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
 import com.example.demo.model.enums.RoleEnum;
@@ -171,15 +172,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthenticatedUserDto authUser(Principal principal) {
+    public AuthenticatedUserDto authUser(String username) {
         AuthenticatedUserDto auth = new AuthenticatedUserDto();
-        UserEntity authUser = this.findUserByName(principal.getName());
+        UserEntity authUser = this.findUserByName(username);
         auth.setUsername(authUser.getUsername());
         auth.setId(authUser.getId());
         auth.setYears(authUser.getYears());
         auth.setEmail(authUser.getEmail());
-        auth.setAdmin(this.isAdmin(principal));
+      //  auth.setAdmin(this.isAdmin(principal));
         return auth;
+    }
+
+    @Override
+    public boolean validateUser(LoginUserDto loginUserDto) {
+        if(this.userRepository.findByUsername(loginUserDto.getUsername()).isEmpty() &&
+        this.userRepository.findByPassword(loginUserDto.getPassword()).isEmpty()){
+            return false;
+        }
+        return true;
     }
 
 
