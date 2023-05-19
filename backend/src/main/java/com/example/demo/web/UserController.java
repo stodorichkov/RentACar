@@ -88,6 +88,11 @@ public class UserController {
         return  ResponseEntity.ok(response);
     }
 
+//    @PatchMapping("/{username}/set-admin")
+//    public ResponseEntity<?> setAsAdmin(@PathVariable String username){
+//
+//    }
+
 
 
 }
