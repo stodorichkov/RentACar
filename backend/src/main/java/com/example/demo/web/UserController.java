@@ -4,17 +4,22 @@ package com.example.demo.web;
 import com.example.demo.model.dto.LoginUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
+import com.example.demo.security.jwt.JwtUtils;
+import com.example.demo.security.response.JwtResponse;
+import com.example.demo.service.UserDetailsImpl;
 import com.example.demo.service.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
+
+import java.util.List;
 
 
 @RestController
@@ -25,13 +30,16 @@ public class UserController {
 
     private final ModelMapper modelMapper;
 
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtils jwtUtils;
 
     public UserController(UserService userService, ModelMapper modelMapper,
-                          AuthenticationManagerBuilder authenticationManagerBuilder) {
+                          AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
     @GetMapping("/{username}/profile")
@@ -81,48 +89,54 @@ public class UserController {
         return ResponseEntity.internalServerError().body("Wrong username or password.");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> authInfo(@RequestBody LoginUserDto loginUserDto){
-//        AuthenticatedUserDto auth = new AuthenticatedUserDto();
-//        if(this.userService.validateUser(loginUserDto)){
-//            auth = this.userService.authUser(loginUserDto.getUsername());
-//        }
-//        if(auth == null){
-//            return ResponseEntity.internalServerError().build();
-//        }
-        String response = this.userService.validateUser(loginUserDto);
-        return  ResponseEntity.ok(response);
+    @PostMapping("/login-success")
+    public ResponseEntity<String> loginSuccess(){
+        return ResponseEntity.ok("Connection was successful.");
     }
 
-//    @PatchMapping("/{username}/set-admin")
-//    public ResponseEntity<?> setAsAdmin(@PathVariable String username){
-//
+//    @PostMapping("/login")
+//    public ResponseEntity<String> authInfo(@RequestBody LoginUserDto loginUserDto){
+////        AuthenticatedUserDto auth = new AuthenticatedUserDto();
+////        if(this.userService.validateUser(loginUserDto)){
+////            auth = this.userService.authUser(loginUserDto.getUsername());
+////        }
+////        if(auth == null){
+////            return ResponseEntity.internalServerError().build();
+////        }
+//        String response = this.userService.validateUser(loginUserDto);
+//        return  ResponseEntity.ok(response);
 //    }
+//
+////    @PatchMapping("/{username}/set-admin")
+////    public ResponseEntity<?> setAsAdmin(@PathVariable String username){
+////
+////    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
-        try {
-            // Build the AuthenticationManager using the AuthenticationManagerBuilder
-            AuthenticationManager authenticationManager = authenticationManagerBuilder.getObject();
+      Authentication authentication = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                      loginUserDto.getUsername(),
+                      loginUserDto.getPassword()
+              )
+      );
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      String jwt = jwtUtils.generateJwtToken(authentication);
 
-            // Create an authentication token using the provided username and password
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(
-                            loginUserDto.getUsername(),
-                            loginUserDto.getPassword()
-                    );
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      List<String> authorities = userDetails.getAuthorities().stream()
+              .map(item -> item.getAuthority())
+              .collect(Collectors.toList());
 
-            // Attempt to authenticate the user
-            Authentication auth = authenticationManager.authenticate(authToken);
-
-            // If successful, update the security context and return OK status
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            return ResponseEntity.ok().build();
-        } catch (BadCredentialsException ex) {
-            // If the credentials are invalid, return Unauthorized status
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }
+      return ResponseEntity.ok(
+              new JwtResponse(jwt,
+                      userDetails.getId(),
+                      userDetails.getUsername(),
+                      authorities)
+      );
     }
+
 
 
 }
