@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,11 +20,6 @@ public class RentalController {
 
     public RentalController(RentalService rentalService) {
         this.rentalService = rentalService;
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<RentalEntity>> getAllRentals() {
-        return ResponseEntity.ok(this.rentalService.getAllRentals());
     }
 
     @GetMapping("/{username}/history")
@@ -40,10 +37,15 @@ public class RentalController {
         return new ResponseEntity<>(monthlyRevenue, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<RentalEntity> addRental(@RequestBody RentalDto rentalDto) {
-        //return new ResponseEntity<>(rentalService.addRental(rentalDto), HttpStatus.CREATED);
-        return null;
+    @PostMapping("/{carId}/add")
+    public ResponseEntity<String> addRental(@RequestBody AddRentalDto addrentalDto,
+                                                  @PathVariable Long carId,
+                                                  Principal principal) {
+        String response = this.rentalService.addRental(addrentalDto,carId,principal);
+        if(!response.equals("Everything was successful.")){
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/edit")

@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
                 () -> new ObjectNotFoundException("Role with requested id:" + 2 + " was not found.")
         );
         user.setRoles(List.of(userRole));
-        user.setPassword(userRegisterDto.getPassword());
+        user.setPassword(this.passwordEncoder.encode(userRegisterDto.getPassword()));
         user.setYears(userRegisterDto.getYears());
 
         this.userRepository.save(user);
