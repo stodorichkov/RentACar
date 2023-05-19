@@ -7,13 +7,16 @@ import com.example.demo.model.dto.AuthenticatedUserDto;
 import com.example.demo.model.dto.LoginUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
-import com.example.demo.model.enums.RoleEnum;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,12 +36,15 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
+    private final UserDetailsService userDetailsService;
+
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
-                           PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+                           PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserDetailsService userDetailsService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -152,8 +158,12 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.save(user);
 
-        return "Registration was successful";
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(user.getUsername());
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                userDetails,user.getPassword(),userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
+        return "Registration was successful";
     }
 
     @Override
