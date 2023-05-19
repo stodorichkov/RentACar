@@ -1,18 +1,20 @@
 package com.example.demo.web;
 
 
-import com.example.demo.model.dto.AuthenticatedUserDto;
 import com.example.demo.model.dto.LoginUserDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
 import com.example.demo.service.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 
 @RestController
@@ -23,9 +25,13 @@ public class UserController {
 
     private final ModelMapper modelMapper;
 
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    public UserController(UserService userService, ModelMapper modelMapper,
+                          AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
     @GetMapping("/{username}/profile")
@@ -88,6 +94,35 @@ public class UserController {
         return  ResponseEntity.ok(response);
     }
 
+//    @PatchMapping("/{username}/set-admin")
+//    public ResponseEntity<?> setAsAdmin(@PathVariable String username){
+//
+//    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
+        try {
+            // Build the AuthenticationManager using the AuthenticationManagerBuilder
+            AuthenticationManager authenticationManager = authenticationManagerBuilder.getObject();
+
+            // Create an authentication token using the provided username and password
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                            loginUserDto.getUsername(),
+                            loginUserDto.getPassword()
+                    );
+
+            // Attempt to authenticate the user
+            Authentication auth = authenticationManager.authenticate(authToken);
+
+            // If successful, update the security context and return OK status
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            return ResponseEntity.ok().build();
+        } catch (BadCredentialsException ex) {
+            // If the credentials are invalid, return Unauthorized status
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+    }
 
 
 }
