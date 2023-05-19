@@ -81,7 +81,7 @@ public class UserController {
         return ResponseEntity.internalServerError().body("Wrong username or password.");
     }
 
-    @PostMapping("/login")
+   /* @PostMapping("/login")
     public ResponseEntity<String> authInfo(@RequestBody LoginUserDto loginUserDto){
 //        AuthenticatedUserDto auth = new AuthenticatedUserDto();
 //        if(this.userService.validateUser(loginUserDto)){
@@ -92,14 +92,14 @@ public class UserController {
 //        }
         String response = this.userService.validateUser(loginUserDto);
         return  ResponseEntity.ok(response);
-    }
+    }*/
 
 //    @PatchMapping("/{username}/set-admin")
 //    public ResponseEntity<?> setAsAdmin(@PathVariable String username){
 //
 //    }
 
-    @PostMapping("/login")
+   /* @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
         try {
             // Build the AuthenticationManager using the AuthenticationManagerBuilder
@@ -122,7 +122,7 @@ public class UserController {
             // If the credentials are invalid, return Unauthorized status
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-    }
+    }*/
 
 
 }

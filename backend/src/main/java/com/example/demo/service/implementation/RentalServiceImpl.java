@@ -10,6 +10,7 @@ import com.example.demo.model.RentalEntity;
 import com.example.demo.model.dto.ShowRentalCostDto;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.UserService;
@@ -26,13 +27,15 @@ public class RentalServiceImpl implements RentalService {
 
     private final RentalRepository rentalRepository;
     private final CarRepository carRepository;
+    private  final UserRepository userRepository;
 
     private final UserService userService;
 
     private final CarService carService;
-    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserService userService, CarService carService) {
+    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserRepository userRepository, UserService userService, CarService carService) {
         this.rentalRepository = rentalRepository;
         this.carRepository = carRepository;
+        this.userRepository = userRepository;
         this.userService = userService;
         this.carService = carService;
     }
@@ -60,23 +63,34 @@ public class RentalServiceImpl implements RentalService {
         return price ;
     }
     @Override
-    public String addRental(AddRentalDto addRentalDto,Long carId, Principal principal) {
+    public String addRental(AddRentalDto addRentalDto,Long carId) {
 
         RentalEntity rental = new RentalEntity();
         CarEntity currentCar = this.carService.findCarById(carId);
         rental.setStartTime(addRentalDto.getStartTime());
         rental.setEndTime(addRentalDto.getEndTime());
         LocalDateTime currentTime = LocalDateTime.now();
+        UserEntity renter = this.userService.findUserByName("Administrator");
+
         if(rental.getStartTime().plusHours(1).isAfter(currentTime)){
             return "Cannot make reservation 1 hour prior your current time!";
         }
-        UserEntity renter = this.userService.findUserByName(principal.getName());
-        rental.setRenter(renter);
-        rental.setTotalPrice(calculateRentalPrice(
+        double balance = renter.getBudget();
+        double price = calculateRentalPrice(
                 addRentalDto.getStartTime(),
                 addRentalDto.getEndTime(),
                 currentCar.getPricePerDay()
-                ));
+        );
+        //check budget
+        if(balance > price){
+            renter.setBudget(balance - price);
+            userRepository.save(renter);
+        }else {
+            return "Not enough money for reservation!";
+        }
+
+        rental.setRenter(renter);
+        rental.setTotalPrice(price);
 
         return "Everything was successful.";
     }

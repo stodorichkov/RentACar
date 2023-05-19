@@ -45,9 +45,9 @@ public class RentalController {
 
     @PostMapping("/{carId}/add")
     public ResponseEntity<String> addRental(@RequestBody AddRentalDto addrentalDto,
-                                                  @PathVariable Long carId,
-                                                  Principal principal) {
-        String response = this.rentalService.addRental(addrentalDto,carId,principal);
+                                                  @PathVariable Long carId
+                                            ) {
+        String response = this.rentalService.addRental(addrentalDto,carId);
         if(!response.equals("Everything was successful.")){
             return ResponseEntity.internalServerError().build();
         }

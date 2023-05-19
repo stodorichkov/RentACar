@@ -11,7 +11,7 @@ import java.util.List;
 public interface RentalService {
     List<RentalEntity> getAllRentals();
     RentalEntity getRentalById(Long id);
-    String addRental(AddRentalDto addRentalDto,Long carId, Principal principal);
+    String addRental(AddRentalDto addRentalDto,Long carId);
     RentalEntity updateRental(Long id, RentalDto rentalDto);
     void deleteRental(Long id);
     double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
@@ -23,6 +23,7 @@ public interface RentalService {
     Double calculateMonthlyRevenue(int month, int year);
 
     Double showTotalCost( ShowRentalCostDto showRentalCostDto);
+
 
 }
 
