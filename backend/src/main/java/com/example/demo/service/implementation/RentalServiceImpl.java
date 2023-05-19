@@ -45,10 +45,19 @@ public class RentalServiceImpl implements RentalService {
     public RentalEntity getRentalById(Long id) {
         return rentalRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
     }
+    @Override
+    public Double showTotalCost(ShowRentalCostDto showRentalCostDto) {
+        CarEntity car = carRepository.findById(showRentalCostDto.getCarId())
+                .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
+        double price = calculateRentalPrice(showRentalCostDto.getStartTime(), showRentalCostDto.getEndTime(), car.getPricePerDay());
 
-    public Double showTotalCost(ShowRentalCostDto showRentalCostDto,Long carId){
 
-        return 0.0;
+        showRentalCostDto.setStartTime(showRentalCostDto.getStartTime());
+        showRentalCostDto.setEndTime(showRentalCostDto.getEndTime());
+        showRentalCostDto.setCarId(showRentalCostDto.getCarId());
+        showRentalCostDto.setRentalPrice(price);
+
+        return price ;
     }
     @Override
     public String addRental(AddRentalDto addRentalDto,Long carId, Principal principal) {

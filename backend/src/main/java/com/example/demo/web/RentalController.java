@@ -4,6 +4,7 @@ import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.dto.ShowRentalCostDto;
 import com.example.demo.service.service.RentalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,11 @@ public class RentalController {
     public ResponseEntity<Double> getMonthlyRevenue(@PathVariable int year, @PathVariable int month) {
         double monthlyRevenue = rentalService.calculateMonthlyRevenue(month, year);
         return new ResponseEntity<>(monthlyRevenue, HttpStatus.OK);
+    }
+
+    @GetMapping("/showCost")
+    public ResponseEntity<Double> calculateRentalPrice(@RequestBody ShowRentalCostDto showRentalCostDto) {
+        return new ResponseEntity<>(rentalService.showTotalCost(showRentalCostDto), HttpStatus.OK);
     }
 
     @PostMapping("/{carId}/add")

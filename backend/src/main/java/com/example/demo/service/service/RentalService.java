@@ -22,7 +22,7 @@ public interface RentalService {
 
     Double calculateMonthlyRevenue(int month, int year);
 
-    Double showTotalCost(ShowRentalCostDto showRentalCostDto, Long carId);
+    Double showTotalCost( ShowRentalCostDto showRentalCostDto);
 
 }
 
