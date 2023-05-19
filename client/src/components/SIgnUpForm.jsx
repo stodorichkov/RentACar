@@ -6,31 +6,31 @@ import { SHA256 } from 'crypto-js';
 
 
 const SignUpForm = () => {
-    const [username, SetUsername] = useState('');
-    const [age, SetAge] = useState('');
-    const [email, SetEmail] = useState('');
-    const [phone, SetPhone] = useState('');
-    const [password, SetPassword] = useState('');
-    const [confirmPassword, SetConfirmPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [age, setAge] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [alert, setAlert] = useState('');
 
     const handleChangeUsername = (event) => {
-        SetUsername(event.target.value);
+        setUsername(event.target.value);
     }
     const handleChangeAge = (event) => {
-        SetAge(event.target.value);
+        setAge(event.target.value);
     }
     const handleChangeEmail = (event) => {
-        SetEmail(event.target.value);
+        setEmail(event.target.value);
     }
     const handleChangePhone = (event) => {
-        SetPhone(event.target.value);
+        setPhone(event.target.value);
     }
     const handleChangePassword = (event) => {
-        SetPassword(event.target.value);
+        setPassword(event.target.value);
     }
     const handleChangeConfirmPassword = (event) => {
-        SetConfirmPassword(event.target.value);
+        setConfirmPassword(event.target.value);
     }
 
     const navigate = useNavigate();
