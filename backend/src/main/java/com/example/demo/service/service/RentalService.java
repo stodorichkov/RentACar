@@ -1,10 +1,7 @@
 package com.example.demo.service.service;
 
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.dto.AddRentalDto;
-import com.example.demo.model.dto.RentalCarDto;
-import com.example.demo.model.dto.RentalDto;
-import com.example.demo.model.dto.UserProfileDto;
+import com.example.demo.model.dto.*;
 import org.springframework.cglib.core.Local;
 
 import java.security.Principal;
@@ -24,6 +21,8 @@ public interface RentalService {
     void addTestRental();
 
     Double calculateMonthlyRevenue(int month, int year);
+
+    Double showTotalCost(ShowRentalCostDto showRentalCostDto, Long carId);
 
 }
 

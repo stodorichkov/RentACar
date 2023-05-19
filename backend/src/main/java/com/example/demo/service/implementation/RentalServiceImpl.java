@@ -7,6 +7,7 @@ import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.dto.ShowRentalCostDto;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
 import com.example.demo.service.service.CarService;
@@ -45,7 +46,10 @@ public class RentalServiceImpl implements RentalService {
         return rentalRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
     }
 
+    public Double showTotalCost(ShowRentalCostDto showRentalCostDto,Long carId){
 
+        return 0.0;
+    }
     @Override
     public String addRental(AddRentalDto addRentalDto,Long carId, Principal principal) {
 
