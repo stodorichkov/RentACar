@@ -150,11 +150,13 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public void addTestRental() {
 
+        if(this.rentalRepository.count()==0) {
             RentalEntity rental = new RentalEntity();
             rental.setStartTime(LocalDateTime.parse("2023-05-18T12:00:00"));
             rental.setEndTime(LocalDateTime.parse("2023-05-20T15:00:00"));
             rental.setTotalPrice(200.00);
             this.rentalRepository.save(rental);
+        }
 
     }
 
