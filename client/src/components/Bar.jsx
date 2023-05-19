@@ -5,7 +5,7 @@ const Bar = () => {
 	const navigate = useNavigate();
 	return (
 		<>
-			<AppBar position="fixed" color="menue" sx={{padding: '1rem'}}>
+			<AppBar position="static" color="menue" sx={{padding: '0.5rem'}}>
 				<Toolbar>
 					<Grid container direction="row" justifyContent="space-between">
 						<Button sx={{textTransform: "none"}} onClick={() => navigate('/')}>

@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography, Divider, Button, Container, Alert } from '@mui/material';
+import { Grid, Paper, Typography, Button, Alert, Divider } from '@mui/material';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -27,22 +27,23 @@ const SearchCarForm = () => {
     }
 
     return (
-        <Container maxWidth="sm" sx={{marginTop: "8rem", marginBottom: '2rem'}}>
-            <Paper elevation={12} sx={{padding: '3.5rem'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Grid container direction="column"  spacing={5}>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="h3" color="textPrimary" align="center" >Search for car</Typography>
+        <Grid container justifyContent="center" sx={{marginTop: '2vw'}}>
+            <Grid item xs={11} md={11} xl={11}>
+                <Paper elevation={12} sx={{padding: '1rem'}}>
+                    <Grid container  justifyContent='center' alignContent={'center'} spacing={2}>
+                        <Grid item xs={12}>
+                            <Typography variant="h3" color="textPrimary" align="center" >Road is before you!</Typography>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
+                        <Grid item xs={10}>
                             <Divider/>
                         </Grid>
                         {alert ? (
-                            <Grid item xs={12} sm={12} md={12}>
+                            <Grid item xs={12}>
                                 <Alert severity="error" variant="filled">{alert}</Alert>
                             </Grid>
                         ) : null}
-                        <Grid item xs={12} sm={6} md={6}>
+                        <Grid item xs={12} xl={3} md={4}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DateTimePicker
                                 label="Pick-up date"
                                 slotProps={{ textField: { fullWidth: true } }}
@@ -51,9 +52,11 @@ const SearchCarForm = () => {
                                 minDate={dayjs()}
                                 value={pickUpDate}
                                 onChange={(newValue) => handleChangePickUpDate(newValue)}
-                            />  
+                            />
+                            </LocalizationProvider>  
                         </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
+                        <Grid item xs={12} xl={3} md={4}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DateTimePicker
                                 label="Drop-off date"
                                 slotProps={{ textField: { fullWidth: true } }}
@@ -62,17 +65,18 @@ const SearchCarForm = () => {
                                 minDate={dayjs()}
                                 value={dropOffDate}
                                 onChange={(newValue) => handleChangeDropOffDate(newValue)}
-                            />  
+                            />
+                            </LocalizationProvider>   
                         </Grid>
-                        <Grid item xs={12} sm={6} md={6} alignSelf={'center'}>
+                        <Grid item alignSelf={'center'}>
                             <Button variant="contained" size="large" color="button_primary" onClick={searchCars}>
                                 Search
                             </Button>
                         </Grid>
-                    </Grid>
-                </LocalizationProvider>
-            </Paper>
-        </Container> 
+                    </Grid>   
+                </Paper>
+            </Grid>
+        </Grid> 
     )
 }
 
