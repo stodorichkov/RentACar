@@ -1,6 +1,5 @@
 import { Grid, Paper, Typography, TextField, Divider, Button, Container, Alert } from '@mui/material';
 import { useState } from 'react';
-import { SHA256 } from 'crypto-js';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +24,7 @@ const SignInForm = () => {
         else {
             const content = {
                 username: username,
-                password: SHA256(password).toString()
+                password: password
             };
             try {
                 const response = await axios.post('http://localhost:8086/user/login', content);

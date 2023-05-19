@@ -9,6 +9,7 @@ import Bar from './components/Bar';
 import SignInForm from './components/SignInForm';
 import SignUpForm from './components/SignUpForm';
 import AddCarForm from './components/AddCarForm';
+import Home from './components/Home';
 
 const App = () => {
 	return (
@@ -18,7 +19,7 @@ const App = () => {
 				<ThemeProvider theme={theme}>
 					<Bar />
 					<Routes>
-						<Route path='/'/>
+						<Route path='/' element={<Home />}/>
 						<Route path='/signin' element={<SignInForm />}/>
 						<Route path='/signup' element={<SignUpForm />}/>
 						<Route path='/car/add' element={<AddCarForm />}/>

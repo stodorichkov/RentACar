@@ -2,8 +2,6 @@ import { Grid, Paper, Typography, TextField, Divider, Button, Container, Alert }
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { SHA256 } from 'crypto-js';
-
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('');
@@ -52,7 +50,7 @@ const SignUpForm = () => {
                 email: email,
                 years: age,
                 mobilePhone: phone,
-                password: SHA256(password).toString()
+                password: password
             };
             try {
                 const response = await axios.post('http://localhost:8086/user/register', content);
