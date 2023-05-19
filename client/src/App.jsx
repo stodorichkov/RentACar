@@ -1,7 +1,5 @@
 import './App.css';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme';
-import CssBaseline from '@mui/material/CssBaseline';
+import { Grid } from '@mui/material';
 
 import { BrowserRouter as Router ,Routes, Route, Navigate } from 'react-router-dom';
 
@@ -15,9 +13,8 @@ const App = () => {
 	return (
 		<>
 			<Router>
-				<CssBaseline />
-				<ThemeProvider theme={theme}>
-					<Bar />
+				<Bar />
+				<Grid container sx={{background: 'linear-gradient(94deg, rgba(47, 93, 170, 0.97) 0%, rgba(116, 34, 102, 0.97) 100%)', minHeight:'100vh'}}>
 					<Routes>
 						<Route path='/' element={<Home />}/>
 						<Route path='/signin' element={<SignInForm />}/>
@@ -25,7 +22,7 @@ const App = () => {
 						<Route path='/car/add' element={<AddCarForm />}/>
 						<Route path="*" element={<Navigate to="/" />} />
 					</Routes>
-				</ThemeProvider>  
+				</Grid> 
 			</Router>
 		</>
 	);

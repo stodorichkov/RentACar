@@ -34,56 +34,51 @@ const SignInForm = () => {
                 }  
             }
             catch (error) {
-                // setAlert(error.response.data)
-                console.log(error)
+                setAlert(error.response.data)
             } 
         }
     }
 
     return (
-        <>
-            <Grid container sx={{backgroundSize: 'cover', background: 'linear-gradient(rgba(48,94,171, 0.7), rgba(115, 35, 101, 0.7))', height: "100vh"}}>
-                <Container maxWidth="sm" sx={{marginTop: "7.5rem", marginBottom: '1rem'}}>
-                    <Paper elevation={12} sx={{padding: '3.5rem'}}>
-                        <Grid container direction="column"  spacing={5}>
-                            <Grid item xs={12} sm={6} md={6}>
-                                <Typography variant="h3" color="textPrimary" align="center" >Sign In</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6}>
-                                <Divider/>
-                            </Grid>
-                            {alert ? (
-                                <Grid item xs={12} sm={12} md={12}>
-                                    <Alert severity="error" variant="filled">{alert}</Alert>
-                                </Grid>
-                            ) : null}
-                            <Grid item xs={12} sm={6} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Username"
-                                    value = {username}
-                                    onChange ={handleChangeUsername}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Password"
-                                    type="password"
-                                    value = {password}
-                                    onChange ={handleChangePassword}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6} alignSelf={'center'}>
-                                <Button variant="contained" size="large" color="button_primary" onClick={signInUser}>
-                                    Sign In
-                                </Button>
-                            </Grid>
+        <Container maxWidth="sm" sx={{marginTop: "8rem", marginBottom: '2rem'}}>
+            <Paper elevation={12} sx={{padding: '3.5rem'}}>
+                <Grid container direction="column"  spacing={5}>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="h3" color="textPrimary" align="center" >Sign In</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Divider/>
+                    </Grid>
+                    {alert ? (
+                        <Grid item xs={12} sm={12} md={12}>
+                            <Alert severity="error" variant="filled">{alert}</Alert>
                         </Grid>
-                    </Paper>
-                </Container>
-            </Grid>
-        </> 
+                    ) : null}
+                    <Grid item xs={12} sm={6} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Username"
+                            value={username}
+                            onChange={handleChangeUsername}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            value = {password}
+                            onChange ={handleChangePassword}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6} alignSelf={'center'}>
+                        <Button variant="contained" size="large" color="button_primary" onClick={signInUser}>
+                            Sign In
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </Container> 
     )
 }
 
