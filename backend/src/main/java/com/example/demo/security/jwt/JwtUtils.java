@@ -1,12 +1,15 @@
 package com.example.demo.security.jwt;
 
+
 import com.example.demo.service.UserDetailsImpl;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 
 import java.util.Date;
 import java.security.Key;
@@ -16,7 +19,10 @@ public class JwtUtils {
     private static final Logger logger =
             LoggerFactory.getLogger(JwtUtils.class);
 
-    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+   Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
+
+
 
     public String generateJwtToken(Authentication authentication){
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
@@ -27,7 +33,7 @@ public class JwtUtils {
                 .setSubject((principal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, key)
+                .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
     }
