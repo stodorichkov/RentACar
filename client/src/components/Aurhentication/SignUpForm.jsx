@@ -1,4 +1,5 @@
-import { Grid, Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
+import { Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -66,22 +67,22 @@ const SignUpForm = () => {
     }
 
     return (
-        <Grid container justifyContent="center" sx={{marginTop: '2vw'}}>
-            <Grid item xs={12} md={5} xl={4}>
-                <Paper elevation={12} sx={{padding: '3em', maxHeight: '84vh', overflow: 'auto'}}>
+        <Grid container justifyContent='center' sx={{marginTop: '2vw' }}>
+            <Grid xl={3.5} lg={4} md={5} sm={7} xs={10}>
+                <Paper elevation={12} sx={{padding: '3em', overflow: 'auto', maxHeight: {xs: '80vh', sm:'80vh', md: '80vh', lg: '85vh', xl: '100vh'}}}>
                     <Grid container spacing={4} justifyContent="center">
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <Typography variant="h3" color="textPrimary" align="center" >Sign Up</Typography>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <Divider/>
                         </Grid>
                         {alert ? (
-                            <Grid item xs={12}>
+                            <Grid xs={12}>
                                 <Alert severity="error" variant="filled">{alert}</Alert>
                             </Grid>
                         ) : null}
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <TextField
                                 fullWidth
                                 label="Username"
@@ -89,7 +90,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangeUsername}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <TextField
                                 fullWidth
                                 type="number"
@@ -103,7 +104,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangeAge}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <TextField
                                 fullWidth
                                 label="Email"
@@ -111,7 +112,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangeEmail}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <TextField
                                 fullWidth
                                 label="Phone number"
@@ -119,7 +120,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangePhone}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <TextField
                                 fullWidth
                                 label="Password"
@@ -128,7 +129,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangePassword}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <TextField
                                 fullWidth
                                 label="Confirm password"
@@ -137,7 +138,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangeConfirmPassword}
                             />
                         </Grid>
-                        <Grid item >
+                        <Grid>
                             <Button variant="contained" size="large" color="button_secondary" onClick={addUser}>
                                 Sign Up
                             </Button>
