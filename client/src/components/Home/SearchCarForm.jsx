@@ -68,7 +68,6 @@ const SearchCarForm = () => {
                 </Paper>
             </Grid>
         </Grid>
-        
     )
 }
 

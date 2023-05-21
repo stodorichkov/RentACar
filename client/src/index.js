@@ -12,16 +12,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>  
-      </React.StrictMode>
-    </PersistGate>
-  </Provider>
+    <Provider store={store}>
+        <PersistGate persistor={persistor}>
+        <React.StrictMode>
+            <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+            </ThemeProvider>  
+        </React.StrictMode>
+        </PersistGate>
+    </Provider>
   
 );
 
