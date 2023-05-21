@@ -1,8 +1,47 @@
 import { AppBar, Toolbar, Button, Stack, Typography, Avatar, Box }  from '@mui/material';
+
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const Bar = () => {
 	const navigate = useNavigate();
+	
+	const user = useSelector((state) => state.user);
+
+	const renderButtons = () => {
+		if(!user) {
+			return(
+				<>
+					<Button variant="contained"  color="button_primary" size="large" onClick={() => navigate('/signin')}>
+						Sign In
+					</Button>
+					<Button variant="contained"  color="button_secondary" size="large" onClick={() => navigate('/signup')}>
+						Sign Up
+					</Button>
+				</>
+			)
+		}
+		else {
+			return(
+				<>
+					<Button sx={{textTransform: "none"}} onClick={() => navigate('/admin')}>
+						<Typography variant="h6" color="white">
+							Admin
+						</Typography>
+					</Button>
+					<Button sx={{textTransform: "none"}} onClick={() => navigate('/profile')}>
+						<Typography variant="h6" color="white">
+							Profile
+						</Typography>
+					</Button>
+					<Button variant="contained"  color="button_secondary" size="large" onClick={() => navigate('/p')}>
+						Sign Up
+					</Button>
+				</>
+			)
+		}
+	}
+
 	return (
 		<AppBar position="static" color="menue" sx={{padding: '0.5rem'}}>
 			<Toolbar>
@@ -13,13 +52,8 @@ const Bar = () => {
 							odexio Cruisers
 						</Typography>
 					</Button>
-					<Stack spacing={2} direction="row">
-						<Button variant="contained"  color="button_primary" size="large" onClick={() => navigate('/signin')}>
-							Sign In
-						</Button>
-						<Button variant="contained"  color="button_secondary" size="large" onClick={() => navigate('/signup')}>
-							Sign Up
-						</Button>
+					<Stack spacing={3} direction="row">
+						{renderButtons()}
 					</Stack>
 				</Box>
 			</Toolbar>
