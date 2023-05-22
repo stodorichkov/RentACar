@@ -22,6 +22,16 @@ public class RentalEntity extends Base{
 
     private Double totalPrice;
 
+    private String status;//active(default)/canceled/completed
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @ManyToOne
     private CarEntity rentedCar;
 

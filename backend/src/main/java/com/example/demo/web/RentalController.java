@@ -1,10 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.model.dto.AddRentalDto;
-import com.example.demo.model.dto.RentalCarDto;
-import com.example.demo.model.dto.RentalDto;
+import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.dto.ShowRentalCostDto;
 import com.example.demo.service.service.RentalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +40,17 @@ public class RentalController {
                                                   @PathVariable Long carId
                                                  ) {
         String response = this.rentalService.addRental(addrentalDto,carId);
-        if(!response.equals("Everything was successful.")){
-            return ResponseEntity.internalServerError().build();
-        }
+//        if(!response.equals("Everything was successful.")){
+//            return ResponseEntity.internalServerError().build();
+//        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/completeRental")
+
+    public ResponseEntity<String> completeRental(@RequestBody CompleteRentalDto completeRentalDto) {
+        String response = this.rentalService.completeRental(completeRentalDto);
+
         return ResponseEntity.ok(response);
     }
 

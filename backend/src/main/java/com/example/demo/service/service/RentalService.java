@@ -13,6 +13,9 @@ public interface RentalService {
     RentalEntity getRentalById(Long id);
     String addRental(AddRentalDto addRentalDto,Long carId);
     RentalEntity updateRental(Long id, RentalDto rentalDto);
+
+
+
     void deleteRental(Long id);
     double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
 
@@ -22,6 +25,7 @@ public interface RentalService {
 
     Double  showTotalCost(ShowRentalCostDto showRentalCostDto);
 
+    String completeRental(CompleteRentalDto completeRentalDto);
     Double calculateMonthlyRevenue(int month, int year);
 
 }

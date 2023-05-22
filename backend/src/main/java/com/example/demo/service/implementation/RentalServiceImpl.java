@@ -3,11 +3,8 @@ package com.example.demo.service.implementation;
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.CarEntity;
 import com.example.demo.model.UserEntity;
-import com.example.demo.model.dto.AddRentalDto;
-import com.example.demo.model.dto.RentalCarDto;
-import com.example.demo.model.dto.RentalDto;
+import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.dto.ShowRentalCostDto;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.UserRepository;
@@ -17,7 +14,6 @@ import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -49,6 +45,9 @@ public class RentalServiceImpl implements RentalService {
     public RentalEntity getRentalById(Long id) {
         return rentalRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
     }
+
+
+
     @Override
     public Double showTotalCost(ShowRentalCostDto showRentalCostDto) {
         CarEntity car = carRepository.findById(showRentalCostDto.getCarId())
@@ -74,22 +73,26 @@ public class RentalServiceImpl implements RentalService {
         rental.setEndTime(addRentalDto.getEndTime());
         LocalDateTime currentTime = LocalDateTime.now();
         UserEntity renter = this.userService.findUserByName("Administrator");
+        rental.setRenter(renter);
+        rental.setRentedCar(currentCar);
+        rental.setStatus("active");
 
-        if(rental.getStartTime().isBefore(currentTime.plusHours(1))){
-            return "Cannot make reservation 1 hour or less before your current time!";
+        if (rental.getStartTime().isBefore(currentTime.plusHours(1))) {
+            return "Cannot make a reservation 1 hour or less before your current time!";
         }
-        double balance = renter.getBudget();
-        double price = calculateRentalPrice(
-                addRentalDto.getStartTime(),
-                addRentalDto.getEndTime(),
-                currentCar.getPricePerDay()
-        );
-        //check budget
 
-        if(balance > price){
-            renter.setBudget(balance - price);
-            userRepository.save(renter);
-        }else {
+        double price = calculateRentalPrice(addRentalDto.getStartTime(), addRentalDto.getEndTime(), currentCar.getPricePerDay());
+
+        // Check budget and existing reservations
+        List<RentalEntity> userReservations = rentalRepository.findByRenterUserNameActive(renter.getUsername());
+        double totalReservationCost = userReservations.stream().mapToDouble(RentalEntity::getTotalPrice).sum();
+        double totalCost = totalReservationCost + price;
+
+        double balance = renter.getBudget();
+        if (balance > totalCost) {
+            rental.setTotalPrice(price);
+            this.rentalRepository.save(rental);
+        } else {
             return "Not enough money for reservation!";
         }
 
@@ -118,6 +121,52 @@ public class RentalServiceImpl implements RentalService {
         return rentalRepository.save(rental);
     }
 
+    @Override
+    public String completeRental(CompleteRentalDto completeRentalDto) {
+        RentalEntity rental = rentalRepository.findById(completeRentalDto.getRentalId())
+                .orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
+
+        if (rental.getStatus().equals("completed")) {
+            throw new RuntimeException("Rental is already completed");
+        }
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime startTime = rental.getStartTime();
+        LocalDateTime endTime = rental.getEndTime();
+        UserEntity renter = rental.getRenter();
+        CarEntity  car = rental.getRentedCar();
+        double balance = renter.getBudget();
+        double totalPrice = calculateRentalPrice(rental.getStartTime(),rental.getEndTime(), car.getPricePerDay());
+        double payment = 0.0;
+
+
+        long rentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), endTime.toLocalDate());
+        long currentRentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), currentTime.toLocalDate());
+
+
+        if (currentTime.isBefore(startTime.minusHours(1))) {
+            rental.setStatus("canceled");
+            rentalRepository.save(rental);
+            return "Rental canceled ,charged: 0";
+        }
+        else if (currentRentalDays < rentalDays / 2) {
+            payment = totalPrice / 2.0;
+        } else {
+            payment = totalPrice;
+        }
+
+       if (balance < payment) {
+          return "Not enough money to complete the rental";
+        } else {
+            renter.setBudget(balance - payment);
+            rental.setStatus("completed");
+
+        }
+
+        userRepository.save(renter);
+        rentalRepository.save(rental);
+        return "Rental complete!";
+    }
     @Override
     public void deleteRental(Long id) {
         rentalRepository.deleteById(id);
