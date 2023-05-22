@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -44,11 +46,17 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<CarDto> getAllCars() {
        List<CarEntity> allCars = this.carRepository.findAll();
+        Set<String> uniqueCars = new HashSet<>();
        List<CarDto> displayCars = new ArrayList<>();
-       if(allCars!=null && !allCars.isEmpty()){
-          displayCars = this.modelMapper.map(allCars,new TypeToken<List<CarDto>>(){}.getType());
-       }
-       return displayCars;
+        for (CarEntity car : allCars) {
+            String carMakeModel = car.getMake() + car.getModel();
+            if (!uniqueCars.contains(carMakeModel)) {
+                uniqueCars.add(carMakeModel);
+                displayCars.add(this.modelMapper.map(car, CarDto.class));
+            }
+        }
+
+        return displayCars;
     }
 
     @Override
@@ -58,8 +66,6 @@ public class CarServiceImpl implements CarService {
         }
         return carRepository.findByIsRented(result);
     }
-
-
 
     //ToDo: maybe i need to delete this later
     @Override
@@ -79,13 +85,13 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void addTestCar() {
-        if(this.carRepository.count()==0){
+
             CarEntity car = new CarEntity();
             car.setMake("Audi");
             car.setModel("A7");
             car.setPricePerDay(60.00);
             this.carRepository.save(car);
-        }
+
     }
 
     @Override
