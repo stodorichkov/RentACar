@@ -10,6 +10,7 @@ import com.example.demo.service.UserDetailsServiceImpl;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -192,16 +193,15 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     @Override
-    public String validateUser(LoginUserDto loginUserDto) {
-        if(!this.userRepository.findByUsername(loginUserDto.getUsername()).isEmpty()){
-            return "This username seems not to be correct.";
-        }else if(!this.userRepository.findByPassword(loginUserDto.getPassword()).isEmpty()){
-            return "This password seems not to be correct";
+    public List<UserProfileDto> findAllUsers() {
+        List<UserEntity> all = this.userRepository.findAll();
+        if(all.isEmpty()){
+            return null;
         }
-        return "Everything is ok, you can go!";
+        return this.modelMapper.map(all,new TypeToken<List<UserProfileDto>>(){}.getType());
     }
+
 
     @Override
     public void setAsAdmin(String username) {

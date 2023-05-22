@@ -5,6 +5,8 @@ import com.example.demo.model.dto.*;
 
 import java.security.Principal;
 
+import java.util.List;
+
 public interface UserService {
 
     void seedAdmin();
@@ -25,9 +27,7 @@ public interface UserService {
 
     boolean isAdmin(Principal principal);
 
-
-
-    String validateUser(LoginUserDto loginUserDto);
+    List<UserProfileDto> findAllUsers();
 
     void setAsAdmin(String username);
 

@@ -1,14 +1,15 @@
 package com.example.demo.service.service;
 
 import com.example.demo.model.CarEntity;
+import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.*;
 
 public interface CarService {
-    List<CarDto> getAllCars();
+    Set<CarDto> getAllUniqueCars();
     List<CarEntity> displayCarsByAvailability(Boolean result);
 
     void deleteCar(Long id);
@@ -24,4 +25,6 @@ public interface CarService {
     CarEnumDto findCarEnumInfo();
 
     CarEntity findCarById(Long id);
+
+    List<CarAdminDto> findCarsForAdmin(String username);
 }

@@ -1,16 +1,19 @@
 package com.example.demo.web;
 
 import com.example.demo.model.CarEntity;
+import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.service.service.CarService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/car")
@@ -22,10 +25,25 @@ public class CarController {
         this.carService = carService;
         this.modelMapper = modelMapper;
     }
-    @GetMapping("/all")
-    public ResponseEntity<List<CarDto>> getAll(){
+    @GetMapping("/all-unique")
+    public ResponseEntity<Set<CarDto>> getAllUnique(){
 
-        return ResponseEntity.ok(this.carService.getAllCars());
+        Set<CarDto> uniqueCars = this.carService.getAllUniqueCars();
+        if(uniqueCars.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(uniqueCars);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<CarAdminDto>> allCarsForAdmin(Authentication authentication){
+        List<CarAdminDto> cars = this.carService.findCarsForAdmin(authentication.getName());
+        if(!cars.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.ok(cars);
+        }
     }
 
     @GetMapping("/{id}/info")
@@ -40,12 +58,14 @@ public class CarController {
     }
 
     @DeleteMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteCars(@PathVariable Long id){
         this.carService.deleteCar(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
                                          Principal principal){
         return ResponseEntity.ok(this.carService.addCar(carDto,principal));

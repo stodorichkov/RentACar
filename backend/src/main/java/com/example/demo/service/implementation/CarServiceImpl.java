@@ -2,10 +2,13 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.model.CarEntity;
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.model.enums.EngineEnum;
+import com.example.demo.model.enums.RoleEnum;
 import com.example.demo.model.enums.TransmissionEnum;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
@@ -21,10 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -44,19 +44,16 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDto> getAllCars() {
-       List<CarEntity> allCars = this.carRepository.findAll();
-        Set<String> uniqueCars = new HashSet<>();
-       List<CarDto> displayCars = new ArrayList<>();
-        for (CarEntity car : allCars) {
-            String carMakeModel = car.getMake() + car.getModel();
-            if (!uniqueCars.contains(carMakeModel)) {
-                uniqueCars.add(carMakeModel);
-                displayCars.add(this.modelMapper.map(car, CarDto.class));
-            }
-        }
+    public Set<CarDto> getAllUniqueCars() {
 
-        return displayCars;
+       List<CarEntity> allCars = this.carRepository.findAll();
+       List<CarDto> carToDisplay = this.modelMapper.map(allCars,new TypeToken<List<CarDto>>(){}.getType());
+
+       Set<CarDto> filteredCars = new HashSet<>();
+       filteredCars.addAll(carToDisplay);
+
+       return filteredCars;
+
     }
 
     @Override
@@ -155,6 +152,31 @@ public class CarServiceImpl implements CarService {
         return this.carRepository.findById(id).orElseThrow(
                 () -> new ObjectNotFoundException("Car with requested id:" + id + " not found.")
         );
+    }
+
+    @Override
+    public List<CarAdminDto> findCarsForAdmin(String username) {
+
+        UserEntity admin = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new ObjectNotFoundException("User with requested name:" + username + " was not found.")
+        );
+        List<CarAdminDto> carsToDisplay = new ArrayList<>();
+        RoleEntity adminRole = new RoleEntity(RoleEnum.ADMIN);
+        if(admin.getRoles().contains(adminRole)){
+            List<CarEntity> adminCars = admin.getAddedByAdmin();
+            for(CarEntity c : adminCars){
+                carsToDisplay.add(
+                        new CarAdminDto(
+                                c.getId(),
+                                c.getMake() + " " + c.getModel(),
+                                c.getRegistrationPlate(),
+                                c.getPricePerDay()
+                        )
+                );
+            }
+
+        }
+        return carsToDisplay;
     }
 
 }

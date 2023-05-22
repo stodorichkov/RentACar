@@ -4,12 +4,14 @@ import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.TransmissionEnum;
 import jakarta.validation.constraints.*;
 
+import java.util.Objects;
+
 public class CarDto {
 
  private Long id;
 
  private String imageUrl;
- @NotNull(message="Username field empty")
+
  private String model;
 
  private String make;
@@ -122,5 +124,25 @@ public class CarDto {
 
  public void setRegistrationPlate(String registrationPlate) {
   this.registrationPlate = registrationPlate;
+ }
+
+ @Override
+ public boolean equals(Object o) {
+  if (this == o) return true;
+  if (!(o instanceof CarDto carDto)) return false;
+  return Objects.equals(getId(),
+          carDto.getId()) && Objects.equals(getImageUrl(),
+          carDto.getImageUrl()) && Objects.equals(getModel(),
+          carDto.getModel()) && Objects.equals(getMake(),
+          carDto.getMake()) && Objects.equals(getCapacity(),
+          carDto.getCapacity()) && getEngine() == carDto.getEngine() &&
+          getTransmissionEnum() == carDto.getTransmissionEnum() &&
+          Objects.equals(getPricePerDay(), carDto.getPricePerDay());
+ }
+
+ @Override
+ public int hashCode() {
+  return Objects.hash(getId(), getImageUrl(), getModel(), getMake(),
+          getCapacity(), getEngine(), getTransmissionEnum(), getPricePerDay());
  }
 }

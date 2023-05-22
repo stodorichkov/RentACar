@@ -49,11 +49,22 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserProfileInfo(authentication.getName()));
     }
 
+    @GetMapping("/all-users")
+    public ResponseEntity<List<UserProfileDto>> allUsersForAdmin(Authentication authentication){
+
+       List<UserProfileDto> all =  this.userService.findAllUsers();
+       if(all == null){
+           return ResponseEntity.noContent().build();
+       }
+       return ResponseEntity.ok(all);
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(Authentication authentication){
         this.userService.deleteUser(authentication.getName());
         return ResponseEntity.noContent().build();
     }
+
 
 
     @PatchMapping("/edit")

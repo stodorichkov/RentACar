@@ -5,6 +5,7 @@ import com.example.demo.model.RentalEntity;
 import com.example.demo.service.service.RentalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,19 +21,18 @@ public class RentalController {
         this.rentalService = rentalService;
     }
 
-    @GetMapping("/{username}/history")
-    public ResponseEntity<List<RentalCarDto>> getUserHistory(@PathVariable String username){
-        List<RentalCarDto> rental = this.rentalService.getUserRentalHistory(username);
+    @GetMapping("/history")
+    public ResponseEntity<List<RentalCarDto>> getUserHistory(Authentication authentication){
+        List<RentalCarDto> rental = this.rentalService.getUserRentalHistory(authentication.getName());
         if(rental.isEmpty()){
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(rental);
     }
 
-    @GetMapping("/monthly-revenue/{year}/{month}")
-    public ResponseEntity<Double> getMonthlyRevenue(@PathVariable int year, @PathVariable int month) {
-        double monthlyRevenue = rentalService.calculateMonthlyRevenue(month, year);
-        return new ResponseEntity<>(monthlyRevenue, HttpStatus.OK);
+    @GetMapping("/total")
+    public ResponseEntity<Double> getMonthlyRevenue() {
+        return ResponseEntity.ok(this.rentalService.calculateMonthlyRevenue());
     }
 
     @PostMapping("/{carId}/add")

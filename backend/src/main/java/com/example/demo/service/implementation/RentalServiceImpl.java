@@ -215,13 +215,15 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public Double calculateMonthlyRevenue(int month, int year) {
-        List<RentalEntity> rentals = rentalRepository.findAll();
+    public Double calculateMonthlyRevenue() {
+        List<RentalEntity> rentals =
+                this.rentalRepository.findAllFinishedRentalsForCurrentMonth(LocalDateTime.now().getMonthValue());
 
-        double total = rentals.stream()
-                .filter(rental -> rental.getStartTime().getMonthValue() == month && rental.getStartTime().getYear() == year)
-                .mapToDouble(RentalEntity::getTotalPrice)
-                .sum();
+        //ToDo: check status of the rental
+        double total = 0.0;
+        for(RentalEntity r : rentals){
+            total+=r.getTotalPrice();
+        }
 
         return total;
     }
