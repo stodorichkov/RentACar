@@ -58,7 +58,7 @@ public class RentalServiceImpl implements RentalService {
         showRentalCostDto.setStartTime(showRentalCostDto.getStartTime());
         showRentalCostDto.setEndTime(showRentalCostDto.getEndTime());
         showRentalCostDto.setCarId(showRentalCostDto.getCarId());
-        showRentalCostDto.setRentalPrice(price);
+        showRentalCostDto.setRentalCost(price);
 
         return price ;
     }

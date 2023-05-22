@@ -4,6 +4,7 @@ import com.example.demo.model.dto.AddRentalDto;
 import com.example.demo.model.dto.RentalCarDto;
 import com.example.demo.model.dto.RentalDto;
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.dto.ShowRentalCostDto;
 import com.example.demo.service.service.RentalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,13 +40,18 @@ public class RentalController {
 
     @PostMapping("/{carId}/add")
     public ResponseEntity<String> addRental(@RequestBody AddRentalDto addrentalDto,
-                                                  @PathVariable Long carId,
-                                                  Principal principal) {
-        String response = this.rentalService.addRental(addrentalDto,carId,principal);
+                                                  @PathVariable Long carId
+                                                 ) {
+        String response = this.rentalService.addRental(addrentalDto,carId);
         if(!response.equals("Everything was successful.")){
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/showCost")
+    public ResponseEntity<Double> calculateRentalPrice(@RequestBody ShowRentalCostDto showRentalCostDto) {
+        return new ResponseEntity<>(rentalService.showTotalCost(showRentalCostDto), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/edit")

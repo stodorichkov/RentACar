@@ -1,10 +1,7 @@
 package com.example.demo.service.service;
 
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.dto.AddRentalDto;
-import com.example.demo.model.dto.RentalCarDto;
-import com.example.demo.model.dto.RentalDto;
-import com.example.demo.model.dto.UserProfileDto;
+import com.example.demo.model.dto.*;
 import org.springframework.cglib.core.Local;
 
 import java.security.Principal;
@@ -14,7 +11,7 @@ import java.util.List;
 public interface RentalService {
     List<RentalEntity> getAllRentals();
     RentalEntity getRentalById(Long id);
-    String addRental(AddRentalDto addRentalDto,Long carId, Principal principal);
+    String addRental(AddRentalDto addRentalDto,Long carId);
     RentalEntity updateRental(Long id, RentalDto rentalDto);
     void deleteRental(Long id);
     double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
@@ -22,6 +19,8 @@ public interface RentalService {
     List<RentalCarDto> getUserRentalHistory(String username);
 
     void addTestRental();
+
+    Double  showTotalCost(ShowRentalCostDto showRentalCostDto);
 
     Double calculateMonthlyRevenue(int month, int year);
 
