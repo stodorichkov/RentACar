@@ -14,6 +14,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -63,10 +64,12 @@ public class RentalServiceImpl implements RentalService {
         return price ;
     }
     @Override
+    @Transactional
     public String addRental(AddRentalDto addRentalDto,Long carId) {
 
         RentalEntity rental = new RentalEntity();
         CarEntity currentCar = this.carService.findCarById(carId);
+        currentCar.setRented(true);
         rental.setStartTime(addRentalDto.getStartTime());
         rental.setEndTime(addRentalDto.getEndTime());
         LocalDateTime currentTime = LocalDateTime.now();
@@ -93,6 +96,7 @@ public class RentalServiceImpl implements RentalService {
         rental.setRenter(renter);
         rental.setTotalPrice(price);
         this.rentalRepository.save(rental);
+        this.carRepository.save(currentCar);
         return "Everything was successful.";
     }
     @Override

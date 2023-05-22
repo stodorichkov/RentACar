@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
             UserEntity admin = new UserEntity();
             admin.setUsername("Administrator");
             admin.setPassword(this.passwordEncoder.encode("Codexio10*"));
+            admin.setRoles(this.roleRepository.findAll());
             this.userRepository.save(admin);
         }
 
@@ -207,6 +208,17 @@ public class UserServiceImpl implements UserService {
             return "This password seems not to be correct";
         }
         return "Everything is ok, you can go!";
+    }
+
+    @Override
+    public void setAsAdmin(String username) {
+       UserEntity user =  this.findUserByName(username);
+       RoleEntity administrator = this.roleRepository.findById(1l).orElseThrow(
+               () -> new ObjectNotFoundException("Role with requested id=" + 1 + " not fond,")
+       );
+       user.setRoles(List.of(administrator));
+       this.userRepository.save(user);
+
     }
 
 

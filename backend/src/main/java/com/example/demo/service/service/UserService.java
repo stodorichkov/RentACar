@@ -29,4 +29,6 @@ public interface UserService {
 
     String validateUser(LoginUserDto loginUserDto);
 
+    void setAsAdmin(String username);
+
 }

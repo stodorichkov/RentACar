@@ -128,5 +128,12 @@ public class UserController {
     }
 
 
+    @PatchMapping("/{username}/set-admin")
+    public ResponseEntity<?> setAsAdmin(@PathVariable String username){
+        this.userService.setAsAdmin(username);
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }
