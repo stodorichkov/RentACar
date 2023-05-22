@@ -3,10 +3,7 @@ package com.example.demo.service.implementation;
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
-import com.example.demo.model.dto.AuthenticatedUserDto;
-import com.example.demo.model.dto.LoginUserDto;
-import com.example.demo.model.dto.UserProfileDto;
-import com.example.demo.model.dto.UserRegisterDto;
+import com.example.demo.model.dto.*;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserDetailsServiceImpl;
@@ -128,7 +125,7 @@ public class UserServiceImpl implements UserService {
         if(this.userRepository.findByUsername(userRegisterDto.getUsername()).isEmpty()){
             user.setUsername(userRegisterDto.getUsername());
         }else{
-            return "Username already existed.";
+            return "Username already exist.";
         }
 
         if(this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty() &&
@@ -165,6 +162,14 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         return "Registration was successful";
+    }
+
+    @Override
+    public void addMoneyToBudget(MoneyDto moneyDto) {
+        UserEntity user = userRepository.findByUsername("Administrator").get();
+        user.setBudget(user.getBudget() + moneyDto.getMoney());
+        this.userRepository.save(user);
+
     }
 
     @Override
