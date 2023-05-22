@@ -21,28 +21,36 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
+
+//    @Override
+//    @Transactional
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//
+//        UserEntity authUser = this.userRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User with name:" + username + " not found."));
+//
+//        List<GrantedAuthority> authorities = authUser
+//                .getRoles()
+//                .stream()
+//                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRole().name()))
+//                .collect(Collectors.toList());
+//
+//        return new User(authUser.getUsername(), authUser.getPassword(), authorities);
+//
+//    }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        UserEntity authUser = this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with name:" + username + " not found."));
-
-        List<GrantedAuthority> authorities = authUser
-                .getRoles()
-                .stream()
-                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRole().name()))
-                .collect(Collectors.toList());
-
-        return new User(authUser.getUsername(),this.passwordEncoder.encode(authUser.getPassword()),authorities);
-
+        UserEntity user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("User with name:" + username + " not found")
+        );
+        return UserDetailsImpl.build(user);
     }
 }

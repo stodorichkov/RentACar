@@ -75,8 +75,6 @@ public class RentalServiceImpl implements RentalService {
         if(rental.getStartTime().isBefore(currentTime.plusHours(1))){
             return "Cannot make reservation 1 hour or less before your current time!";
         }
-
-
         double balance = renter.getBudget();
         double price = calculateRentalPrice(
                 addRentalDto.getStartTime(),
