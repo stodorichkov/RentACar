@@ -1,12 +1,19 @@
 import { AppBar, Toolbar, Button, Stack, Typography, Avatar, Box }  from '@mui/material';
 
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOutAction } from '../redux/actions/userActions';
 
 const Bar = () => {
 	const navigate = useNavigate();
 	
 	const user = useSelector((state) => state.user);
+	const dispatch = useDispatch();
+
+	const signOutUser = () => {
+		dispatch(signOutAction());
+		navigate('/');
+	}
 
 	const renderButtons = () => {
 		if(!user) {
@@ -34,8 +41,8 @@ const Bar = () => {
 							Profile
 						</Typography>
 					</Button>
-					<Button variant="contained"  color="button_secondary" size="large" onClick={() => navigate('/p')}>
-						Sign Up
+					<Button variant="contained"  color="button_secondary" size="large" onClick={signOutUser}>
+						Sign Out
 					</Button>
 				</>
 			)

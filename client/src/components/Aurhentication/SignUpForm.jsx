@@ -1,8 +1,12 @@
 import { Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+
 import { useState } from 'react';
-import axios from 'axios';
+import { useTheme } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+
+import axios from 'axios';
+
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('');
@@ -34,16 +38,11 @@ const SignUpForm = () => {
 
     const navigate = useNavigate();
 
+    const theme = useTheme();
+
     const addUser = async () => {
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*].{7,}$/;
         if (username === '' || age === '' || email === '' || phone === '' || password === '' || confirmPassword === '') {
             setAlert('The form must be completed!');
-        }
-        else if (!passwordRegex.test(password)) {
-            setAlert('Password is not valid! It must containst min 8 charecters, one special and numbers');
-        }
-        else if (password !== confirmPassword) {
-            setAlert('Password not confirmed!');
         }
         else {
             const content = {
@@ -51,7 +50,8 @@ const SignUpForm = () => {
                 email: email,
                 years: age,
                 mobilePhone: phone,
-                password: password
+                password: password,
+                confirmPassword: confirmPassword
             };
             try {
                 const response = await axios.post('http://localhost:8086/user/register', content);
@@ -69,13 +69,13 @@ const SignUpForm = () => {
     return (
         <Grid container justifyContent='center' sx={{marginTop: '2vw' }}>
             <Grid xl={3.5} lg={4} md={5} sm={7} xs={10}>
-                <Paper elevation={12} sx={{padding: '3em', overflow: 'auto', maxHeight: {xs: '80vh', sm:'80vh', md: '80vh', lg: '85vh', xl: '100vh'}}}>
+                <Paper elevation={12} sx={{padding: '3em', overflow: 'auto', maxHeight: {xs: '80vh', sm:'80vh', md: '80vh', lg: '85vh', xl: '80vh'}}}>
                     <Grid container spacing={4} justifyContent="center">
                         <Grid xs={12}>
                             <Typography variant="h3" color="textPrimary" align="center" >Sign Up</Typography>
                         </Grid>
                         <Grid xs={12}>
-                            <Divider/>
+                            <Divider sx={{backgroundColor: theme.palette.menue.main}}/>
                         </Grid>
                         {alert ? (
                             <Grid xs={12}>

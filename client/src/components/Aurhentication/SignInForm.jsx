@@ -1,8 +1,14 @@
 import { Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useState } from 'react';
+
 import axios from 'axios';
+
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
+
+import { signInAction } from '../../redux/actions/userActions';
 
 const SignInForm = () => {
     const [username, setUsername] = useState('');
@@ -17,9 +23,10 @@ const SignInForm = () => {
     }
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const theme = useTheme();
 
     const signInUser = async () => {
-        console.log(password)
         if (username === '' || password === '') {
             setAlert('The form must be completed!');
         }
@@ -32,13 +39,17 @@ const SignInForm = () => {
                 const response = await axios.post('http://localhost:8086/user/login', content);
                 if (response.status === 200) {
                     console.log(response);
+                    // dispatch(signInAction("skfsj"));
                     navigate('/');
                 }  
             }
             catch (error) {
-                setAlert(error.response.data)
+                // setAlert(error.response.data)
+                console.log(error)
             } 
         }
+        // dispatch(signInAction("skfsj"));
+        // navigate('/');
     }
 
     return (
@@ -50,7 +61,7 @@ const SignInForm = () => {
                             <Typography variant="h3" color="textPrimary" align="center" >Sign In</Typography>
                         </Grid>
                         <Grid xs={12}>
-                            <Divider/>
+                            <Divider sx={{backgroundColor: theme.palette.menue.main}}/>
                         </Grid>
                         {alert ? (
                             <Grid xs={12}>

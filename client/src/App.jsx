@@ -21,6 +21,14 @@ const App = () => {
 					<Route path='/admin' element={null}/>
 				</>
 			)
+		}
+		else {
+			return(
+				<>
+					<Route path='/signin' element={<SignInForm />}/>
+					<Route path='/signup' element={<SignUpForm />}/>
+				</>
+			)
 		}	
 	}
 	
@@ -30,9 +38,7 @@ const App = () => {
 				<Bar />
 				<Routes>
 					<Route path='/' element={<Home/>}/>
-					<Route path='/signin' element={<SignInForm />}/>
-					<Route path='/signup' element={<SignUpForm />}/>
-					{renderRoutes}
+					{renderRoutes()}
 					<Route path="*" element={<Navigate to="/" />} />
 				</Routes>
 			</Router>
