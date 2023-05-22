@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 
 import com.example.demo.model.dto.LoginUserDto;
+import com.example.demo.model.dto.MoneyDto;
 import com.example.demo.model.dto.UserProfileDto;
 import com.example.demo.model.dto.UserRegisterDto;
 import com.example.demo.security.jwt.JwtUtils;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.stream.Collectors;
 
 import java.util.List;
@@ -87,6 +89,12 @@ public class UserController {
     @PostMapping("/login-error")
     public ResponseEntity<String> loginError(){
         return ResponseEntity.internalServerError().body("Wrong username or password.");
+    }
+    @PutMapping("/addMoney")
+    public ResponseEntity<String> addMoney(@RequestBody MoneyDto moneyDto
+                                           ){
+        this.userService.addMoneyToBudget(moneyDto);
+        return ResponseEntity.ok("Successfully added: " + moneyDto.getMoney() + " to your budget!");
     }
 
     @PostMapping("/login-success")
