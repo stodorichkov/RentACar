@@ -11,7 +11,7 @@ public interface UserService {
 
     UserProfileDto getUserProfileInfo(String username);
 
-    void deleteUser(Long id);
+    void deleteUser(String username);
 
     String editUserProfile(String username,UserProfileDto userProfileDto);
 
@@ -19,13 +19,13 @@ public interface UserService {
 
     String addUser(UserRegisterDto userRegisterDto);
 
-    void addMoneyToBudget(MoneyDto moneyDto);
+    void addMoneyToBudget(String username,MoneyDto moneyDto);
 
     UserEntity findById(Long id);
 
     boolean isAdmin(Principal principal);
 
-    AuthenticatedUserDto authUser(String username);
+
 
     String validateUser(LoginUserDto loginUserDto);
 

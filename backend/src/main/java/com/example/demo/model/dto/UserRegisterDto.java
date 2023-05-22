@@ -24,13 +24,16 @@ public class UserRegisterDto {
 
     private String password;
 
-    public UserRegisterDto(Long id, String username, String email, Integer years, String mobilePhone, String password) {
+    private String confirmPassword;
+
+    public UserRegisterDto(Long id, String username, String email, Integer years, String mobilePhone, String password, String confirmPassword) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.years = years;
         this.mobilePhone = mobilePhone;
         this.password = password;
+        this.confirmPassword = confirmPassword;
     }
 
     public UserRegisterDto(){}
@@ -81,5 +84,13 @@ public class UserRegisterDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

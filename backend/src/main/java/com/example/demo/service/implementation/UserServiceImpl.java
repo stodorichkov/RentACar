@@ -68,8 +68,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
-        this.userRepository.deleteById(id);
+    public void deleteUser(String username) {
+        this.userRepository.deleteByUsername(username);
     }
 
 
@@ -147,12 +147,17 @@ public class UserServiceImpl implements UserService {
             return "Mobile phone already exists.";
         }
 
+        if(userRegisterDto.getPassword().matches("^(?=.[A-Z])(?=.[a-z])(?=.\\d)(?=.[!@#$%^&])[A-Za-z\\d!@#$%^&].{7,}$") &&
+                !userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
+            user.setPassword(this.passwordEncoder.encode(userRegisterDto.getPassword()));
+        }else{
+            return "Password is not valid! It must contain min 8 characters, one special and numbers";
+        }
 
         RoleEntity userRole = this.roleRepository.findById(2l).orElseThrow(
                 () -> new ObjectNotFoundException("Role with requested id:" + 2 + " was not found.")
         );
         user.setRoles(List.of(userRole));
-        user.setPassword(this.passwordEncoder.encode(userRegisterDto.getPassword()));
         user.setYears(userRegisterDto.getYears());
 
         this.userRepository.save(user);
@@ -166,11 +171,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addMoneyToBudget(MoneyDto moneyDto) {
-        UserEntity user = userRepository.findByUsername("Administrator").get();
+    public void addMoneyToBudget(String username, MoneyDto moneyDto) {
+        UserEntity user = this.findUserByName(username);
         user.setBudget(user.getBudget() + moneyDto.getMoney());
         this.userRepository.save(user);
-
     }
 
     @Override
@@ -188,17 +192,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public AuthenticatedUserDto authUser(String username) {
-        AuthenticatedUserDto auth = new AuthenticatedUserDto();
-        UserEntity authUser = this.findUserByName(username);
-        auth.setUsername(authUser.getUsername());
-        auth.setId(authUser.getId());
-        auth.setYears(authUser.getYears());
-        auth.setEmail(authUser.getEmail());
-      //  auth.setAdmin(this.isAdmin(principal));
-        return auth;
-    }
 
     @Override
     public String validateUser(LoginUserDto loginUserDto) {

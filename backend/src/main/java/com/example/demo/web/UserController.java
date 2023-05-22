@@ -44,26 +44,25 @@ public class UserController {
         this.jwtUtils = jwtUtils;
     }
 
-    @GetMapping("/{username}/profile")
-    public ResponseEntity<UserProfileDto> userProfile(@PathVariable String username){
-        return ResponseEntity.ok(this.userService.getUserProfileInfo(username));
-
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileDto> userProfile(Authentication authentication){
+        return ResponseEntity.ok(this.userService.getUserProfileInfo(authentication.getName()));
     }
 
-    @DeleteMapping("/{id}/delete")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
-        this.userService.deleteUser(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(Authentication authentication){
+        this.userService.deleteUser(authentication.getName());
         return ResponseEntity.noContent().build();
     }
 
 
-    @PatchMapping("/{username}/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<String> editProfile(
-            @PathVariable String username,
+            Authentication authentication,
             @RequestBody UserProfileDto userProfileDto
     ){
 
-        String returnStatement = this.userService.editUserProfile(username,userProfileDto);
+        String returnStatement = this.userService.editUserProfile(authentication.getName(), userProfileDto);
 
         if(!returnStatement.equals("Edit is successful")){
             return ResponseEntity.internalServerError().body(returnStatement);
@@ -86,20 +85,13 @@ public class UserController {
     }
 
 
-    @PostMapping("/login-error")
-    public ResponseEntity<String> loginError(){
-        return ResponseEntity.internalServerError().body("Wrong username or password.");
-    }
-    @PutMapping("/addMoney")
-    public ResponseEntity<String> addMoney(@RequestBody MoneyDto moneyDto
+    @PutMapping("/add-money")
+    public ResponseEntity<String> addMoney(
+            Authentication authentication,
+            @RequestBody MoneyDto moneyDto
                                            ){
-        this.userService.addMoneyToBudget(moneyDto);
+        this.userService.addMoneyToBudget(authentication.getName(), moneyDto);
         return ResponseEntity.ok("Successfully added: " + moneyDto.getMoney() + " to your budget!");
-    }
-
-    @PostMapping("/login-success")
-    public ResponseEntity<String> loginSuccess(){
-        return ResponseEntity.ok("Connection was successful.");
     }
 
     @PostMapping("/login")
@@ -127,13 +119,11 @@ public class UserController {
       );
     }
 
-
     @PatchMapping("/{username}/set-admin")
     public ResponseEntity<?> setAsAdmin(@PathVariable String username){
         this.userService.setAsAdmin(username);
         return ResponseEntity.ok().build();
     }
-
 
 
 }
