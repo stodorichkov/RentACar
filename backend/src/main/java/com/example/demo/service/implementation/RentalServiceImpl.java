@@ -72,9 +72,11 @@ public class RentalServiceImpl implements RentalService {
         LocalDateTime currentTime = LocalDateTime.now();
         UserEntity renter = this.userService.findUserByName("Administrator");
 
-        if(rental.getStartTime().plusHours(1).isAfter(currentTime)){
-            return "Cannot make reservation 1 hour prior your current time!";
+        if(rental.getStartTime().isBefore(currentTime.plusHours(1))){
+            return "Cannot make reservation 1 hour or less before your current time!";
         }
+
+
         double balance = renter.getBudget();
         double price = calculateRentalPrice(
                 addRentalDto.getStartTime(),
@@ -82,6 +84,7 @@ public class RentalServiceImpl implements RentalService {
                 currentCar.getPricePerDay()
         );
         //check budget
+
         if(balance > price){
             renter.setBudget(balance - price);
             userRepository.save(renter);
@@ -91,7 +94,7 @@ public class RentalServiceImpl implements RentalService {
 
         rental.setRenter(renter);
         rental.setTotalPrice(price);
-
+        this.rentalRepository.save(rental);
         return "Everything was successful.";
     }
     @Override
