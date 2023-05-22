@@ -1,10 +1,7 @@
 package com.example.demo.service.service;
 
 import com.example.demo.model.UserEntity;
-import com.example.demo.model.dto.AuthenticatedUserDto;
-import com.example.demo.model.dto.LoginUserDto;
-import com.example.demo.model.dto.UserProfileDto;
-import com.example.demo.model.dto.UserRegisterDto;
+import com.example.demo.model.dto.*;
 
 import java.security.Principal;
 
@@ -21,6 +18,8 @@ public interface UserService {
     UserEntity findUserByName(String username);
 
     String addUser(UserRegisterDto userRegisterDto);
+
+    void addMoneyToBudget(MoneyDto moneyDto);
 
     UserEntity findById(Long id);
 
