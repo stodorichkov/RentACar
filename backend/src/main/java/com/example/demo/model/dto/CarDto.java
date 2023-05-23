@@ -137,12 +137,14 @@ public class CarDto {
           carDto.getMake()) && Objects.equals(getCapacity(),
           carDto.getCapacity()) && getEngine() == carDto.getEngine() &&
           getTransmissionEnum() == carDto.getTransmissionEnum() &&
-          Objects.equals(getPricePerDay(), carDto.getPricePerDay());
+          Objects.equals(getPricePerDay(), carDto.getPricePerDay())
+          && Objects.equals(getRented(), carDto.getRented());
  }
 
  @Override
  public int hashCode() {
   return Objects.hash(getId(), getImageUrl(), getModel(), getMake(),
-          getCapacity(), getEngine(), getTransmissionEnum(), getPricePerDay());
+          getCapacity(), getEngine(), getTransmissionEnum(), getPricePerDay(), getRented());
  }
+
 }

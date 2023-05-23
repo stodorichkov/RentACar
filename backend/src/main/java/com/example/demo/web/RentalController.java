@@ -30,9 +30,10 @@ public class RentalController {
         return ResponseEntity.ok(rental);
     }
 
-    @GetMapping("/total")
-    public ResponseEntity<Double> getMonthlyRevenue() {
-        return ResponseEntity.ok(this.rentalService.calculateMonthlyRevenue());
+    @GetMapping("/{month}/{year}/total")
+    public ResponseEntity<Double> getMonthlyRevenue(@PathVariable int month,
+                                                    @PathVariable int year) {
+        return ResponseEntity.ok(this.rentalService.calculateMonthlyRevenue(month,year));
     }
 
     @PostMapping("/{carId}/add")

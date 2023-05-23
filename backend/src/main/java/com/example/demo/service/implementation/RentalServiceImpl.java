@@ -75,7 +75,7 @@ public class RentalServiceImpl implements RentalService {
         UserEntity renter = this.userService.findUserByName("Administrator");
         rental.setRenter(renter);
         rental.setRentedCar(currentCar);
-        rental.setStatus("active");
+       // rental.setStatus("active");
 
         if (rental.getStartTime().isBefore(currentTime.plusHours(1))) {
             return "Cannot make a reservation 1 hour or less before your current time!";
@@ -145,7 +145,7 @@ public class RentalServiceImpl implements RentalService {
 
 
         if (currentTime.isBefore(startTime.minusHours(1))) {
-            rental.setStatus("canceled");
+          //  rental.setStatus("canceled");
             rentalRepository.save(rental);
             return "Rental canceled ,charged: 0";
         }
@@ -159,7 +159,7 @@ public class RentalServiceImpl implements RentalService {
           return "Not enough money to complete the rental";
         } else {
             renter.setBudget(balance - payment);
-            rental.setStatus("completed");
+          //  rental.setStatus("completed");
 
         }
 
@@ -215,9 +215,9 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public Double calculateMonthlyRevenue() {
+    public Double calculateMonthlyRevenue(int month,int year) {
         List<RentalEntity> rentals =
-                this.rentalRepository.findAllFinishedRentalsForCurrentMonth(LocalDateTime.now().getMonthValue());
+                this.rentalRepository.findAllFinishedRentalsForCurrentMonth(month,year);
 
         //ToDo: check status of the rental
         double total = 0.0;

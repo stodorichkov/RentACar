@@ -1,15 +1,10 @@
 package com.example.demo.model;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-
-import java.util.List;
 
 @Entity
 public class RentalEntity extends Base{
@@ -22,30 +17,24 @@ public class RentalEntity extends Base{
 
     private Double totalPrice;
 
-    private String status;//active(default)/canceled/completed
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     @ManyToOne
     private CarEntity rentedCar;
 
     @ManyToOne
     private UserEntity renter;
 
+    @OneToOne
+    private StatusEntity status;
 
-    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice,CarEntity rentedCar,UserEntity renter) {
+
+    public RentalEntity(LocalDateTime startTime, LocalDateTime endTime, Double totalPrice, CarEntity rentedCar, UserEntity renter, StatusEntity status) {
 
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalPrice = totalPrice;
         this.rentedCar = rentedCar;
         this.renter = renter;
+        this.status = status;
     }
 
     public RentalEntity() {}
@@ -94,5 +83,13 @@ public class RentalEntity extends Base{
 
     public void setRentedCar(CarEntity rentedCar) {
         this.rentedCar = rentedCar;
+    }
+
+    public StatusEntity getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEntity status) {
+        this.status = status;
     }
 }

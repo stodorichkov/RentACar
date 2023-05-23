@@ -26,7 +26,7 @@ public interface RentalService {
     Double  showTotalCost(ShowRentalCostDto showRentalCostDto);
 
     String completeRental(CompleteRentalDto completeRentalDto);
-    Double calculateMonthlyRevenue();
+    Double calculateMonthlyRevenue(int month,int year);
 
 }
 

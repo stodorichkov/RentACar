@@ -23,6 +23,8 @@ public class UserEntity extends Base{
 
     private String mobilePhone;
 
+    private Double score;
+
     @ManyToMany
     private List<RoleEntity> roles;
 
@@ -33,7 +35,8 @@ public class UserEntity extends Base{
     private List<CarEntity> addedByAdmin;
 
     public UserEntity(String username, String email, String password,
-                      Double budget, Integer years, String mobilePhone, List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
+                      Double budget, Integer years, String mobilePhone, Double score,
+                      List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
 
         this.username = username;
         this.email = email;
@@ -41,6 +44,7 @@ public class UserEntity extends Base{
         this.budget = budget;
         this.years = years;
         this.mobilePhone = mobilePhone;
+        this.score = score;
         this.roles = roles;
         this.rentals = rentals;
         this.addedByAdmin = addedByAdmin;
@@ -120,5 +124,13 @@ public class UserEntity extends Base{
 
     public void setMobilePhone(String mobilePhone) {
         this.mobilePhone = mobilePhone;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 }
