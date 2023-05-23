@@ -51,10 +51,10 @@ public class CarServiceImpl implements CarService {
        List<CarDto> carToDisplay = this.modelMapper.map(allCars,new TypeToken<List<CarDto>>(){}.getType());
 
        Set<CarDto> filteredCars = new HashSet<>();
+
        filteredCars.addAll(carToDisplay);
 
        return filteredCars;
-
     }
 
     @Override

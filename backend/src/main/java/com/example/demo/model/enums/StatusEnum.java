@@ -2,11 +2,20 @@ package com.example.demo.model.enums;
 
 public enum StatusEnum {
 
-    Active,
-    Completed,
-    HalfCompleted,
+    Reserved,
+
     Canceled,
+    Active,
+
     Late,
+
+    CompletedOnTime,
+
+    CompletedEarly,
+    CompletedLate,
+
+
+
 
 
 }

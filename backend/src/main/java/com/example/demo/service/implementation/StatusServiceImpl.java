@@ -27,12 +27,15 @@ public class StatusServiceImpl implements StatusService {
         if(this.statusRepository.count()!=0) {
             return;
         }
+        StatusEntity reserved = new StatusEntity(StatusEnum.Reserved,0.0);
         StatusEntity active = new StatusEntity(StatusEnum.Active,0.0);
-        StatusEntity completed = new StatusEntity(StatusEnum.Completed,1.5);
-        StatusEntity halfCompleted = new StatusEntity(StatusEnum.HalfCompleted,1.0);
-        StatusEntity canceled = new StatusEntity(StatusEnum.Canceled,0.5);
-        StatusEntity late = new StatusEntity(StatusEnum.Late,0.2);
-        this.statusRepository.saveAll(List.of(active,completed,halfCompleted,canceled,late));
+        StatusEntity canceled = new StatusEntity(StatusEnum.Canceled,0.0);
+        StatusEntity late = new StatusEntity(StatusEnum.Late,0.0);
+        StatusEntity completedOnTime = new StatusEntity(StatusEnum.CompletedOnTime,1.5);
+        StatusEntity completedEarly = new StatusEntity(StatusEnum.CompletedEarly,1.0);
+        StatusEntity completedLate = new StatusEntity(StatusEnum.CompletedLate,0.5);
+        this.statusRepository.saveAll(List.of(
+                reserved,active,canceled,late,completedOnTime,completedEarly,completedEarly,completedLate));
 
     }
 
