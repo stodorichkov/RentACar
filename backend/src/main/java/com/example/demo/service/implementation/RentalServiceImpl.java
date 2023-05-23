@@ -15,6 +15,7 @@ import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -83,7 +84,7 @@ public class RentalServiceImpl implements RentalService {
         UserEntity renter = this.userService.findUserByName("Administrator");
         rental.setRenter(renter);
         rental.setRentedCar(currentCar);
-        rental.setStatus(this.statusService.findByStatus(StatusEnum.Active));
+        //rental.setStatus(this.statusService.findByStatus("Active"));
 
         if (rental.getStartTime().isBefore(currentTime.plusHours(1))) {
             return "Cannot make a reservation 1 hour or less before your current time!";
@@ -163,19 +164,21 @@ public class RentalServiceImpl implements RentalService {
             if (balance < payment) {
                 return "Not enough money to complete the rental";
             }
-            rental.setStatus(this.statusService.findByStatus(StatusEnum.HalfCompleted));
+           // rental.setStatus(this.statusService.findByStatus(StatusEnum.HalfCompleted));
         } else {
             if (balance < payment) {
                 return "Not enough money to complete the rental";}
             payment = totalPrice;
-            rental.setStatus(this.statusService.findByStatus(StatusEnum.Completed));
+           // rental.setStatus(this.statusService.findByStatus(StatusEnum.Completed));
         }
 
        if (balance < payment) {
           return "Not enough money to complete the rental";
         } else {
             renter.setBudget(balance - payment);
+          //  rental.setStatus("completed");
 
+        }
 
            userRepository.save(renter);
            rentalRepository.save(rental);
@@ -183,7 +186,7 @@ public class RentalServiceImpl implements RentalService {
         }
 
 
-    }
+
     @Override
     public void deleteRental(Long id) {
         rentalRepository.deleteById(id);
@@ -258,6 +261,27 @@ public class RentalServiceImpl implements RentalService {
             this.rentalRepository.save(rental);
         }
 
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void scheduled(){
+
+        LocalDateTime now = LocalDateTime.now();
+        //first find rentals which are reserved
+        //then find rentals which are active
+        List<RentalEntity> reservedRentals = this.rentalRepository.findAllByStatus(StatusEnum.Reserved);
+        List<RentalEntity> activeRentals = this.rentalRepository.findAllByStatus(StatusEnum.Active);
+
+        for(RentalEntity reserved : reservedRentals){
+            if(reserved.getStartTime().plusHours(1).equals(now)){
+                reserved.setStatus(this.statusService.findByStatus(StatusEnum.Active));
+                this.rentalRepository.save(reserved);
+            }
+        }
+
+        for(RentalEntity active : activeRentals){
+
+        }
     }
 
 }

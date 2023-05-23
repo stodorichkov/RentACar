@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.model.RentalEntity;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.enums.StatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +28,8 @@ public interface RentalRepository extends JpaRepository<RentalEntity, Long> {
             "MONTH(r.endTime) = :month AND YEAR(r.endTime) = :year")
     List<RentalEntity> findAllFinishedRentalsForCurrentMonth(@Param("month") int month,
                                                              @Param("year") int year);
+
+    @Query("SELECT r FROM RentalEntity r JOIN r.status s WHERE s.status = :currentStatus")
+    List<RentalEntity> findAllByStatus(@Param("currentStatus") StatusEnum currentStatus);
 
 }
