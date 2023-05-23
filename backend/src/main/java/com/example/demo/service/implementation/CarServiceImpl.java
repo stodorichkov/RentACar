@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -83,11 +84,15 @@ public class CarServiceImpl implements CarService {
     @Override
     public void addTestCar() {
 
-            CarEntity car = new CarEntity();
-            car.setMake("Audi");
-            car.setModel("A7");
-            car.setPricePerDay(60.00);
-            this.carRepository.save(car);
+        if(this.carRepository.count() != 0){
+            return;
+        }
+
+        CarEntity car = new CarEntity();
+        car.setMake("Audi");
+        car.setModel("A7");
+        car.setPricePerDay(60.00);
+        this.carRepository.save(car);
 
     }
 
@@ -177,6 +182,18 @@ public class CarServiceImpl implements CarService {
 
         }
         return carsToDisplay;
+    }
+
+    @Override
+    public Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate) {
+
+        List<CarEntity> cars = this.carRepository.findAllByTheirAvailability(startDate,endDate);
+        List<CarDto> allCarsToDto = this.modelMapper.map(
+                        cars, new TypeToken<List<CarDto>>(){}.getType()
+                );
+        Set<CarDto> uniqueCars = new HashSet<>();
+        uniqueCars.addAll(allCarsToDto);
+        return uniqueCars;
     }
 
 }

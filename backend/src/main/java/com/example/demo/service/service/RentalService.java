@@ -29,6 +29,8 @@ public interface RentalService {
     Double calculateMonthlyRevenue(int month,int year);
 
 
+    void changeStatus(Long id);
 
+    RentalEntity findById(Long id);
 }
 

@@ -2,6 +2,7 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.CarEntity;
+import com.example.demo.model.StatusEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
@@ -154,7 +155,7 @@ public class RentalServiceImpl implements RentalService {
 
 
         if (currentTime.isBefore(startTime.minusHours(1))) {
-          //  rental.setStatus("canceled");
+
             rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
             rentalRepository.save(rental);
             return "Rental canceled ,charged: 0";
@@ -248,6 +249,23 @@ public class RentalServiceImpl implements RentalService {
         return total;
     }
 
+    @Override
+    public void changeStatus(Long id) {
+        RentalEntity rental = this.findById(id);
+        if(!StatusEnum.Canceled.equals(rental.getStatus().getStatus())){
+            rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
+        }
+        this.rentalRepository.save(rental);
+    }
+
+    @Override
+    public RentalEntity findById(Long id) {
+
+        return this.rentalRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Rental with id=" + id + " was not found")
+        );
+
+    }
 
 
     @Override
@@ -263,52 +281,5 @@ public class RentalServiceImpl implements RentalService {
 
     }
 
-    @Scheduled(fixedRate = 60000)
-    @Transactional
-    public void scheduled(){
-
-        LocalDateTime now = LocalDateTime.now();
-        //first find rentals which are reserved
-        //then find rentals which are active
-        List<RentalEntity> reservedRentals = this.rentalRepository.findAllByStatus(StatusEnum.Reserved);
-        List<RentalEntity> activeRentals = this.rentalRepository.findAllByStatus(StatusEnum.Active);
-        List<RentalEntity> lateRentals = this.rentalRepository.findAllByStatus(StatusEnum.Late);
-
-        for(RentalEntity reserved : reservedRentals){
-            if(reserved.getStartTime().plusHours(1).isAfter(now)){
-                reserved.setStatus(this.statusService.findByStatus(StatusEnum.Active));
-                this.rentalRepository.save(reserved);
-            }
-        }
-
-
-        for(RentalEntity active : activeRentals){
-            if(active.getEndTime().plusHours(2).isAfter(now)) {
-                active.setEndTime(now.plusDays(1));
-                active.setStatus(this.statusService.findByStatus(StatusEnum.Late));
-                this.rentalRepository.save(active);
-            }
-        }
-
-        for(RentalEntity late : lateRentals){
-            if(late.getEndTime().isAfter(now)){
-
-                late.setEndTime(now.plusDays(1));
-
-                CarEntity currentCar = late.getRentedCar();
-                List<RentalEntity> carRentals = currentCar.getCarRental();
-                for(RentalEntity r : carRentals){
-                    if(StatusEnum.Reserved.equals(r.getStatus().getStatus())){
-                        if(late.getEndTime().isAfter(r.getStartTime())){
-                            r.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
-                            this.rentalRepository.save(r);
-                        }
-                    }
-                }
-                this.rentalRepository.save(late);
-
-            }
-        }
-    }
 
 }

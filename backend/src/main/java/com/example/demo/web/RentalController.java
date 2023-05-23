@@ -70,4 +70,10 @@ public class RentalController {
         rentalService.deleteRental(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/change-status")
+    public ResponseEntity<?> changeStatus(@PathVariable Long id){
+        this.rentalService.changeStatus(id);
+        return ResponseEntity.noContent().build();
+    }
 }

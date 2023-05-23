@@ -6,6 +6,7 @@ import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public interface CarService {
@@ -27,4 +28,6 @@ public interface CarService {
     CarEntity findCarById(Long id);
 
     List<CarAdminDto> findCarsForAdmin(String username);
+
+    Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate);
 }
