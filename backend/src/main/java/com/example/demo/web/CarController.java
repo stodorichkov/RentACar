@@ -6,6 +6,7 @@ import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.service.service.CarService;
 import org.modelmapper.ModelMapper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -34,7 +36,6 @@ public class CarController {
         }
         return ResponseEntity.ok(uniqueCars);
     }
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CarAdminDto>> allCarsForAdmin(Authentication authentication){
