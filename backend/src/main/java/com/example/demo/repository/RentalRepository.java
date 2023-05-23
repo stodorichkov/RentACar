@@ -18,7 +18,7 @@ public interface RentalRepository extends JpaRepository<RentalEntity, Long> {
     List<RentalEntity> findByRenterUsername(String username);
 
 
-    @Query("SELECT r FROM RentalEntity r WHERE r.renter.username = :username AND r.status != 'completed'")
+    @Query("SELECT r FROM RentalEntity r WHERE r.renter.username = :username AND r.status != 'Completed' AND r.status != 'Completed'")
     List<RentalEntity>findByRenterUserNameActive(String username);
     //Select * from RentalEntity join UserEntity u where u.username := username
 
@@ -31,5 +31,8 @@ public interface RentalRepository extends JpaRepository<RentalEntity, Long> {
 
     @Query("SELECT r FROM RentalEntity r JOIN r.status s WHERE s.status = :currentStatus")
     List<RentalEntity> findAllByStatus(@Param("currentStatus") StatusEnum currentStatus);
+
+    @Query("SELECT r FROM RentalEntity r WHERE r.renter.username = :username AND r.status IN ('CompletedOnTime', 'CompletedLate', 'CompletedEarly', 'Canceled')")
+    List<RentalEntity> findByRenterUsernameWithStatusCompleted(@Param("username") String username);
 
 }
