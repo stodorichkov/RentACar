@@ -6,7 +6,6 @@ import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.*;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserDetailsServiceImpl;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;

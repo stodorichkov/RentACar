@@ -28,5 +28,7 @@ public interface RentalService {
     String completeRental(CompleteRentalDto completeRentalDto);
     Double calculateMonthlyRevenue(int month,int year);
 
+
+
 }
 

@@ -11,6 +11,7 @@ import com.example.demo.repository.StatusRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
+import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,17 @@ public class RentalServiceImpl implements RentalService {
     private final CarRepository carRepository;
     private  final UserRepository userRepository;
 
-    private final StatusRepository statusRepository;
+    private final StatusService statusService;
     private final UserService userService;
 
     private final CarService carService;
-    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserRepository userRepository, StatusRepository statusRepository, UserService userService, CarService carService) {
+    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserRepository userRepository,
+                             StatusService statusService, UserService userService, CarService carService) {
         this.rentalRepository = rentalRepository;
         this.carRepository = carRepository;
         this.userRepository = userRepository;
-        this.statusRepository = statusRepository;
+        this.statusService = statusService;
+
         this.userService = userService;
         this.carService = carService;
 
@@ -79,11 +82,7 @@ public class RentalServiceImpl implements RentalService {
         UserEntity renter = this.userService.findUserByName("Administrator");
         rental.setRenter(renter);
         rental.setRentedCar(currentCar);
-       // rental.setStatus("active");
-        statusRepository.findByStatus("Active").orElseThrow(
-                () -> new ObjectNotFoundException("object name active")
-        );
-        //rental.setStatus(statusRepository.findByStatus("Active").get());
+        rental.setStatus(this.statusService.findByStatus("Active"));
 
         if (rental.getStartTime().isBefore(currentTime.plusHours(1))) {
             return "Cannot make a reservation 1 hour or less before your current time!";

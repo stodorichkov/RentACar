@@ -1,5 +1,6 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.StatusEntity;
 import com.example.demo.model.enums.StatusEnum;
 import com.example.demo.repository.StatusRepository;
@@ -32,6 +33,14 @@ public class StatusServiceImpl implements StatusService {
         StatusEntity canceled = new StatusEntity(StatusEnum.Canceled,0.5);
         StatusEntity late = new StatusEntity(StatusEnum.Late,0.2);
         this.statusRepository.saveAll(List.of(active,completed,halfCompleted,canceled,late));
+
+    }
+
+    @Override
+    public StatusEntity findByStatus(String status) {
+        return this.statusRepository.findByStatus(status).orElseThrow(
+                () -> new ObjectNotFoundException("Status with name:" + status + " was not found.")
+        );
 
     }
 }
