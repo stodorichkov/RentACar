@@ -7,19 +7,19 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme';
+import theme from './style/theme';
 import CssBaseline from '@mui/material/CssBaseline';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <PersistGate persistor={persistor}>
-        <React.StrictMode>
-            <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-            </ThemeProvider>  
-        </React.StrictMode>
+            <React.StrictMode>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <App />
+                </ThemeProvider>  
+            </React.StrictMode>
         </PersistGate>
     </Provider>
   

@@ -1,12 +1,14 @@
 import { Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'axios';
 
+import { setAlert } from '../../redux/actions/alertActions';
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('');
@@ -15,7 +17,10 @@ const SignUpForm = () => {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [alert, setAlert] = useState('');
+    const alert = useSelector(state => state.alert);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const theme = useTheme();
 
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
@@ -36,13 +41,13 @@ const SignUpForm = () => {
         setConfirmPassword(event.target.value);
     }
 
-    const navigate = useNavigate();
-
-    const theme = useTheme();
+    useEffect(() => {
+        dispatch(setAlert(null));
+    }, [dispatch]);
 
     const addUser = async () => {
         if (username === '' || age === '' || email === '' || phone === '' || password === '' || confirmPassword === '') {
-            setAlert('The form must be completed!');
+            dispatch(setAlert('The form must be completed!'));
         }
         else {
             const content = {
@@ -53,15 +58,15 @@ const SignUpForm = () => {
                 password: password,
                 confirmPassword: confirmPassword
             };
+
             try {
                 const response = await axios.post('http://localhost:8086/user/register', content);
                 if (response.status === 200) {
-                    console.log(response.data);
                     navigate('/signin');
                 }
             }
             catch (error) {
-                setAlert(error.response.data)
+                dispatch(setAlert(error.response.data));
             } 
         }
     }

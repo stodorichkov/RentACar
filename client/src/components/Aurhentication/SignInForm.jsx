@@ -1,19 +1,23 @@
 import { Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import axios from 'axios';
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
+import axios from 'axios';
+
 import { signInAction } from '../../redux/actions/userActions';
+import { setAlert } from '../../redux/actions/alertActions';
 
 const SignInForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [alert, setAlert] = useState('');
+    const alert = useSelector(state => state.alert);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const theme = useTheme();
 
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
@@ -22,34 +26,31 @@ const SignInForm = () => {
         setPassword(event.target.value);
     }
 
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const theme = useTheme();
+    useEffect(() => {
+        dispatch(setAlert(null));
+    }, [dispatch]);
 
     const signInUser = async () => {
         if (username === '' || password === '') {
-            setAlert('The form must be completed!');
+            dispatch(setAlert('The form must be completed!'));
         }
         else {
             const content = {
                 username: username,
                 password: password
             };
+
             try {
                 const response = await axios.post('http://localhost:8086/user/login', content);
                 if (response.status === 200) {
-                    console.log(response);
-                    // dispatch(signInAction("skfsj"));
+                    dispatch(signInAction(response.data));
                     navigate('/');
                 }  
             }
             catch (error) {
-                // setAlert(error.response.data)
-                console.log(error)
+                dispatch(setAlert('Wrong username or password'));
             } 
         }
-        // dispatch(signInAction("skfsj"));
-        // navigate('/');
     }
 
     return (

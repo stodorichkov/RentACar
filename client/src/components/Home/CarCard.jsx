@@ -5,6 +5,8 @@ import { useTheme, Button } from '@mui/material';
 const CarCard = (props) => {
     const theme = useTheme();
 
+    const {car} = props;
+
     return(
         <Grid xs={12} xl={6}>
             <Card sx={{height: '250px', border: '1px solid', borderColor: theme.palette.button_secondary.main,}}>
@@ -25,32 +27,32 @@ const CarCard = (props) => {
                             <Grid container spacing={1} justifyContent="center">
                                 <Grid xs={12}>
                                     <Typography variant="h6" component="div">
-                                        Mercedes A class
+                                        {car.name}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>
                                     <Typography variant="body2" color="text.secondary">
-                                        Engine Type: "Petrol"
+                                        Engine Type: {car.engine}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>
                                     <Typography variant="body2" color="text.secondary">
-                                        Gearbox: Manual
+                                        Gearbox: {car.gearbox}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>
                                     <Typography variant="body2" color="text.secondary">
-                                        Fuel Consumption: 6.0
+                                        Fuel Consumption: {car.fueConsuption}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>
                                     <Typography variant="body2" color="text.secondary">
-                                        Seats: 10
+                                        Seats: {car.seats}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>
                                     <Typography variant="body2" color="text.secondary">
-                                        Price per Day: 12.50
+                                        Price per Day: {car.pricePerDay}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>
