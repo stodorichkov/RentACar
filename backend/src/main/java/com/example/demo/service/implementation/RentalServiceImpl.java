@@ -264,6 +264,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Scheduled(fixedRate = 60000)
+    @Transactional
     public void scheduled(){
 
         LocalDateTime now = LocalDateTime.now();
@@ -271,16 +272,42 @@ public class RentalServiceImpl implements RentalService {
         //then find rentals which are active
         List<RentalEntity> reservedRentals = this.rentalRepository.findAllByStatus(StatusEnum.Reserved);
         List<RentalEntity> activeRentals = this.rentalRepository.findAllByStatus(StatusEnum.Active);
+        List<RentalEntity> lateRentals = this.rentalRepository.findAllByStatus(StatusEnum.Late);
 
         for(RentalEntity reserved : reservedRentals){
-            if(reserved.getStartTime().plusHours(1).equals(now)){
+            if(reserved.getStartTime().plusHours(1).isAfter(now)){
                 reserved.setStatus(this.statusService.findByStatus(StatusEnum.Active));
                 this.rentalRepository.save(reserved);
             }
         }
 
-        for(RentalEntity active : activeRentals){
 
+        for(RentalEntity active : activeRentals){
+            if(active.getEndTime().plusHours(2).isAfter(now)) {
+                active.setEndTime(now.plusDays(1));
+                active.setStatus(this.statusService.findByStatus(StatusEnum.Late));
+                this.rentalRepository.save(active);
+            }
+        }
+
+        for(RentalEntity late : lateRentals){
+            if(late.getEndTime().isAfter(now)){
+
+                late.setEndTime(now.plusDays(1));
+
+                CarEntity currentCar = late.getRentedCar();
+                List<RentalEntity> carRentals = currentCar.getCarRental();
+                for(RentalEntity r : carRentals){
+                    if(StatusEnum.Reserved.equals(r.getStatus().getStatus())){
+                        if(late.getEndTime().isAfter(r.getStartTime())){
+                            r.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
+                            this.rentalRepository.save(r);
+                        }
+                    }
+                }
+                this.rentalRepository.save(late);
+
+            }
         }
     }
 
