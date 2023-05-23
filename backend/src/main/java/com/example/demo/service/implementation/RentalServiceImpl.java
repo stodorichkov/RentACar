@@ -5,6 +5,7 @@ import com.example.demo.model.CarEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
+import com.example.demo.model.enums.StatusEnum;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.StatusRepository;
@@ -82,7 +83,7 @@ public class RentalServiceImpl implements RentalService {
         UserEntity renter = this.userService.findUserByName("Administrator");
         rental.setRenter(renter);
         rental.setRentedCar(currentCar);
-        rental.setStatus(this.statusService.findByStatus("Active"));
+        rental.setStatus(this.statusService.findByStatus(StatusEnum.Active));
 
         if (rental.getStartTime().isBefore(currentTime.plusHours(1))) {
             return "Cannot make a reservation 1 hour or less before your current time!";
@@ -153,26 +154,35 @@ public class RentalServiceImpl implements RentalService {
 
         if (currentTime.isBefore(startTime.minusHours(1))) {
           //  rental.setStatus("canceled");
+            rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
             rentalRepository.save(rental);
             return "Rental canceled ,charged: 0";
         }
         else if (currentRentalDays < rentalDays / 2) {
             payment = totalPrice / 2.0;
+            if (balance < payment) {
+                return "Not enough money to complete the rental";
+            }
+            rental.setStatus(this.statusService.findByStatus(StatusEnum.HalfCompleted));
         } else {
+            if (balance < payment) {
+                return "Not enough money to complete the rental";}
             payment = totalPrice;
+            rental.setStatus(this.statusService.findByStatus(StatusEnum.Completed));
         }
 
        if (balance < payment) {
           return "Not enough money to complete the rental";
         } else {
             renter.setBudget(balance - payment);
-          //  rental.setStatus("completed");
 
+
+           userRepository.save(renter);
+           rentalRepository.save(rental);
+           return "Rental complete!";
         }
 
-        userRepository.save(renter);
-        rentalRepository.save(rental);
-        return "Rental complete!";
+
     }
     @Override
     public void deleteRental(Long id) {

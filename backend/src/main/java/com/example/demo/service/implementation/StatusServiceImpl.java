@@ -37,7 +37,7 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public StatusEntity findByStatus(String status) {
+    public StatusEntity findByStatus(StatusEnum status) {
         return this.statusRepository.findByStatus(status).orElseThrow(
                 () -> new ObjectNotFoundException("Status with name:" + status + " was not found.")
         );
