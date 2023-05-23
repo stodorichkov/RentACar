@@ -55,7 +55,7 @@ const SignInForm = () => {
 
     return (
         <Grid container justifyContent='center' sx={{marginTop: '2vw'}}>
-            <Grid xl={3.5} lg={4} md={5} sm={7} xs={10}>
+            <Grid xs={10} sm={7.5} md={6.5} lg={4.5} xl={3.5}>
                 <Paper elevation={12} sx={{padding: '3.5rem'}}>    
                     <Grid container spacing={3} justifyContent='center'>
                         <Grid xs={12}>

@@ -72,9 +72,9 @@ const SignUpForm = () => {
     }
 
     return (
-        <Grid container justifyContent='center' sx={{marginTop: '2vw' }}>
-            <Grid xl={3.5} lg={4} md={5} sm={7} xs={10}>
-                <Paper elevation={12} sx={{padding: '3em', overflow: 'auto', maxHeight: {xs: '80vh', sm:'80vh', md: '80vh', lg: '85vh', xl: '80vh'}}}>
+        <Grid container justifyContent='center' sx={{marginTop: '2vw'}}>
+            <Grid xs={10} sm={7.5} md={6.5} lg={4.5} xl={3.5}>
+                <Paper elevation={12} sx={{padding: '3em',overflow: 'auto', maxHeight: {xl:'94vh', lg: '85vh'}}}>
                     <Grid container spacing={4} justifyContent="center">
                         <Grid xs={12}>
                             <Typography variant="h3" color="textPrimary" align="center" >Sign Up</Typography>

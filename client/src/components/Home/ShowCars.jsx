@@ -14,21 +14,25 @@ const ShowCars = () => {
     const theme = useTheme();
 
     return(
-        <Grid xs={10} >
+        <Grid xs={11.5} >
             <Paper 
                 elevation={12} 
                 sx={{
-                    padding: '1rem', 
-                    height: {xs: '55vh', sm:'55vh', md: '55vh', lg: '55vh', xl: '55vh'}
+                    padding: '2rem', 
+                    height: '63vh'
                 }}
             >
-                <Grid container spacing={2} justifyContent='center' >
-                    <SortBar/>
+                <Grid container spacing={1.5} justifyContent='center' >
+                    <Grid>
+                        <SortBar/>
+                    </Grid>
                     <Grid xs={12}>
                         <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
-                    <Grid container  justifyContent='center' alignItems='center' spacing={2} sx={{overflow: 'auto', height: '300px'}}>
-                        {/* {targetCars.map(car => (<CarCard CAR/>))} */}
+                    <Grid xs={12}>
+                        <Grid container justifyContent='space-evenly' sx={{overflow: 'auto', maxHeight: '47vh'}}>
+                            {targetCars.map(car => (<CarCard key={car.id} car={car}/>))}
+                        </Grid>
                     </Grid>
                 </Grid>    
             </Paper>

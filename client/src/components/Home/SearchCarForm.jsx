@@ -32,7 +32,7 @@ const SearchCarForm = () => {
     const theme = useTheme();
 
     return (
-        <Grid xs={10}>
+        <Grid xs={11.5}>
             <Paper elevation={12} sx={{padding: '1rem'}}>
                 <Grid container  justifyContent='center' alignItems='center' spacing={2}>
                     <Grid xs={12}>

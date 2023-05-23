@@ -8,10 +8,10 @@ const CarCard = (props) => {
     const {car} = props;
 
     return(
-        <Grid xs={12} xl={6}>
+        <Grid xs={6}>
             <Card sx={{height: '250px', border: '1px solid', borderColor: theme.palette.button_secondary.main,}}>
-                <Grid container spacing={2}>
-                    <Grid xs={7} >
+                <Grid container spacing={1}>
+                    <Grid xs={6.5} >
                         <CardMedia 
                             component="img" 
                             src={"https://www.automoblog.net/wp-content/uploads/2010/04/2010-dok-ing-xd-concept-front-3-21.jpg"} 
@@ -22,8 +22,8 @@ const CarCard = (props) => {
                             }}
                         />
                     </Grid>
-                    <Grid xs={5}>
-                        <CardContent>
+                    <Grid xs={5.5}>
+                        <CardContent sx={{overflow: 'auto', maxHeight: '260px'}}>
                             <Grid container spacing={1} justifyContent="center">
                                 <Grid xs={12}>
                                     <Typography variant="h6" component="div">
