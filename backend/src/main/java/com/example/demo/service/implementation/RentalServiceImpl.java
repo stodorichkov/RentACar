@@ -7,6 +7,7 @@ import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
+import com.example.demo.repository.StatusRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
@@ -26,15 +27,18 @@ public class RentalServiceImpl implements RentalService {
     private final CarRepository carRepository;
     private  final UserRepository userRepository;
 
+    private final StatusRepository statusRepository;
     private final UserService userService;
 
     private final CarService carService;
-    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserRepository userRepository, UserService userService, CarService carService) {
+    public RentalServiceImpl(RentalRepository rentalRepository, CarRepository carRepository, UserRepository userRepository, StatusRepository statusRepository, UserService userService, CarService carService) {
         this.rentalRepository = rentalRepository;
         this.carRepository = carRepository;
         this.userRepository = userRepository;
+        this.statusRepository = statusRepository;
         this.userService = userService;
         this.carService = carService;
+
     }
     @Override
     public List<RentalEntity> getAllRentals() {
@@ -76,6 +80,10 @@ public class RentalServiceImpl implements RentalService {
         rental.setRenter(renter);
         rental.setRentedCar(currentCar);
        // rental.setStatus("active");
+        statusRepository.findByStatus("Active").orElseThrow(
+                () -> new ObjectNotFoundException("object name active")
+        );
+        //rental.setStatus(statusRepository.findByStatus("Active").get());
 
         if (rental.getStartTime().isBefore(currentTime.plusHours(1))) {
             return "Cannot make a reservation 1 hour or less before your current time!";
