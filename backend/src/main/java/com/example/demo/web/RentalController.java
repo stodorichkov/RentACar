@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -49,8 +50,8 @@ public class RentalController {
 
     @PostMapping("/completeRental")
 
-    public ResponseEntity<String> completeRental(@RequestBody CompleteRentalDto completeRentalDto) {
-        String response = this.rentalService.completeRental(completeRentalDto);
+    public ResponseEntity<HashMap<String, Double>> completeRental(@RequestBody CompleteRentalDto completeRentalDto) {
+        ResponseEntity<HashMap<String,Double>> response = this.rentalService.completeRental(completeRentalDto);
 
         return ResponseEntity.ok(response);
     }

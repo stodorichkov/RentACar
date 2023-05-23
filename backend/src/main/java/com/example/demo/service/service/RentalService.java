@@ -21,6 +21,8 @@ public interface RentalService {
 
     List<RentalCarDto> getUserRentalHistory(String username);
 
+    Double calculateUserScore(String username);
+
     void addTestRental();
 
     Double  showTotalCost(ShowRentalCostDto showRentalCostDto);
