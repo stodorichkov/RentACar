@@ -9,6 +9,7 @@ import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.RoleEnum;
+import com.example.demo.model.enums.StatusEnum;
 import com.example.demo.model.enums.TransmissionEnum;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
@@ -188,13 +189,25 @@ public class CarServiceImpl implements CarService {
     @Override
     public Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate) {
 
-        List<CarEntity> cars = this.carRepository.findAllByTheirAvailability(startDate,endDate);
-        List<CarDto> allCarsToDto = this.modelMapper.map(
-                        cars, new TypeToken<List<CarDto>>(){}.getType()
-                );
-        Set<CarDto> uniqueCars = new HashSet<>();
-        uniqueCars.addAll(allCarsToDto);
-        return uniqueCars;
+        List<CarEntity> allCars = this.carRepository.findAll();
+        Set<CarEntity> rentedCars = new HashSet<>();
+        for(CarEntity c : allCars){
+            List<RentalEntity> currentRentals = c.getCarRental();
+            for(RentalEntity r : currentRentals){
+                if(r.getEndTime().isAfter(startDate) && r.getStartTime().isBefore(endDate)) {
+                    if (StatusEnum.Reserved.equals(r.getStatus().getStatus())
+                            || StatusEnum.Active.equals(r.getStatus().getStatus())) {
+                        rentedCars.add(c);
+                    }
+                }
+            }
+        }
+
+        Set<CarEntity> available = new HashSet<>(allCars);
+        available.removeAll(rentedCars);
+
+        return this.modelMapper.map(available, new TypeToken<Set<CarDto>>(){}.getType());
+
     }
 
 }

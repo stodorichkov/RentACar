@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -132,9 +133,7 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public String completeRental(CompleteRentalDto completeRentalDto) {
-        RentalEntity rental = rentalRepository.findById(completeRentalDto.getRentalId())
-                .orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
-
+        RentalEntity rental = this.findById(completeRentalDto.getRentalId());
 
 
         LocalDateTime currentTime = LocalDateTime.now();
@@ -145,17 +144,25 @@ public class RentalServiceImpl implements RentalService {
         double balance = renter.getBudget();
         double totalPrice = calculateRentalPrice(rental.getStartTime(),rental.getEndTime(), car.getPricePerDay());
         double payment = 0.0;
-        double discount =0.0;
+        double discount = 0.0;
         double renterScore = renter.getScore();
 
         //set discount
-        if(renterScore<1){
+        if(renterScore<1.0){
+
             discount=0.0;
+
         }
-        else if(renterScore>=1 && renterScore<=1.25){
+        else if(renterScore>=1.0 && renterScore<=1.25){
+
             discount =0.1;
+
         }
-        else {discount=0.15;}
+        else {
+
+            discount=0.15;
+
+        }
 
         long rentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), endTime.toLocalDate());
         long currentRentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), currentTime.toLocalDate());
@@ -165,10 +172,11 @@ public class RentalServiceImpl implements RentalService {
 
             rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
             rentalRepository.save(rental);
-
             return "Rental canceled ,charged: 0";
+
         }
         else if (currentRentalDays < rentalDays / 2) {
+
             payment = totalPrice / 2.0;
             if (balance < payment) {
                 return "Not enough money to complete the rental";

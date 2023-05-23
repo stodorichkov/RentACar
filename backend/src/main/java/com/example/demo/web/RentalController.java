@@ -48,13 +48,13 @@ public class RentalController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/completeRental")
-
-    public ResponseEntity<HashMap<String, Double>> completeRental(@RequestBody CompleteRentalDto completeRentalDto) {
-        ResponseEntity<HashMap<String,Double>> response = this.rentalService.completeRental(completeRentalDto);
-
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/completeRental")
+//
+//    public ResponseEntity<HashMap<String, Double>> completeRental(@RequestBody CompleteRentalDto completeRentalDto) {
+//        ResponseEntity<HashMap<String,Double>> response = this.rentalService.completeRental(completeRentalDto);
+//
+//        return ResponseEntity.ok(response);
+//    }
 
     @GetMapping("/showCost")
     public ResponseEntity<Double> calculateRentalPrice(@RequestBody ShowRentalCostDto showRentalCostDto) {
