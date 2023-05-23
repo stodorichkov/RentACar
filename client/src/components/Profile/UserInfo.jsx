@@ -1,6 +1,9 @@
 import { Paper, TextField, Divider, Button, Avatar, InputAdornment, Stack }  from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+
 import { useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+
 import axios from 'axios';
 
 const UserInfo = () => {
@@ -12,6 +15,7 @@ const UserInfo = () => {
     const [transfer, setTransfer] = useState(0.00);
     const [editMode, setEditMode] = useState(false);
     const [addMoneyMode, setAddMoneyMode] = useState(false);
+    const theme = useTheme();
 
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
@@ -58,7 +62,7 @@ const UserInfo = () => {
                         </Avatar>
                     </Grid>
                     <Grid xs={12}>
-                        <Divider/>
+                        <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
                     <Grid xs={12}>
                         <TextField

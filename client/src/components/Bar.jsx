@@ -16,41 +16,43 @@ const Bar = () => {
 	}
 
 	const renderButtons = () => {
-		if(!user) {
-			return(
-				<>
-					<Button variant="contained"  color="button_primary" size="large" onClick={() => navigate('/signin')}>
-						Sign In
-					</Button>
-					<Button variant="contained"  color="button_secondary" size="large" onClick={() => navigate('/signup')}>
-						Sign Up
-					</Button>
-				</>
-			)
-		}
-		else {
-			return(
-				<>
-					<Button sx={{textTransform: "none"}} onClick={() => navigate('/admin')}>
+		let buttons = [
+			<Button key="profile" sx={{textTransform: "none"}} onClick={() => navigate('/profile')}>
+				<Typography variant="h6" color="white">
+					Profile
+				</Typography>
+			</Button>,
+			<Button key="signOut" variant="contained"  color="button_secondary" size="large" onClick={signOutUser}>
+				Sign Out
+			</Button>
+		];
+
+		if (user) {
+			if (user.roles.includes('ROLE_ADMIN')) {
+				buttons.unshift(
+					<Button key="admin" sx={{textTransform: "none"}} onClick={() => navigate('/admin')}>
 						<Typography variant="h6" color="white">
 							Admin
 						</Typography>
 					</Button>
-					<Button sx={{textTransform: "none"}} onClick={() => navigate('/profile')}>
-						<Typography variant="h6" color="white">
-							Profile
-						</Typography>
-					</Button>
-					<Button variant="contained"  color="button_secondary" size="large" onClick={signOutUser}>
-						Sign Out
-					</Button>
-				</>
-			)
+				);
+			}
+		} else {
+			buttons = [
+				<Button key="signIn" variant="contained"  color="button_primary" size="large" onClick={() => navigate('/signin')}>
+					Sign In
+				</Button>,
+				<Button key="signUp" variant="contained"  color="button_secondary" size="large" onClick={() => navigate('/signup')}>
+					Sign Up
+				</Button>
+			];
 		}
+
+		return buttons;
 	}
 
 	return (
-		<AppBar position="static" color="menue" sx={{padding: '0.5rem'}}>
+		<AppBar position="static" color="menu" sx={{padding: '0.5rem'}}>
 			<Toolbar>
 				<Box display="flex" justifyContent="space-between" width="100%">
 					<Button sx={{textTransform: "none"}} onClick={() => navigate('/')}>

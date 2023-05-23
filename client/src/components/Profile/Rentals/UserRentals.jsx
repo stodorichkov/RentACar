@@ -1,12 +1,15 @@
 import { Paper, Divider, Typography }  from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+
 import ActiveRentals from './ActiveRentals';
 import RentalsHistory from './RentalsHistory';
-import { useState } from 'react';
 
 const UserRentals = () => {
     const [expanded, setExpanded] = useState('panel1');
+    const theme = useTheme();
 
     const handleChangeExpand = (panel) => (event, isExpanded) => {
         if (isExpanded || expanded !== panel) {
@@ -22,7 +25,7 @@ const UserRentals = () => {
                         <Typography variant="h3" color="textPrimary" align="center" >Rentals</Typography>
                     </Grid>
                     <Grid xs={12}>
-                        <Divider/>
+                        <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
                     <Grid xs={12}>
                         <ActiveRentals handleChangeExpand={handleChangeExpand('panel1')} expanded={expanded === 'panel1'}/>

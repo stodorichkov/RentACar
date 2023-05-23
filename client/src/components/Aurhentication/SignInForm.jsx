@@ -62,7 +62,7 @@ const SignInForm = () => {
                             <Typography variant="h3" color="textPrimary" align="center" >Sign In</Typography>
                         </Grid>
                         <Grid xs={12}>
-                            <Divider sx={{backgroundColor: theme.palette.menue.main}}/>
+                            <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                         </Grid>
                         {alert ? (
                             <Grid xs={12}>

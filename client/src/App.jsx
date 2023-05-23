@@ -7,6 +7,7 @@ import SignInForm from './components/Aurhentication/SignInForm';
 import SignUpForm from './components/Aurhentication/SignUpForm';
 import Home from './components/Home/Home';
 import Profile from './components/Profile/Profile';
+import Admin from './components/Admin/Admin';
 
 import { useSelector } from 'react-redux';
 
@@ -14,22 +15,22 @@ const App = () => {
 	const user = useSelector((state) => state.user);
 
 	const renderRoutes = () => {
-		if(user) {
-			return(
-				<>
-					<Route path='/profile' element={<Profile/>}/>
-					<Route path='/admin' element={null}/>
-				</>
-			)
+		let routes = [
+			<Route key="profile" path="/profile" element={<Profile />} />
+		];
+	
+		if (user) {
+			if (user.roles.includes('ROLE_ADMIN')) {
+				routes.push(<Route key="admin" path="/admin" element={<Admin />} />);
+			}
+		} else {
+			routes = [
+				<Route key="signIn" path="/signin" element={<SignInForm />} />,
+				<Route key="signOut" path="/signup" element={<SignUpForm />} />
+			];
 		}
-		else {
-			return(
-				<>
-					<Route path='/signin' element={<SignInForm />}/>
-					<Route path='/signup' element={<SignUpForm />}/>
-				</>
-			)
-		}	
+		
+		return routes
 	}
 	
 	return (

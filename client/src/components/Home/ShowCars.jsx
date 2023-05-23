@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 import CarCard from './CarCard';
+import SortBar from './SortBar';
 
 const ShowCars = () => {
     const targetCars = useSelector((state) => state.targetCars)
@@ -22,11 +23,12 @@ const ShowCars = () => {
                 }}
             >
                 <Grid container spacing={2} justifyContent='center' >
+                    <SortBar/>
                     <Grid xs={12}>
-                        <Divider sx={{backgroundColor: theme.palette.menue.main}}/>
+                        <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
                     <Grid container  justifyContent='center' alignItems='center' spacing={2} sx={{overflow: 'auto', height: '300px'}}>
-                        {targetCars.map(car => (<CarCard CAR/>))}
+                        {/* {targetCars.map(car => (<CarCard CAR/>))} */}
                     </Grid>
                 </Grid>    
             </Paper>

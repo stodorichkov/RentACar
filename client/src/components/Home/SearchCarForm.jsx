@@ -12,10 +12,12 @@ import { useTheme } from '@mui/material/styles';
 
 const SearchCarForm = () => {
     const [pickUpDate, setPickUpDate] = useState(dayjs());
-    const [dropOffDate, setDropOffDate] = useState(null);
+    const [dropOffDate, setDropOffDate] = useState(pickUpDate.add(1, 'day'));
 
     const handleChangePickUpDate = (value) => {
         setPickUpDate(value);
+        setDropOffDate(dayjs(value).add(1, 'day'));
+
     }
 
     const handleChangeDropOffDate = (value) => {
@@ -37,7 +39,7 @@ const SearchCarForm = () => {
                         <Typography variant="h3" color="textPrimary" align="center" >Road is before you!</Typography>
                     </Grid>
                     <Grid xs={10}>
-                        <Divider sx={{backgroundColor: theme.palette.menue.main}}/>
+                        <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
                     <Grid xs={12} >
                         <Stack spacing={2} direction="row" justifyContent="center">
@@ -56,7 +58,7 @@ const SearchCarForm = () => {
                                     label="Drop-off date"
                                     format="DD/MM/YYYY HH:mm"
                                     ampm={false}
-                                    minDate={dayjs()}
+                                    minDate={pickUpDate.add(1, 'day')}
                                     value={dropOffDate}
                                     onChange={(newValue) => handleChangeDropOffDate(newValue)}
                                 />

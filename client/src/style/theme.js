@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
     palette: {
-        menue: {
+        menu: {
           main: '#333'
         },
         button_primary: {
