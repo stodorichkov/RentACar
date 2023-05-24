@@ -1,4 +1,4 @@
-const targetCarsReducer = (state = null, action) => {
+const targetCarsReducer = (state = 'null', action) => {
     switch(action.type) {
         case 'SEARCH':
             return action.payload;

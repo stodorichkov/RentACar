@@ -8,7 +8,7 @@ const Admin = () => {
     const theme = useTheme();
 
     return(
-        <Grid container spacing={2} justifyContent='center' direction='row' sx={{ maxHeight: "86vh",marginTop: '2vh', marginBottom: '2vh', overflow: 'auto'}}>
+        <Grid container spacing={2} justifyContent='center' direction='row' sx={{ height: "85vh", marginTop: '4vh',  overflow: 'auto'}}>
             <Grid xs={11} >
                 <Paper elevation={12} sx={{padding: '3.5rem', height: "100%"}}>
                     <Grid container spacing={2.5} justifyContent="center">   

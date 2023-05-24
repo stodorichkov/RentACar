@@ -19,7 +19,6 @@ const ShowCars = () => {
                 elevation={12} 
                 sx={{
                     padding: '2rem', 
-                    height: '63vh'
                 }}
             >
                 <Grid container spacing={1.5} justifyContent='center' >
@@ -30,8 +29,8 @@ const ShowCars = () => {
                         <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
                     <Grid xs={12}>
-                        <Grid container justifyContent='space-evenly' sx={{overflow: 'auto', maxHeight: '47vh'}}>
-                            {targetCars.map(car => (<CarCard key={car.id} car={car}/>))}
+                        <Grid container justifyContent='space-evenly' sx={{overflow: 'auto', height: '47vh'}}>
+                            {/* {targetCars.map(car => (<CarCard key={car.id} car={car}/>))} */}
                         </Grid>
                     </Grid>
                 </Grid>    

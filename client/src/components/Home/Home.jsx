@@ -10,7 +10,7 @@ const Home = () => {
     const targetCars = useSelector((state) => state.targetCars)
     
     return (
-        <Grid container spacing={2} justifyContent='center' alignItems='center' direction='column' sx={{marginTop: '2vw'}}>
+        <Grid container spacing={2} justifyContent='center' alignItems='center' direction='column' sx={{marginTop: '4vh'}}>
             <SearchCarForm/>
             { targetCars ? (
                 <ShowCars/>
