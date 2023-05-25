@@ -5,6 +5,7 @@ import com.example.demo.model.RentalEntity;
 import com.example.demo.service.service.RentalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,41 +39,43 @@ public class RentalController {
     }
 
     @PostMapping("/{carId}/add")
-    public ResponseEntity<String> addRental(@RequestBody AddRentalDto addrentalDto,
+    public ResponseEntity<String> addRental(Authentication authentication,@RequestBody AddRentalDto addrentalDto,
                                                   @PathVariable Long carId
                                                  ) {
-        String response = this.rentalService.addRental(addrentalDto,carId);
-//        if(!response.equals("Everything was successful.")){
-//            return ResponseEntity.internalServerError().build();
-//        }
+        String response = this.rentalService.addRental(authentication.getName(),addrentalDto,carId);
+        if(!response.equals("Everything was successful.")){
+            return ResponseEntity.internalServerError().build();
+        }
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/completeRental")
-//
-//    public ResponseEntity<HashMap<String, Double>> completeRental(@RequestBody CompleteRentalDto completeRentalDto) {
-//        ResponseEntity<HashMap<String,Double>> response = this.rentalService.completeRental(completeRentalDto);
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @PostMapping("/{rentalId}/complete")
+    public ResponseEntity<String> completeRental(@PathVariable Long rentalId){
+        String response = this.rentalService.completeRental(rentalId);
+        if(!response.equals("Rental completed!")){
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{rentalId}/summary")
+    public ResponseEntity<HashMap<String,Double>> summary(@PathVariable Long rentalId){
+        HashMap<String,Double> map = this.rentalService.rentalCostSummary(rentalId);
+        if(map.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(map);
+    }
 
     @GetMapping("/showCost")
     public ResponseEntity<Double> calculateRentalPrice(@RequestBody ShowRentalCostDto showRentalCostDto) {
         return new ResponseEntity<>(rentalService.showTotalCost(showRentalCostDto), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/edit")
-    public ResponseEntity<RentalEntity> updateRental(@PathVariable Long id, @RequestBody RentalDto rentalDto) {
-        return new ResponseEntity<>(rentalService.updateRental(id, rentalDto), HttpStatus.OK);
-    }
 
-    @DeleteMapping("/{id}/delete")
-    public ResponseEntity<?> deleteRental(@PathVariable Long id) {
-        rentalService.deleteRental(id);
-        return ResponseEntity.noContent().build();
-    }
 
     @PatchMapping("/{id}/change-status")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> changeStatus(@PathVariable Long id){
         this.rentalService.changeStatus(id);
         return ResponseEntity.noContent().build();

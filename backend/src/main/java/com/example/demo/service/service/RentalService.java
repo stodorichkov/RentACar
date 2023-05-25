@@ -6,33 +6,23 @@ import org.springframework.cglib.core.Local;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 public interface RentalService {
     List<RentalEntity> getAllRentals();
     RentalEntity getRentalById(Long id);
-    String addRental(AddRentalDto addRentalDto,Long carId);
-    RentalEntity updateRental(Long id, RentalDto rentalDto);
+    String addRental(String username,AddRentalDto addRentalDto,Long carId);
 
-
-
-    void deleteRental(Long id);
     double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
-
     List<RentalCarDto> getUserRentalHistory(String username);
-
     Double calculateUserScore(String username);
-
     void addTestRental();
-
     Double  showTotalCost(ShowRentalCostDto showRentalCostDto);
-
-    String completeRental(CompleteRentalDto completeRentalDto);
+    String completeRental(Long rentalId);
     Double calculateMonthlyRevenue(int month,int year);
-
-
     void changeStatus(Long id);
-
     RentalEntity findById(Long id);
+    HashMap<String,Double> rentalCostSummary(Long rentalId);
 }
 

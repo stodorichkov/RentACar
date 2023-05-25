@@ -6,6 +6,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ShowRentalCostDto {
+
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private Long carId;
+
+    public ShowRentalCostDto(LocalDateTime startTime, LocalDateTime endTime, Long carId) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.carId = carId;
+    }
+
+    public ShowRentalCostDto(){}
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -22,14 +35,6 @@ public class ShowRentalCostDto {
         this.endTime = endTime;
     }
 
-    public Double getRentalCost() {
-        return rentalCost;
-    }
-
-    public void setRentalCost(Double totalPrice) {
-        this.rentalCost = totalPrice;
-    }
-
     public Long getCarId() {
         return carId;
     }
@@ -37,10 +42,5 @@ public class ShowRentalCostDto {
     public void setCarId(Long carId) {
         this.carId = carId;
     }
-
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Double rentalCost;
-    private Long carId;
 
 }

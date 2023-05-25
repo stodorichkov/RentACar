@@ -15,13 +15,14 @@ import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -53,28 +54,26 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public RentalEntity getRentalById(Long id) {
-        return rentalRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
+        return rentalRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Rental with id:" + id + " was not found!"));
     }
 
 
 
     @Override
     public Double showTotalCost(ShowRentalCostDto showRentalCostDto) {
+
         CarEntity car = carRepository.findById(showRentalCostDto.getCarId())
-                .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
-        double price = calculateRentalPrice(showRentalCostDto.getStartTime(), showRentalCostDto.getEndTime(), car.getPricePerDay());
+                .orElseThrow(() -> new ObjectNotFoundException("Car with:" + showRentalCostDto.getCarId() + " was not found!"));
+        Double price = calculateRentalPrice(showRentalCostDto.getStartTime(), showRentalCostDto.getEndTime(), car.getPricePerDay());
+        return price;
 
-
-        showRentalCostDto.setStartTime(showRentalCostDto.getStartTime());
-        showRentalCostDto.setEndTime(showRentalCostDto.getEndTime());
-        showRentalCostDto.setCarId(showRentalCostDto.getCarId());
-        showRentalCostDto.setRentalCost(price);
-
-        return price ;
     }
+
+
     @Override
     @Transactional
-    public String addRental(AddRentalDto addRentalDto,Long carId) {
+    public String addRental(String username,AddRentalDto addRentalDto,Long carId) {
 
         RentalEntity rental = new RentalEntity();
         CarEntity currentCar = this.carService.findCarById(carId);
@@ -95,7 +94,8 @@ public class RentalServiceImpl implements RentalService {
         rental.setEndTime(addRentalDto.getEndTime());
 
         LocalDateTime currentTime = LocalDateTime.now();
-        UserEntity renter = this.userService.findUserByName("Administrator");
+
+        UserEntity renter = this.userService.findUserByName(username);
         rental.setRenter(renter);
         rental.setRentedCar(currentCar);
         rental.setStatus(this.statusService.findByStatus(StatusEnum.Reserved));
@@ -104,78 +104,56 @@ public class RentalServiceImpl implements RentalService {
             return "Cannot make a reservation 1 hour or less before your current time!";
         }
 
-        double price = calculateRentalPrice(addRentalDto.getStartTime(), addRentalDto.getEndTime(), currentCar.getPricePerDay());
+        double price = this.calculateRentalPrice
+                (addRentalDto.getStartTime(), addRentalDto.getEndTime(), currentCar.getPricePerDay());
 
-        // Check budget and existing reservations
-        List<RentalEntity> userReservations = rentalRepository.findByRenterUserNameActive(renter.getUsername());
-        double totalReservationCost = userReservations.stream().mapToDouble(RentalEntity::getTotalPrice).sum();
-        double totalCost = totalReservationCost + price;
 
-        double balance = renter.getBudget();
-        if (balance > totalCost) {
+        List<RentalEntity> activeUserReservations =
+                this.rentalRepository.findByRenterUserNameActive(renter.getUsername());
+        double totalReservationCost = activeUserReservations
+                .stream()
+                .mapToDouble(RentalEntity::getTotalPrice)
+                .sum() + price;
+
+        if (renter.getBudget() > totalReservationCost) {
+
             rental.setTotalPrice(price);
             this.rentalRepository.save(rental);
+
         } else {
+
             return "Not enough money for reservation!";
+
         }
 
-        rental.setRenter(renter);
-        rental.setTotalPrice(price);
         this.rentalRepository.save(rental);
         this.carRepository.save(currentCar);
         return "Everything was successful.";
-    }
-    @Override
-    public RentalEntity updateRental(Long id, RentalDto rentalDto) {
-        RentalEntity rental = rentalRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Rental not found"));
 
-        rental.setStartTime(rentalDto.getStartTime());
-        rental.setEndTime(rentalDto.getEndTime());
-        rental.setTotalPrice(rentalDto.getTotalPrice());
-
-        CarEntity car = carRepository.findById(rentalDto.getRentedCarId())
-                .orElseThrow(() -> new ObjectNotFoundException("Car not found"));
-
-        UserEntity user = this.userService.findUserByName(rentalDto.getRenterUsername());
-        rental.setRentedCar(car);
-        rental.setRenter(user);
-
-        return rentalRepository.save(rental);
     }
 
-    @Override
-    public String completeRental(CompleteRentalDto completeRentalDto) {
-        RentalEntity rental = this.findById(completeRentalDto.getRentalId());
 
+    @Override
+    public String completeRental(Long rentalId) {
+
+        RentalEntity rental = this.findById(rentalId);
 
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime startTime = rental.getStartTime();
         LocalDateTime endTime = rental.getEndTime();
+
         UserEntity renter = rental.getRenter();
         CarEntity  car = rental.getRentedCar();
+
         double balance = renter.getBudget();
-        double totalPrice = calculateRentalPrice(rental.getStartTime(),rental.getEndTime(), car.getPricePerDay());
+
+        double totalPrice = calculateRentalPrice(
+                rental.getStartTime(),
+                rental.getEndTime(),
+                car.getPricePerDay());
+
         double payment = 0.0;
-        double discount = 0.0;
-        double renterScore = renter.getScore();
-
-        //set discount
-        if(renterScore<1.0){
-
-            discount=0.0;
-
-        }
-        else if(renterScore>=1.0 && renterScore<=1.25){
-
-            discount =0.1;
-
-        }
-        else {
-
-            discount=0.15;
-
-        }
+        double discount = this.calculateDiscount(renter.getScore());
 
         long rentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), endTime.toLocalDate());
         long currentRentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), currentTime.toLocalDate());
@@ -183,11 +161,10 @@ public class RentalServiceImpl implements RentalService {
         if (currentTime.isBefore(startTime.minusHours(1))) {
 
             rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
-            rentalRepository.save(rental);
+            this.rentalRepository.save(rental);
             return "Rental canceled ,charged: 0";
 
-        }
-        else if (currentRentalDays < rentalDays / 2) {
+        } else if (currentRentalDays < (rentalDays / 2)) {
 
             payment = totalPrice / 2.0;
             if (balance < payment) {
@@ -196,58 +173,99 @@ public class RentalServiceImpl implements RentalService {
            rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedEarly));
 
         } else {
-            if (balance < payment) {
-                return "Not enough money to complete the rental";}
-            payment = totalPrice;
-            if(rental.getStatus().getStatus().equals(StatusEnum.Late))
-                rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedLate));
-            else{rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedOnTime));}
 
+            if (balance < payment) {
+
+                return "Not enough money to complete the rental";
 
             }
 
+            payment = totalPrice;
+            if(rental.getStatus().getStatus().equals(StatusEnum.Late)) {
+                rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedLate));
+            } else {
+                rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedOnTime));
+            }
 
-       if (balance < payment) {
-          return "Not enough money to complete the rental";
-        } else {
-            renter.setBudget(balance - payment- (payment*discount));
-          //  rental.setStatus("completed");
-
-            //recalculate user score before update
-           renter.setScore(calculateUserScore(renter.getUsername()));
-
-           userRepository.save(renter);
-           rentalRepository.save(rental);
-           return "Rental complete!";
+            Double total = balance - (payment - (payment * discount));
+            renter.setBudget(total);
+            renter.setScore(calculateUserScore(renter.getUsername()));
+            rental.setTotalPrice(total);
         }
 
+           this.userRepository.save(renter);
+           this.rentalRepository.save(rental);
 
+           return "Rental completed!";
     }
-    @Override
-    public void deleteRental(Long id) {
-        rentalRepository.deleteById(id);
+
+    private double calculateDiscount(double renterScore){
+
+        if(renterScore < 1.0){
+
+            return 0.0;
+
+        }
+        else if(renterScore >= 1.0 && renterScore <= 1.25){
+
+            return 0.1;
+
+        }
+        else {
+
+            return 0.15;
+
+        }
+    }
+
+    public HashMap<String,Double> rentalCostSummary(Long rentalId){
+
+        RentalEntity r = this.getRentalById(rentalId);
+        UserEntity user = r.getRenter();
+        //discount
+        double discount = calculateDiscount(user.getScore());
+        //totalPrice with discount
+        double totalWithDiscount = r.getTotalPrice();
+        //calculate price without discount
+        double totalWithoutDiscount = totalWithDiscount/(1-discount);
+
+        HashMap<String,Double> summary = new LinkedHashMap<>();
+
+        summary.put("Without discount",totalWithoutDiscount);
+        summary.put("Discount",discount);
+        summary.put("With discount",totalWithDiscount);
+        return summary;
     }
 
     @Override
     public double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime, double pricePerDay) {
+
         LocalDateTime endTimeWithGracePeriod = endTime.plusHours(2);
         LocalDateTime currentTime = LocalDateTime.now();
 
         long rentalDays = startTime.until(endTimeWithGracePeriod, ChronoUnit.DAYS);
+
         if (startTime.plusDays(rentalDays).isBefore(endTimeWithGracePeriod)) {
             rentalDays++;
         }
 
         long overdueDays = 0;
+
         if (currentTime.isAfter(endTimeWithGracePeriod)) {
+
             overdueDays = endTimeWithGracePeriod.until(currentTime, ChronoUnit.DAYS);
+
             if (endTimeWithGracePeriod.plusDays(overdueDays).isBefore(currentTime)) {
+
                 overdueDays++;
+
             }
         }
 
         return (rentalDays + overdueDays) * pricePerDay;
     }
+
+
 
     @Override
     public List<RentalCarDto> getUserRentalHistory(String username) {
@@ -275,10 +293,9 @@ public class RentalServiceImpl implements RentalService {
         List<RentalEntity> rentals =
                 this.rentalRepository.findAllFinishedRentalsForCurrentMonth(month,year);
 
-        //ToDo: check status of the rental
         double total = 0.0;
         for(RentalEntity r : rentals){
-            total+=r.getTotalPrice();
+            total += r.getTotalPrice();
         }
 
         return total;
@@ -304,15 +321,19 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public Double calculateUserScore(String username){
-        Double userScore =0.0;
-        Double sumScore =0.0;
-        List<RentalEntity> listRentalsScore= rentalRepository.findByRenterUsernameWithStatusCompleted(username);
-        if(!listRentalsScore.isEmpty()){
+
+        Double userScore = 0.0;
+        Double sumScore = 0.0;
+        List<RentalEntity> listRentalsScore=
+                this.rentalRepository.findByRenterUsernameWithStatusCompleted(username);
+        int size = listRentalsScore.size();
+        if(!listRentalsScore.isEmpty() && size>2){
             for(RentalEntity r:listRentalsScore){
-                sumScore+=r.getStatus().getScore();
+                sumScore += r.getStatus().getScore();
 
             }
-            userScore=sumScore/listRentalsScore.size();
+
+            userScore = sumScore / size;
 
         }
 
@@ -333,6 +354,7 @@ public class RentalServiceImpl implements RentalService {
         }
 
     }
+
 
 
 }
