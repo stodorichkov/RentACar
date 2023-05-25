@@ -196,7 +196,8 @@ public class CarServiceImpl implements CarService {
             for(RentalEntity r : currentRentals){
                 if(r.getEndTime().isAfter(startDate) && r.getStartTime().isBefore(endDate)) {
                     if (StatusEnum.Reserved.equals(r.getStatus().getStatus())
-                            || StatusEnum.Active.equals(r.getStatus().getStatus())) {
+                            || StatusEnum.Active.equals(r.getStatus().getStatus())
+                            || StatusEnum.Late.equals(r.getStatus().getStatus())) {
                         rentedCars.add(c);
                     }
                 }

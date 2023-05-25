@@ -161,6 +161,7 @@ public class UserServiceImpl implements UserService {
         );
         user.setRoles(List.of(userRole));
         user.setYears(userRegisterDto.getYears());
+        user.setScore(0.0);
 
         this.userRepository.save(user);
 

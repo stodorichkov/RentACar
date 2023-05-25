@@ -78,9 +78,22 @@ public class RentalServiceImpl implements RentalService {
 
         RentalEntity rental = new RentalEntity();
         CarEntity currentCar = this.carService.findCarById(carId);
-        currentCar.setRented(true);
+
+        for(RentalEntity r : currentCar.getCarRental()){
+            if(StatusEnum.Active.equals(r.getStatus().getStatus()) ||
+                    StatusEnum.Reserved.equals(r.getStatus().getStatus()) ||
+                    StatusEnum.Late.equals(r.getStatus().getStatus())) {
+                if(r.getEndTime().isAfter(addRentalDto.getStartTime())
+                        && r.getStartTime().isBefore(addRentalDto.getEndTime())) {
+
+                    return "Your selected car was reserved.";
+                }
+            }
+        }
+
         rental.setStartTime(addRentalDto.getStartTime());
         rental.setEndTime(addRentalDto.getEndTime());
+
         LocalDateTime currentTime = LocalDateTime.now();
         UserEntity renter = this.userService.findUserByName("Administrator");
         rental.setRenter(renter);
@@ -166,7 +179,6 @@ public class RentalServiceImpl implements RentalService {
 
         long rentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), endTime.toLocalDate());
         long currentRentalDays = ChronoUnit.DAYS.between(startTime.toLocalDate(), currentTime.toLocalDate());
-
 
         if (currentTime.isBefore(startTime.minusHours(1))) {
 
