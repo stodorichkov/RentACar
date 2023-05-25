@@ -7,6 +7,7 @@ import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
+import com.example.demo.model.dto.EditConditionAndPriceDto;
 import com.example.demo.model.enums.*;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
@@ -102,7 +103,7 @@ public class CarServiceImpl implements CarService {
         car.setModel(carDto.getModel());
         car.setImageUrl(carDto.getImageUrl());
         car.setPricePerDay(carDto.getPricePerDay());
-        car.setCondition(carDto.getCondition());
+        car.setCondition(carDto.getCarCondition());
 
         if(this.carRepository.findByRegistrationPlate(carDto.getRegistrationPlate()).isEmpty()){
             car.setRegistrationPlate(carDto.getRegistrationPlate());
@@ -205,6 +206,19 @@ public class CarServiceImpl implements CarService {
 
         return this.modelMapper.map(available, new TypeToken<Set<CarDto>>(){}.getType());
 
+    }
+
+    @Override
+    public String editConditionAndPrice(EditConditionAndPriceDto editConditionAndPriceDto, Long carId) {
+        CarEntity currentCar = this.getCarById(carId);
+        currentCar.setCondition(editConditionAndPriceDto.getCondition());
+        if(editConditionAndPriceDto.getPricePerDay()<=30.0){
+            return "Price must be more than 30.";
+        }else{
+            currentCar.setPricePerDay(editConditionAndPriceDto.getPricePerDay());
+        }
+        this.carRepository.save(currentCar);
+        return "Edit was successful";
     }
 
 }

@@ -18,12 +18,12 @@ public class CarDto {
  private TransmissionEnum transmissionEnum;
  private Double pricePerDay;
 
- private ConditionEnum condition;
+ private ConditionEnum carCondition;
 
 
  public CarDto(Long id, String imageUrl, String model,
                String make, Integer capacity, String registrationPlate, EngineEnum engine, TransmissionEnum transmissionEnum,
-               Double pricePerDay, ConditionEnum condition) {
+               Double pricePerDay, ConditionEnum carCondition) {
   this.id = id;
   this.imageUrl = imageUrl;
   this.model = model;
@@ -33,7 +33,7 @@ public class CarDto {
   this.engine = engine;
   this.transmissionEnum = transmissionEnum;
   this.pricePerDay = pricePerDay;
-  this.condition = condition;
+  this.carCondition = carCondition;
 
  }
 
@@ -112,12 +112,12 @@ public class CarDto {
   this.registrationPlate = registrationPlate;
  }
 
- public ConditionEnum getCondition() {
-  return condition;
+ public ConditionEnum getCarCondition() {
+  return carCondition;
  }
 
- public void setCondition(ConditionEnum condition) {
-  this.condition = condition;
+ public void setCarCondition(ConditionEnum carCondition) {
+  this.carCondition = carCondition;
  }
 
  @Override

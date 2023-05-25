@@ -1,20 +1,16 @@
 package com.example.demo.web;
 
-import com.example.demo.model.CarEntity;
 import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
+import com.example.demo.model.dto.EditConditionAndPriceDto;
 import com.example.demo.service.service.CarService;
 import org.modelmapper.ModelMapper;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -71,6 +67,18 @@ public class CarController {
                                          Authentication authentication){
         return ResponseEntity.ok(this.carService.addCar(carDto,authentication.getName()));
     }
+
+    @PatchMapping("/{carId}/edit")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> editCar(@PathVariable Long carId,
+                                          @RequestBody EditConditionAndPriceDto editConditionAndPriceDto){
+        String response = this.carService.editConditionAndPrice(editConditionAndPriceDto,carId);
+        if(!response.equals("Edit was successful")){
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
 
 
 
