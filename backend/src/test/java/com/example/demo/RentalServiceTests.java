@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+
 @RunWith(MockitoJUnitRunner.class)
  class RentalServiceTest {
 
@@ -56,7 +57,7 @@ import java.util.Optional;
         UserEntity renter = new UserEntity();
         renter.setBudget(1000.0);
 
-        Mockito.when(rentalRepository.findById(rentalId)).thenReturn(Optional.of(rental));
+        //Mockito.when(rentalRepository.findByRenterUsername(renter.getUsername())).thenReturn(Optional.of(rental));
         Mockito.when(rentalRepository.save(Mockito.any(RentalEntity.class))).thenReturn(rental);
         Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(renter);
         Mockito.when(statusService.findByStatus(StatusEnum.Canceled)).thenReturn(new StatusEntity(StatusEnum.Canceled));
