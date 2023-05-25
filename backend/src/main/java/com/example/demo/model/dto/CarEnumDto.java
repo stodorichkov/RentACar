@@ -9,6 +9,8 @@ public class CarEnumDto {
 
     private List<String> engine;
 
+    private List<String> condition;
+
     public CarEnumDto(List<String> transmission, List<String> engine) {
 ;
         this.transmission = transmission;

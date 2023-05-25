@@ -76,7 +76,7 @@ public class RentalServiceImpl implements RentalService {
     public String addRental(String username,AddRentalDto addRentalDto,Long carId) {
 
         RentalEntity rental = new RentalEntity();
-        CarEntity currentCar = this.carService.findCarById(carId);
+        CarEntity currentCar = this.carService.getCarById(carId);
 
         for(RentalEntity r : currentCar.getCarRental()){
             if(StatusEnum.Active.equals(r.getStatus().getStatus()) ||
@@ -218,10 +218,12 @@ public class RentalServiceImpl implements RentalService {
         }
     }
 
+    @Override
     public HashMap<String,Double> rentalCostSummary(Long rentalId){
 
         RentalEntity r = this.getRentalById(rentalId);
         UserEntity user = r.getRenter();
+
         //discount
         double discount = calculateDiscount(user.getScore());
         //totalPrice with discount
@@ -235,6 +237,27 @@ public class RentalServiceImpl implements RentalService {
         summary.put("Discount",discount);
         summary.put("With discount",totalWithDiscount);
         return summary;
+    }
+
+    @Override
+    public List<RentalForAdminDto> findRentalsInfoForAdmin() {
+        List<RentalEntity> all = this.rentalRepository.findAll();
+        List<RentalForAdminDto> forAdmin = new ArrayList<>();
+        if(!all.isEmpty()){
+            for(RentalEntity r : all){
+                forAdmin.add(
+                        new RentalForAdminDto(
+                                r.getRenter().getUsername(),
+                                r.getRentedCar().getMake() + r.getRentedCar().getModel(),
+                                r.getRentedCar().getRegistrationPlate(),
+                                r.getStatus().getStatus(),
+                                r.getTotalPrice()
+
+                        )
+                );
+            }
+        }
+        return forAdmin;
     }
 
     @Override
@@ -273,6 +296,7 @@ public class RentalServiceImpl implements RentalService {
         UserEntity currentUser = this.userService.findUserByName(username);
         List<RentalEntity> currentRental = currentUser.getRentals();
         List<RentalCarDto> userRentalHistory = new ArrayList<>();
+        //ToDo: return status
         for(RentalEntity r : currentRental){
             userRentalHistory.add(
                     new RentalCarDto(
@@ -304,7 +328,8 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public void changeStatus(Long id) {
         RentalEntity rental = this.findById(id);
-        if(!StatusEnum.Canceled.equals(rental.getStatus().getStatus())){
+        if(StatusEnum.Active.equals(rental.getStatus().getStatus())
+        & StatusEnum.Reserved.equals(rental.getStatus().getStatus())){
             rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
         }
         this.rentalRepository.save(rental);

@@ -7,26 +7,20 @@ import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
-import com.example.demo.model.enums.EngineEnum;
-import com.example.demo.model.enums.RoleEnum;
-import com.example.demo.model.enums.StatusEnum;
-import com.example.demo.model.enums.TransmissionEnum;
+import com.example.demo.model.enums.*;
 import com.example.demo.repository.CarRepository;
 import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
-import com.example.demo.service.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import com.example.demo.exception.ObjectNotFoundException;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
+
 import java.util.*;
 
 @Service
@@ -37,7 +31,8 @@ public class CarServiceImpl implements CarService {
     private final RentalRepository rentalRepository;
 
     private final UserRepository userRepository;
-    @Autowired
+
+
     public CarServiceImpl(CarRepository carRepository, ModelMapper modelMapper,
                           RentalRepository rentalRepository, UserRepository userRepository) {
         this.carRepository = carRepository;
@@ -59,22 +54,13 @@ public class CarServiceImpl implements CarService {
        return filteredCars;
     }
 
-    @Override
-    public List<CarEntity> displayCarsByAvailability(Boolean result){
-        if(displayCarsByAvailability(result).isEmpty()){
-            throw new IllegalArgumentException("There are no available cars!");
-        }
-        return carRepository.findByIsRented(result);
-    }
 
-    //ToDo: maybe i need to delete this later
     @Override
     @Transactional
     public void deleteCar(Long id) {
         CarEntity carToDelete = this.getCarById(id);
         this.carRepository.deleteById(id);
     }
-
 
 
     @Override
@@ -105,24 +91,26 @@ public class CarServiceImpl implements CarService {
         );
     }
 
+    //TODO: add conditon of the car(PERFECT,GOOD,POOR)
+    //TODO: add method for updating condition of the car and price
     @Override
     @Transactional
-    public String addCar(CarDto carDto, Principal principal) {
+    public String addCar(CarDto carDto, String username) {
 
         CarEntity car = new CarEntity();
         car.setMake(carDto.getMake());
         car.setModel(carDto.getModel());
-        car.setRented(false);
         car.setImageUrl(carDto.getImageUrl());
         car.setPricePerDay(carDto.getPricePerDay());
+        car.setCondition(carDto.getCondition());
 
         if(this.carRepository.findByRegistrationPlate(carDto.getRegistrationPlate()).isEmpty()){
             car.setRegistrationPlate(carDto.getRegistrationPlate());
         }else{
             return "Car with the same registration plate was already added!";
         }
-        UserEntity admin = this.userRepository.findByUsername(principal.getName()).orElseThrow(
-                () -> new UsernameNotFoundException("User with requested name:" + principal.getName() +
+        UserEntity admin = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("User with requested name:" + username +
                         " was not found.")
         );
         admin.setAddedByAdmin(List.of(car));
@@ -131,12 +119,15 @@ public class CarServiceImpl implements CarService {
         return "Car is added successfully!";
     }
 
+
+    //TODO: return condition info
     @Override
     public CarEnumDto findCarEnumInfo() {
 
         CarEnumDto carEnumDto = new CarEnumDto();
         TransmissionEnum[] transmissionValues = TransmissionEnum.values();
         EngineEnum[] engineValues = EngineEnum.values();
+        ConditionEnum[] conditionValues = ConditionEnum.values();
 
         List<String> transmission = new ArrayList<>();
         for(TransmissionEnum t : transmissionValues){
@@ -148,19 +139,19 @@ public class CarServiceImpl implements CarService {
             engine.add(e.toString());
         }
 
+        List<String> condition = new ArrayList<>();
+        for(ConditionEnum c : conditionValues){
+            condition.add(c.toString());
+        }
+
         carEnumDto.setTransmission(transmission);
         carEnumDto.setEngine(engine);
         return carEnumDto;
 
     }
 
-    @Override
-    public CarEntity findCarById(Long id) {
-        return this.carRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("Car with requested id:" + id + " not found.")
-        );
-    }
 
+    //TODO: return condition here
     @Override
     public List<CarAdminDto> findCarsForAdmin(String username) {
 
@@ -177,7 +168,12 @@ public class CarServiceImpl implements CarService {
                                 c.getId(),
                                 c.getMake() + " " + c.getModel(),
                                 c.getRegistrationPlate(),
-                                c.getPricePerDay()
+                                c.getCondition(),
+                                c.getPricePerDay(),
+                                c.getEngine(),
+                                c.getTransmission(),
+                                c.getCapacity(),
+                                c.getFuelConsumption()
                         )
                 );
             }

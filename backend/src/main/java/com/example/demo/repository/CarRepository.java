@@ -15,18 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<CarEntity, Long> {
-   List<CarEntity> findByIsRented(Boolean isRented);
 
    Optional<CarEntity> findByRegistrationPlate(String registrationPlate);
 
-
-   @Query("SELECT c FROM CarEntity c JOIN c.carRental r " +
-           "JOIN r.status s WHERE r.startTime = :start AND r.endTime = :end AND s.status" +
-           " IN('CompletedOnTime', 'CompletedLate', 'CompletedEarly', 'Canceled'")
-    List<CarEntity> findAllByTheirAvailability(
-            @Param("start") LocalDateTime start,
-            @Param("end") LocalDateTime end);
-
-   @Query("SELECT c FROM CarEntity c LEFT JOIN c.carRental r WHERE :reservationDate NOT BETWEEN r.startTime AND r.endTime")
-   List<CarEntity> findAvailableCarsByReservationDate(@Param("reservationDate") LocalDate reservationDate);
 }

@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    //TODO: change implementation, because there are situations where user can input the same information
     @Override
     public String editUserProfile(String username,UserProfileDto userProfileDto) {
 
@@ -80,19 +81,31 @@ public class UserServiceImpl implements UserService {
 
         if(editUser.getUsername()!=null && editUser.getUsername().equals(userProfileDto.getUsername())){
             return "Username already exists.";
-        }else{
+        }else if(editUser.getUsername().length()<3){
+            return "Username must contain at least 4 characters.";
+        } else {
             editUser.setUsername(userProfileDto.getUsername());
+        }
+
+        if(editUser.getFullName()!=null && editUser.getFullName().equals(userProfileDto.getFullName())){
+            return "Name you've changed is the same.";
+        } else if(!editUser.getFullName().matches("^[A-Za-z]{4,}\\s[A-Za-z]{4,}$")){
+            return "Your first and family name is not correct.At least 3 characters for each name and space between!";
+        } else {
+            editUser.setFullName(userProfileDto.getFullName());
         }
 
         if(editUser.getEmail()!=null && editUser.getEmail().equals(userProfileDto.getEmail())){
             return "Email already exists!";
-        }else {
+        }else if(!editUser.getEmail().matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")) {
+            return "Email format is not correct.";
+        } else {
             editUser.setEmail(userProfileDto.getEmail());
         }
 
         if(editUser.getBudget()!=null && editUser.getBudget().equals(userProfileDto.getBudget())){
             return "Budget already exists!";
-        }else {
+        } else {
             editUser.setBudget(userProfileDto.getBudget());
         }
 
@@ -123,37 +136,46 @@ public class UserServiceImpl implements UserService {
         UserEntity user = new UserEntity();
         user.setBudget(0.00);
 
-        if(this.userRepository.findByUsername(userRegisterDto.getUsername()).isEmpty()){
+        if(this.userRepository.findByUsername(userRegisterDto.getUsername()).isEmpty()
+                && userRegisterDto.getUsername().length()>3){
             user.setUsername(userRegisterDto.getUsername());
-        }else{
+        }else if (userRegisterDto.getUsername().length()<3){
+            return "Username must contain at least 4 characters.";
+        } else {
             return "Username already exist.";
         }
 
         if(this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty() &&
-                (userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
+                userRegisterDto.getEmail().matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
             user.setEmail(userRegisterDto.getEmail());
-        }else if(!(userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
+        } else if (!(userRegisterDto.getEmail()).matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")){
             return "Wrong email format.";
-        } else if(!this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty()){
+        } else if (!this.userRepository.findByEmail(userRegisterDto.getEmail()).isEmpty()){
             return "Email already exists.";
         }
 
         if(this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty() &&
                 (userRegisterDto.getMobilePhone()).matches("^\\d{10}$")){
             user.setMobilePhone(userRegisterDto.getMobilePhone());
-        }else if (!(userRegisterDto.getMobilePhone()).matches("^\\d{10}$")){
+        } else if (!(userRegisterDto.getMobilePhone()).matches("^\\d{10}$")){
             return "Wrong phone number";
-        } else if(!this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
+        } else if (!this.userRepository.findByMobilePhone(userRegisterDto.getMobilePhone()).isEmpty()){
             return "Mobile phone already exists.";
         }
 
         if(userRegisterDto.getPassword().matches("^(?=.\\d)(?=.[A-Z])(?=.*\\W).{8,}$") &&
                 userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
             user.setPassword(this.passwordEncoder.encode(userRegisterDto.getPassword()));
-        }else if(!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
+        } else if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
             return "Password and confirm password are not equal.";
-        }else if(!userRegisterDto.getPassword().matches("^(?=.\\d)(?=.[A-Z])(?=.*\\W).{8,}$")){
+        } else if (!userRegisterDto.getPassword().matches("^(?=.\\d)(?=.[A-Z])(?=.*\\W).{8,}$")){
             return "Password is not valid! It must contain min 8 characters, one special and numbers";
+        }
+
+        if(userRegisterDto.getFullName().matches("^[A-Za-z]{4,}\\s[A-Za-z]{4,}$")){
+            user.setFullName(userRegisterDto.getFullName());
+        } else {
+          return "Your first and family name is not correct.At least 3 characters for each name and space between!";
         }
 
         RoleEntity userRole = this.roleRepository.findById(2l).orElseThrow(
@@ -161,10 +183,12 @@ public class UserServiceImpl implements UserService {
         );
         user.setRoles(List.of(userRole));
         user.setYears(userRegisterDto.getYears());
+
         user.setScore(0.0);
 
         this.userRepository.save(user);
 
+        //TODO: delete this later
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(user.getUsername());
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 userDetails,user.getPassword(),userDetails.getAuthorities());
@@ -192,7 +216,6 @@ public class UserServiceImpl implements UserService {
         return principal != null && principal instanceof Authentication &&
                 ((Authentication) principal).getAuthorities().stream()
                         .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-
     }
 
     @Override
@@ -215,5 +238,6 @@ public class UserServiceImpl implements UserService {
        this.userRepository.save(user);
     }
 
+    //TODO: update DTO to return score of user
 
 }

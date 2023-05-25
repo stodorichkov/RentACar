@@ -80,4 +80,17 @@ public class RentalController {
         this.rentalService.changeStatus(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/all-admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<RentalForAdminDto>> rentalForAdminInfo(){
+
+        List<RentalForAdminDto> forAdmin = this.rentalService.findRentalsInfoForAdmin();
+        if(forAdmin.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(forAdmin);
+
+    }
+
 }

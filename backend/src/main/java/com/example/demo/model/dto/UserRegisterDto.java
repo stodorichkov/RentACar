@@ -1,34 +1,27 @@
 package com.example.demo.model.dto;
 
-import jakarta.validation.constraints.*;
-
 
 public class UserRegisterDto {
 
     private Long id;
 
-
-    @NotEmpty(message = "Username must not be empty")
-
     private String username;
 
-
-
+    private String fullName;
     private String email;
 
     private Integer years;
 
     private String mobilePhone;
 
-
-
     private String password;
 
     private String confirmPassword;
 
-    public UserRegisterDto(Long id, String username, String email, Integer years, String mobilePhone, String password, String confirmPassword) {
+    public UserRegisterDto(Long id, String username, String fullName, String email, Integer years, String mobilePhone, String password, String confirmPassword) {
         this.id = id;
         this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.years = years;
         this.mobilePhone = mobilePhone;
@@ -92,5 +85,13 @@ public class UserRegisterDto {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

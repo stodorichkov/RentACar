@@ -12,8 +12,6 @@ import java.util.*;
 
 public interface CarService {
     Set<CarDto> getAllUniqueCars();
-    List<CarEntity> displayCarsByAvailability(Boolean result);
-
     void deleteCar(Long id);
 
     CarDto getCarInfo(Long id);
@@ -22,11 +20,9 @@ public interface CarService {
 
     CarEntity getCarById(Long id);
 
-    String addCar(CarDto carDto, Principal principal);
+    String addCar(CarDto carDto, String username);
 
     CarEnumDto findCarEnumInfo();
-
-    CarEntity findCarById(Long id);
 
     List<CarAdminDto> findCarsForAdmin(String username);
 

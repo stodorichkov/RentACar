@@ -24,5 +24,7 @@ public interface RentalService {
     void changeStatus(Long id);
     RentalEntity findById(Long id);
     HashMap<String,Double> rentalCostSummary(Long rentalId);
+
+    List<RentalForAdminDto> findRentalsInfoForAdmin();
 }
 

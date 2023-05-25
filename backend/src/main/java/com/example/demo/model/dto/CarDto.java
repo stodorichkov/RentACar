@@ -1,36 +1,29 @@
 package com.example.demo.model.dto;
 
+import com.example.demo.model.enums.ConditionEnum;
 import com.example.demo.model.enums.EngineEnum;
 import com.example.demo.model.enums.TransmissionEnum;
-import jakarta.validation.constraints.*;
 
 import java.util.Objects;
 
 public class CarDto {
 
  private Long id;
-
  private String imageUrl;
-
  private String model;
-
  private String make;
-
  private Integer capacity;
-
  private String registrationPlate;
  private EngineEnum engine;
-
  private TransmissionEnum transmissionEnum;
-
  private Double pricePerDay;
 
- private Boolean isRented;
+ private ConditionEnum condition;
 
 
  public CarDto(Long id, String imageUrl, String model,
                String make, Integer capacity, String registrationPlate, EngineEnum engine, TransmissionEnum transmissionEnum,
-               Double pricePerDay, Boolean isRented) {
+               Double pricePerDay, ConditionEnum condition) {
   this.id = id;
   this.imageUrl = imageUrl;
   this.model = model;
@@ -40,7 +33,8 @@ public class CarDto {
   this.engine = engine;
   this.transmissionEnum = transmissionEnum;
   this.pricePerDay = pricePerDay;
-  this.isRented = isRented;
+  this.condition = condition;
+
  }
 
  public CarDto() {
@@ -110,20 +104,20 @@ public class CarDto {
   this.pricePerDay = pricePerDay;
  }
 
- public Boolean getRented() {
-  return isRented;
- }
-
- public void setRented(Boolean rented) {
-  isRented = rented;
- }
-
  public String getRegistrationPlate() {
   return registrationPlate;
  }
 
  public void setRegistrationPlate(String registrationPlate) {
   this.registrationPlate = registrationPlate;
+ }
+
+ public ConditionEnum getCondition() {
+  return condition;
+ }
+
+ public void setCondition(ConditionEnum condition) {
+  this.condition = condition;
  }
 
  @Override
@@ -145,4 +139,6 @@ public class CarDto {
   return Objects.hash(getId(), getImageUrl(), getModel(), getMake(),
           getCapacity(), getEngine(), getTransmissionEnum(), getPricePerDay());
  }
+
+
 }

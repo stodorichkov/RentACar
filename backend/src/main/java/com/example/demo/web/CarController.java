@@ -68,8 +68,8 @@ public class CarController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
-                                         Principal principal){
-        return ResponseEntity.ok(this.carService.addCar(carDto,principal));
+                                         Authentication authentication){
+        return ResponseEntity.ok(this.carService.addCar(carDto,authentication.getName()));
     }
 
 

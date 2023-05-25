@@ -13,6 +13,8 @@ public class UserEntity extends Base{
 
     private String username;
 
+    private String fullName;
+
     private String email;
 
     private String password;
@@ -34,11 +36,12 @@ public class UserEntity extends Base{
     @OneToMany
     private List<CarEntity> addedByAdmin;
 
-    public UserEntity(String username, String email, String password,
+    public UserEntity(String username, String fullName, String email, String password,
                       Double budget, Integer years, String mobilePhone, Double score,
                       List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
 
         this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.budget = budget;
@@ -132,5 +135,13 @@ public class UserEntity extends Base{
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
