@@ -20,6 +20,9 @@ public class StatusEntity extends Base{
 
     public StatusEntity(){}
 
+    public  StatusEntity(StatusEnum status){
+        this.status = status;
+    }
 
     public StatusEnum getStatus() {
         return status;
