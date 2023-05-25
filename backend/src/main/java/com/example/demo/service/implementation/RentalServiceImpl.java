@@ -162,7 +162,7 @@ public class RentalServiceImpl implements RentalService {
 
             rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
             this.rentalRepository.save(rental);
-            return "Rental canceled ,charged: 0";
+            return "Rental canceled, charged: 0";
 
         } else if (currentRentalDays < (rentalDays / 2)) {
 

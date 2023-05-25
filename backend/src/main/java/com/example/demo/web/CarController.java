@@ -73,7 +73,7 @@ public class CarController {
     public ResponseEntity<String> editCar(@PathVariable Long carId,
                                           @RequestBody EditConditionAndPriceDto editConditionAndPriceDto){
         String response = this.carService.editConditionAndPrice(editConditionAndPriceDto,carId);
-        if(!response.equals("Edit was successful")){
+        if(!response.equals("Edit was successful!")){
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(response);

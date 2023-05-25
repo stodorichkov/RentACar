@@ -211,12 +211,6 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    @Override
-    public boolean isAdmin(Principal principal) {
-        return principal != null && principal instanceof Authentication &&
-                ((Authentication) principal).getAuthorities().stream()
-                        .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-    }
 
     @Override
     public List<UserProfileDto> findAllUsers() {

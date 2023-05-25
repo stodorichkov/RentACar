@@ -218,7 +218,7 @@ public class CarServiceImpl implements CarService {
             currentCar.setPricePerDay(editConditionAndPriceDto.getPricePerDay());
         }
         this.carRepository.save(currentCar);
-        return "Edit was successful";
+        return "Edit was successful!";
     }
 
 }

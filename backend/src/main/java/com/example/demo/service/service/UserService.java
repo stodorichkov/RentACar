@@ -25,8 +25,6 @@ public interface UserService {
 
     UserEntity findById(Long id);
 
-    boolean isAdmin(Principal principal);
-
     List<UserProfileDto> findAllUsers();
 
     void setAsAdmin(String username);
