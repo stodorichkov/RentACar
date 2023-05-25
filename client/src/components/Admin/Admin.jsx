@@ -2,10 +2,21 @@ import { Paper, Divider, Typography }  from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useTheme } from '@mui/material/styles';
+import { useState } from 'react';
+
+import AllCars from './AdminGrids/Cars/AllCars';
+
 
 
 const Admin = () => {
     const theme = useTheme();
+    const [expanded, setExpanded] = useState(null);
+
+    const handleChangeExpand = (panel) => (event, isExpanded) => {
+        if (isExpanded || expanded !== panel) {
+            setExpanded(panel);
+        }
+    };
 
     return(
         <Grid container spacing={2} justifyContent='center' direction='row' sx={{ height: "85vh", marginTop: '4vh',  overflow: 'auto'}}>
@@ -19,7 +30,7 @@ const Admin = () => {
                             <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                         </Grid>
                         <Grid xs={12}>
-                            
+                            <AllCars handleChangeExpand={handleChangeExpand('panel1')} expanded={expanded === 'panel1'}/>
                         </Grid>
                         <Grid xs={12}>
                             

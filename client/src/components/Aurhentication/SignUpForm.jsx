@@ -46,19 +46,19 @@ const SignUpForm = () => {
     }, [dispatch]);
 
     const addUser = async () => {
-        if (username === '' || age === '' || email === '' || phone === '' || password === '' || confirmPassword === '') {
+        const content = {
+            username: username,
+            email: email,
+            years: age,
+            mobilePhone: phone,
+            password: password,
+            confirmPassword: confirmPassword
+        };
+        
+        if(Object.values(content).some(value => value === '')) {
             dispatch(setAlert('The form must be completed!'));
         }
         else {
-            const content = {
-                username: username,
-                email: email,
-                years: age,
-                mobilePhone: phone,
-                password: password,
-                confirmPassword: confirmPassword
-            };
-
             try {
                 const response = await axios.post('http://localhost:8086/user/register', content);
                 if (response.status === 200) {

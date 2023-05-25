@@ -38,7 +38,6 @@ const App = () => {
 			<Router>
 				<Bar />
 				<Routes>
-					<Route key="admin" path="/admin" element={<Admin />} />
 					<Route path='/' element={<Home/>}/>
 					{renderRoutes()}
 					<Route path="*" element={<Navigate to="/" />} />

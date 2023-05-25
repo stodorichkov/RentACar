@@ -31,15 +31,15 @@ const SignInForm = () => {
     }, [dispatch]);
 
     const signInUser = async () => {
-        if (username === '' || password === '') {
+        const content = {
+            username: username,
+            password: password
+        };
+        
+        if(Object.values(content).some(value => value === '')) {
             dispatch(setAlert('The form must be completed!'));
         }
         else {
-            const content = {
-                username: username,
-                password: password
-            };
-
             try {
                 const response = await axios.post('http://localhost:8086/user/login', content);
                 if (response.status === 200) {
