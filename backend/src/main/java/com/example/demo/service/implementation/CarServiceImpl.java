@@ -28,20 +28,14 @@ import java.util.*;
 public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final ModelMapper modelMapper;
-
-    private final RentalRepository rentalRepository;
-
     private final UserRepository userRepository;
 
-
-    public CarServiceImpl(CarRepository carRepository, ModelMapper modelMapper,
-                          RentalRepository rentalRepository, UserRepository userRepository) {
+    public CarServiceImpl(CarRepository carRepository, ModelMapper modelMapper, UserRepository userRepository) {
         this.carRepository = carRepository;
         this.modelMapper = modelMapper;
-        this.rentalRepository = rentalRepository;
+
         this.userRepository =  userRepository;
     }
-
     @Override
     public Set<CarDto> getAllUniqueCars() {
 
@@ -99,17 +93,39 @@ public class CarServiceImpl implements CarService {
     public String addCar(CarDto carDto, String username) {
 
         CarEntity car = new CarEntity();
-        car.setMake(carDto.getMake());
-        car.setModel(carDto.getModel());
-        car.setImageUrl(carDto.getImageUrl());
-        car.setPricePerDay(carDto.getPricePerDay());
+
+        if(!carDto.getMake().matches("\\b[A-Z][A-Za-z]{2,}\\b")){
+            return "Make must be more than 2 characters and start with capital letter";
+        } else {
+            car.setMake(carDto.getMake());
+        }
+
+        if(carDto.getModel().length()<3){
+            return "Model must contain at least 3 characters.";
+        } else {
+            car.setModel(carDto.getModel());
+        }
+
+        if(!carDto.getImageUrl().matches("\\b((?:https?|ftp)://\\S+)")){
+            return "URL is not valid";
+        } else {
+            car.setImageUrl(carDto.getImageUrl());
+        }
+
+        if(carDto.getPricePerDay()<30.0){
+            return "Price per day must be more than 30.";
+        } else {
+            car.setPricePerDay(carDto.getPricePerDay());
+        }
+
         car.setCondition(carDto.getCarCondition());
 
         if(this.carRepository.findByRegistrationPlate(carDto.getRegistrationPlate()).isEmpty()){
             car.setRegistrationPlate(carDto.getRegistrationPlate());
-        }else{
+        } else {
             return "Car with the same registration plate was already added!";
         }
+
         UserEntity admin = this.userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("User with requested name:" + username +
                         " was not found.")
@@ -147,8 +163,8 @@ public class CarServiceImpl implements CarService {
 
         carEnumDto.setTransmission(transmission);
         carEnumDto.setEngine(engine);
+        carEnumDto.setCondition(condition);
         return carEnumDto;
-
     }
 
 

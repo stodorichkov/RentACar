@@ -131,5 +131,4 @@ import java.util.Optional;
         //Assert.assertNull(rental.getStatus());
     }
 
-
 }

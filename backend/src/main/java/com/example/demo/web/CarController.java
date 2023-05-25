@@ -65,6 +65,10 @@ public class CarController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
                                          Authentication authentication){
+        String response = this.carService.addCar(carDto,authentication.getName());
+        if(!response.equals("Car is added successfully!")){
+            return ResponseEntity.internalServerError().build();
+        }
         return ResponseEntity.ok(this.carService.addCar(carDto,authentication.getName()));
     }
 
