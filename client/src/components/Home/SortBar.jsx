@@ -14,11 +14,6 @@ const SortBar = () => {
     const order = useSelector((state) => state.order);
     const dispatch = useDispatch();
 
-    // const handleToggle = (event, newValue) => {
-    //     setSelectedValue(newValue);
-    // };
-
-    // style
     const theme = useTheme();
     const toggleButtonStyle = {
         marginRight: '8px',
@@ -46,15 +41,17 @@ const SortBar = () => {
                 onChange={(event, newVal) => dispatch(sortAction(newVal))}
             >
                 <ToggleButton value="name" sx={{...toggleButtonStyle}}>Name</ToggleButton>
-                <ToggleButton value="engineType" sx={{...toggleButtonStyle}}>Engine type</ToggleButton>
+                <ToggleButton value="engine" sx={{...toggleButtonStyle}}>Engine type</ToggleButton>
                 <ToggleButton value="gearbox" sx={{...toggleButtonStyle}}>Gearbox</ToggleButton>
                 <ToggleButton value="fuelConsumption" sx={{...toggleButtonStyle}}>Fuel Consumption</ToggleButton>
-                <ToggleButton value="seats" sx={{...toggleButtonStyle}}>Seats</ToggleButton>
+                <ToggleButton value="capacity" sx={{...toggleButtonStyle}}>Seats</ToggleButton>
                 <ToggleButton value="pricePerDay" sx={{...toggleButtonStyle}}>Price per Day</ToggleButton>
             </ToggleButtonGroup>
-            <IconButton color='menue' onClick={() => dispatch(orderAction())} size='large'>
-                {order ? <NorthIcon/> : <SouthIcon/> }
-            </IconButton>
+            {sort ? 
+                <IconButton color='menue' onClick={() => dispatch(orderAction())} size='large'>
+                    {order ? <NorthIcon/> : <SouthIcon/> }
+                </IconButton>
+            : null}
         </Grid>
     )
 }

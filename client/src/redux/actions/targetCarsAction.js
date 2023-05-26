@@ -1,4 +1,4 @@
-export const searchCars = (targetCars) => {
+export const searchTargetCars = (targetCars) => {
     return {
         type: 'SEARCH',
         payload: targetCars

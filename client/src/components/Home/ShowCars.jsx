@@ -1,17 +1,41 @@
 import { Paper, Divider } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 import CarCard from './CarCard';
 import SortBar from './SortBar';
 
+
 const ShowCars = () => {
     const targetCars = useSelector((state) => state.targetCars)
-
-    // style
+    const sort = useSelector((state) => state.sort);
+    const order = useSelector((state) => state.order);
     const theme = useTheme();
+
+    const [sortedCars, setSortedCars] = useState(targetCars);
+
+    const sortCars = () => {
+        let sorted = [...sortedCars].sort((a, b) => {
+            const comparison = order ? 1 : -1;
+            if (a[sort] > b[sort]) {
+                return comparison;
+            } else if (a[sort] < b[sort]) {
+                return -comparison;
+            } else {
+                return 0;
+            }
+        });
+        
+        setSortedCars(sorted);
+    };
+
+    useEffect(() => {
+        sortCars()
+    }, [sort, order, sortCars])
+    
 
     return(
         <Grid xs={11.5} >
@@ -30,7 +54,7 @@ const ShowCars = () => {
                     </Grid>
                     <Grid xs={12}>
                         <Grid container justifyContent='space-evenly' sx={{overflow: 'auto', height: '47vh'}}>
-                            {/* {targetCars.map(car => (<CarCard key={car.id} car={car}/>))} */}
+                            {sortedCars.map(car => (<CarCard key={car.id} car={car}/>))}
                         </Grid>
                     </Grid>
                 </Grid>    

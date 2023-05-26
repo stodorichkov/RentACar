@@ -8,12 +8,18 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import axios from 'axios';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
+import { useDispatch } from 'react-redux';
+
+import { searchTargetCars } from '../../redux/actions/targetCarsAction';
+import { sortAction } from '../../redux/actions/sortActions';
 
 const SearchCarForm = () => {
     const [pickUpDate, setPickUpDate] = useState(dayjs());
     const [dropOffDate, setDropOffDate] = useState(pickUpDate.add(1, 'day'));
+
+    const dispatch = useDispatch();
 
     const handleChangePickUpDate = (value) => {
         setPickUpDate(value);
@@ -29,20 +35,21 @@ const SearchCarForm = () => {
             startDate: pickUpDate.format("YYYY-MM-DD hh:mm:ss"),
             endDate: dropOffDate.format("YYYY-MM-DD hh:mm:ss")
         }
-        console.log(content)
         try {
             const response = await axios.get('http://localhost:8086/rentals/all-unique-available', content);
             if (response.status === 200) {
-                console.log(response)
+                dispatch(searchTargetCars(response.data))
             }
         }
         catch (error) {
             console.error('Error fetching data:', error);
         } 
-
-        // console.log(pickUpDate.format("YYYY-MM-DD hh:mm:ss"))
-        // console.log(pickUpDate.format("YYYY-MM-DD hh:mm:ss"))
     }
+
+    useEffect(() => {
+        dispatch(searchTargetCars(null));
+        dispatch(sortAction(null));
+    }, [dispatch]);
 
     const theme = useTheme();
 

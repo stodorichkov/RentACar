@@ -1,5 +1,7 @@
-import { Paper, Typography, TextField, Divider, Button, Alert } from '@mui/material';
+import { Paper, Typography, TextField, Divider, Button, Alert, Link, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -14,6 +16,8 @@ import { setAlert } from '../../redux/actions/alertActions';
 const SignInForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPass, setShowPass] = useState(false);
+
     const alert = useSelector(state => state.alert);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -55,9 +59,9 @@ const SignInForm = () => {
 
     return (
         <Grid container justifyContent='center' sx={{marginTop: '4vh'}}>
-            <Grid xs={10} sm={7.5} md={6.5} lg={4.5} xl={3.5}>
+            <Grid xs={10} sm={7.5} md={6.5} lg={4.5} xl={3.7}>
                 <Paper elevation={12} sx={{padding: '3.5rem'}}>    
-                    <Grid container spacing={3} justifyContent='center'>
+                    <Grid container spacing={4} justifyContent='center'>
                         <Grid xs={12}>
                             <Typography variant="h3" color="textPrimary" align="center" >Sign In</Typography>
                         </Grid>
@@ -78,18 +82,39 @@ const SignInForm = () => {
                             />
                         </Grid>
                         <Grid xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Password"
-                                type="password"
-                                value = {password}
-                                onChange ={handleChangePassword}
-                            />
+                            <FormControl variant="outlined" fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <OutlinedInput
+                                    id="password"
+                                    type={showPass ? 'text' : 'password'}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                            onClick={() => setShowPass(!showPass)}
+                                            edge="end"
+                                            >
+                                            {showPass ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password"
+                                    value = {password}
+                                    onChange ={handleChangePassword}
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid>
                             <Button variant="contained" size="large" color="button_primary" onClick={signInUser}>
                                 Sign In
                             </Button>
+                        </Grid>
+                        <Grid xs={12}>
+                            <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
+                        </Grid>
+                        <Grid xs={12}>
+                            <Typography variant="body2" align="center">
+                                Don't have an account?  <Link onClick={() => navigate('/signup')}>Sign Up</Link>
+                            </Typography>
                         </Grid>
                     </Grid>
                 </Paper>
