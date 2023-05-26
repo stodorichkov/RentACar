@@ -2,6 +2,8 @@ package com.example.demo.config;
 
 import com.example.demo.security.jwt.AuthEntryPointJwt;
 import com.example.demo.security.jwt.AuthTokenFilter;
+import com.example.demo.security.jwt.JwtUtils;
+import com.example.demo.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +30,12 @@ public class ApplicationSecurityConfiguration{
     private final AuthEntryPointJwt unauthorized;
 
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private  JwtUtils jwtUtils;
 
     public ApplicationSecurityConfiguration(UserDetailsService userDetailsService,
                                             AuthEntryPointJwt unauthorized, PasswordEncoder passwordEncoder) {
@@ -39,7 +46,7 @@ public class ApplicationSecurityConfiguration{
 
     @Bean
     public AuthTokenFilter authenticationJwtFilter(){
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(jwtUtils, userDetailsServiceImpl);
     }
 
     @Bean
