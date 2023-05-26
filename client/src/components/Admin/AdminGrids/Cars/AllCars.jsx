@@ -2,14 +2,20 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Butto
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useTheme } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import AddCarForm from './AddCarForm';
 
+import axios from 'axios';
+
 
 const AllCars = (props) => {
+    const user = useSelector((state) => state.user);
     const [open, setOpen] = useState(false);
     const theme = useTheme();
+
+    const[cars, setCars] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -17,6 +23,27 @@ const AllCars = (props) => {
     const curFormatter = new Intl.NumberFormat(undefined, {
         maximumFractionDigits: 2,
     });
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+    const getCars = async () => {
+        try {
+            const response = await axios.get('http://localhost:8086/car/all');
+            if (response.status === 200) {
+                setCars(response.data)
+                console.log(response.data)
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+    }
+
+    useEffect(() => {
+        getCars();
+    }, [])
+
+
 
     const columns = [
         { 
@@ -55,8 +82,8 @@ const AllCars = (props) => {
             headerAlign: 'center'  
         },
         { 
-            field: 'transmission;', 
-            headerName: 'Transmition', 
+            field: 'transmission', 
+            headerName: 'Transmission', 
             width: 200,
             align: 'center',
             headerAlign: 'center'  
@@ -95,13 +122,27 @@ const AllCars = (props) => {
                     <Button variant="contained" size="large" color="button_secondary">
                         Edit
                     </Button>
-                    <Button variant="contained" size="large" color="button_primary">
-                        Remove
+                    <Button variant="contained" size="large" color="button_primary" onClick={() => removeCar(params.id)}>
+                        Remove 
                     </Button>
                 </Stack>
             ) 
         },
     ];
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+    const removeCar = async (id) => {
+        try {
+            const response = await axios.delete(`http://localhost:8086/car/${id}/delete`);
+            if (response.status === 200) {
+                console.log('Data deleted');
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+    }
 
     return(
         <Accordion expanded={props.expanded} onChange={props.handleChangeExpand}
@@ -129,7 +170,7 @@ const AllCars = (props) => {
             <AccordionDetails >
                 <DataGrid 
                     columns={columns}
-                    rows={[]}
+                    rows={cars}
                     initialState={{
                         pagination: {
                             paginationModel: {

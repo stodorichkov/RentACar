@@ -50,7 +50,7 @@ const AddCarForm = (props)  => {
         if (event.target.files[0]) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImg(reader.result);
+                setImg(reader.result.replace('data:image/jpeg;base64,', ''));
                 setImgName(event.target.files[0].name);
             };
             reader.readAsDataURL(event.target.files[0]);
@@ -117,18 +117,19 @@ const AddCarForm = (props)  => {
         }
         else {
             try {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
                 const response = await axios.post('http://localhost:8086/car/add', content);
                 if (response.status === 200) {
                     console.log("Succes")
+                    props.handleClose();
                 }
             }
             catch (error) {
-                if(error.response.status ) {
-                    props.handleClose();
-                    dispatch(signOutAction());
-                    navigate('/signin');
-                }
+                // if(error.response.status ) {
+                //     props.handleClose();
+                //     dispatch(signOutAction());
+                //     navigate('/signin');
+                // }
+                console.log(error)
                 dispatch(setAlert(error.response.data));
             } 
         }
