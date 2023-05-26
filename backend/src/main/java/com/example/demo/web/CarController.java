@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -63,13 +65,14 @@ public class CarController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
-                                         Authentication authentication){
-        String response = this.carService.addCar(carDto,authentication.getName());
+    public ResponseEntity<String> addCar(@RequestBody CarDto carDto){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        String response = this.carService.addCar(carDto, userDetails.getUsername());
         if(!response.equals("Car is added successfully!")){
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(this.carService.addCar(carDto,authentication.getName()));
+        return ResponseEntity.ok(this.carService.addCar(carDto, userDetails.getUsername()));
     }
 
     @PatchMapping("/{carId}/edit")
