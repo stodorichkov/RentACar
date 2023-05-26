@@ -106,13 +106,11 @@ public class CarServiceImpl implements CarService {
             car.setModel(carDto.getModel());
         }
 
-        if(!carDto.getImageUrl().matches("\\b((?:https?|ftp)://\\S+)")){
-            return "URL is not valid";
-        } else {
-            car.setImageUrl(carDto.getImageUrl());
-        }
 
-        if(carDto.getPricePerDay()<30.0){
+        car.setImageUrl(carDto.getImageUrl());
+
+
+        if(carDto.getPricePerDay() < 30.0){
             return "Price per day must be more than 30.";
         } else {
             car.setPricePerDay(carDto.getPricePerDay());
