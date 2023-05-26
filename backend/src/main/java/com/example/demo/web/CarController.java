@@ -64,7 +64,7 @@ public class CarController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+  //  @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
