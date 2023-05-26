@@ -17,6 +17,7 @@ public class CarEntity extends Base{
     private String registrationPlate;
 
     @Lob
+    @Column(length = 1048576)
     private byte[] imageUrl;
 
     private Double pricePerDay;
