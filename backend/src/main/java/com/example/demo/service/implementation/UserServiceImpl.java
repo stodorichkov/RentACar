@@ -48,13 +48,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void seedAdmin() {
 
-        if(this.userRepository.count() == 0) {
-            UserEntity admin = new UserEntity();
-            admin.setUsername("Administrator");
-            admin.setPassword(this.passwordEncoder.encode("Codexio10*"));
-            admin.setRoles(this.roleRepository.findAll());
-            this.userRepository.save(admin);
+        long count = this.userRepository.count();
+
+        if(count != 0){
+            return;
         }
+
+        UserEntity admin = new UserEntity();
+        admin.setUsername("Administrator");
+        admin.setPassword(this.passwordEncoder.encode("Codexio10*"));
+        RoleEntity adminRole = this.roleRepository.findById(1l).get();
+        RoleEntity userRole = this.roleRepository.findById(2l).get();
+        admin.setRoles(List.of(adminRole,userRole));
+        this.userRepository.save(admin);
 
     }
 
