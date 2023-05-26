@@ -100,8 +100,8 @@ public class CarServiceImpl implements CarService {
             car.setMake(carDto.getMake());
         }
 
-        if(carDto.getModel().length()<3){
-            return "Model must contain at least 3 characters.";
+        if(carDto.getModel().length()<2){
+            return "Model must contain at least 2 characters.";
         } else {
             car.setModel(carDto.getModel());
         }
@@ -119,6 +119,7 @@ public class CarServiceImpl implements CarService {
         car.setCondition(carDto.getCarCondition());
         car.setEngine(carDto.getEngine());
         car.setTransmission(carDto.getTransmissionEnum());
+        car.setPricePerDay(carDto.getPricePerDay());
         if(this.carRepository.findByRegistrationPlate(carDto.getRegistrationPlate()).isEmpty()){
             car.setRegistrationPlate(carDto.getRegistrationPlate());
         } else {
