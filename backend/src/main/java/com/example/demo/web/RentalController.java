@@ -1,17 +1,20 @@
 package com.example.demo.web;
 
 import com.example.demo.model.dto.*;
-import com.example.demo.model.RentalEntity;
 import com.example.demo.service.service.RentalService;
+import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.service.service.CarService;
 
-import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/rentals")
@@ -19,8 +22,11 @@ public class RentalController {
 
     private final RentalService rentalService;
 
-    public RentalController(RentalService rentalService) {
+    private final CarService carService;
+
+    public RentalController(RentalService rentalService, CarService carService) {
         this.rentalService = rentalService;
+        this.carService = carService;
     }
 
     @GetMapping("/history")
@@ -36,6 +42,17 @@ public class RentalController {
     public ResponseEntity<Double> getMonthlyRevenue(@PathVariable int month,
                                                     @PathVariable int year) {
         return ResponseEntity.ok(this.rentalService.calculateMonthlyRevenue(month,year));
+    }
+
+    @GetMapping("/all-unique-available")
+    public ResponseEntity<Set<CarDto>> getUniqueAvailableCarsByDate(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        Set<CarDto> uniqueCars = this.carService.getUniqueAvailableCarsByDate(startDate,endDate);
+        if(uniqueCars.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(uniqueCars);
     }
 
     @PostMapping("/{carId}/add")
