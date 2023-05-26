@@ -106,9 +106,7 @@ public class CarServiceImpl implements CarService {
             car.setModel(carDto.getModel());
         }
 
-
-        car.setImageUrl(carDto.getImageUrl());
-
+        car.setImageUrl(Base64.getDecoder().decode(carDto.getImageUrl()));
 
         if(carDto.getPricePerDay() < 30.0){
             return "Price per day must be more than 30.";

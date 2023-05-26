@@ -17,7 +17,7 @@ public class CarEntity extends Base{
     private String registrationPlate;
 
     @Lob
-    private String imageUrl;
+    private byte[] imageUrl;
 
     private Double pricePerDay;
 
@@ -41,7 +41,7 @@ public class CarEntity extends Base{
     @ManyToOne
     private UserEntity addedByAdmin;
 
-    public CarEntity(String make, String model, String registrationPlate, String imageUrl, Double pricePerHour,
+    public CarEntity(String make, String model, String registrationPlate, byte[] imageUrl, Double pricePerHour,
                      Double pricePerDay, Integer capacity, TransmissionEnum transmission, EngineEnum engine,
                      String fuelConsumption, ConditionEnum carCondition, List<RentalEntity> carRental, UserEntity addedByAdmin) {
 
@@ -86,11 +86,11 @@ public class CarEntity extends Base{
         this.registrationPlate = registrationPlate;
     }
 
-    public String getImageUrl() {
+    public byte[] getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(byte[] imageUrl) {
         this.imageUrl = imageUrl;
     }
 

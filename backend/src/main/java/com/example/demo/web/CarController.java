@@ -40,11 +40,12 @@ public class CarController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CarAdminDto>> allCarsForAdmin(Authentication authentication){
         List<CarAdminDto> cars = this.carService.findCarsForAdmin(authentication.getName());
-        if(!cars.isEmpty()){
+        if(cars.isEmpty()){
             return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.ok(cars);
         }
+
+        return ResponseEntity.ok(cars);
+
     }
 
     @GetMapping("/{id}/info")
