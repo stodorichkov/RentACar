@@ -165,39 +165,34 @@ public class CarServiceImpl implements CarService {
     }
 
 
+
+
     //TODO: return condition here
-    /*
+
     @Override
     public List<CarAdminDto> findCarsForAdmin(String username) {
 
-        UserEntity admin = this.userRepository.findByUsername(username).orElseThrow(
-                () -> new ObjectNotFoundException("User with requested name:" + username + " was not found.")
-        );
         List<CarAdminDto> carsToDisplay = new ArrayList<>();
-        RoleEntity adminRole = new RoleEntity(RoleEnum.ADMIN);
-        if(admin.getRoles().contains(adminRole)){
-            List<CarEntity> adminCars = admin.getAddedByAdmin();
-            for(CarEntity c : adminCars){
-                carsToDisplay.add(
-                        new CarAdminDto(
-                                c.getId(),
-                                c.getMake() + " " + c.getModel(),
-                                c.getRegistrationPlate(),
-                                c.getCondition(),
-                                c.getPricePerDay(),
-                                c.getEngine(),
-                                c.getTransmission(),
-                                c.getCapacity(),
-                                c.getFuelConsumption()
-                        )
-                );
-            }
-
+        List<CarEntity> adminCars = this.carRepository.findAllForAdmin(username);
+        for(CarEntity c : adminCars){
+            carsToDisplay.add(
+                    new CarAdminDto(
+                            c.getId(),
+                            c.getMake() + " " + c.getModel(),
+                            c.getRegistrationPlate(),
+                            c.getCondition(),
+                            c.getPricePerDay(),
+                            c.getEngine(),
+                            c.getTransmission(),
+                            c.getCapacity(),
+                            c.getFuelConsumption()
+                    )
+            );
         }
         return carsToDisplay;
     }
 
-     */
+
 
     @Override
     public Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate) {

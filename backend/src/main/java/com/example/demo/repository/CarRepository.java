@@ -18,4 +18,7 @@ public interface CarRepository extends JpaRepository<CarEntity, Long> {
 
    Optional<CarEntity> findByRegistrationPlate(String registrationPlate);
 
+   @Query("SELECT c from CarEntity c JOIN c.addedByAdmin a where a.username = :user")
+   List<CarEntity> findAllForAdmin(@Param("user") String user);
+
 }
