@@ -38,9 +38,12 @@ public class CarEntity extends Base{
     @OneToMany(mappedBy = "rentedCar",cascade = CascadeType.ALL)
     private List<RentalEntity> carRental;
 
+    @ManyToOne
+    private UserEntity addedByAdmin;
+
     public CarEntity(String make, String model, String registrationPlate, String imageUrl, Double pricePerHour,
                      Double pricePerDay, Integer capacity, TransmissionEnum transmission, EngineEnum engine,
-                     String fuelConsumption, ConditionEnum carCondition, List<RentalEntity> carRental) {
+                     String fuelConsumption, ConditionEnum carCondition, List<RentalEntity> carRental, UserEntity addedByAdmin) {
 
         this.make = make;
         this.model = model;
@@ -53,6 +56,7 @@ public class CarEntity extends Base{
         this.fuelConsumption = fuelConsumption;
         this.carCondition = carCondition;
         this.carRental = carRental;
+        this.addedByAdmin = addedByAdmin;
     }
 
     public CarEntity() {
@@ -144,5 +148,13 @@ public class CarEntity extends Base{
 
     public void setFuelConsumption(String fuelConsumption) {
         this.fuelConsumption = fuelConsumption;
+    }
+
+    public UserEntity getAddedByAdmin() {
+        return addedByAdmin;
+    }
+
+    public void setAddedByAdmin(UserEntity addedByAdmin) {
+        this.addedByAdmin = addedByAdmin;
     }
 }

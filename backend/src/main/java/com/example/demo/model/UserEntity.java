@@ -33,12 +33,9 @@ public class UserEntity extends Base{
     @OneToMany(mappedBy = "renter")
     private List<RentalEntity> rentals;
 
-    @OneToMany
-    private List<CarEntity> addedByAdmin;
-
     public UserEntity(String username, String fullName, String email, String password,
                       Double budget, Integer years, String mobilePhone, Double score,
-                      List<RoleEntity> roles, List<RentalEntity> rentals, List<CarEntity> addedByAdmin) {
+                      List<RoleEntity> roles, List<RentalEntity> rentals) {
 
         this.username = username;
         this.fullName = fullName;
@@ -50,7 +47,6 @@ public class UserEntity extends Base{
         this.score = score;
         this.roles = roles;
         this.rentals = rentals;
-        this.addedByAdmin = addedByAdmin;
     }
 
     public UserEntity() {
@@ -111,14 +107,6 @@ public class UserEntity extends Base{
 
     public void setYears(Integer years) {
         this.years = years;
-    }
-
-    public List<CarEntity> getAddedByAdmin() {
-        return addedByAdmin;
-    }
-
-    public void setAddedByAdmin(List<CarEntity> addedByAdmin) {
-        this.addedByAdmin = addedByAdmin;
     }
 
     public String getMobilePhone() {

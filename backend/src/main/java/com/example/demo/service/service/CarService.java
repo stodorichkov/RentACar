@@ -25,7 +25,7 @@ public interface CarService {
 
     CarEnumDto findCarEnumInfo();
 
-    List<CarAdminDto> findCarsForAdmin(String username);
+    //List<CarAdminDto> findCarsForAdmin(String username);
 
 
     Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate);

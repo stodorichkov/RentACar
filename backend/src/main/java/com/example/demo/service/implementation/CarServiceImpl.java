@@ -129,8 +129,7 @@ public class CarServiceImpl implements CarService {
                 () -> new UsernameNotFoundException("User with requested name:" + username +
                         " was not found.")
         );
-        admin.setAddedByAdmin(List.of(car));
-        this.userRepository.save(admin);
+        car.setAddedByAdmin(admin);
         this.carRepository.save(car);
         return "Car is added successfully!";
     }
@@ -167,6 +166,7 @@ public class CarServiceImpl implements CarService {
 
 
     //TODO: return condition here
+    /*
     @Override
     public List<CarAdminDto> findCarsForAdmin(String username) {
 
@@ -196,6 +196,8 @@ public class CarServiceImpl implements CarService {
         }
         return carsToDisplay;
     }
+
+     */
 
     @Override
     public Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate) {
