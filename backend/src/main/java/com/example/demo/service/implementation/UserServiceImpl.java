@@ -169,12 +169,12 @@ public class UserServiceImpl implements UserService {
             return "Mobile phone already exists.";
         }
 
-        if(userRegisterDto.getPassword().matches("^(?=.[A-Z])(?=.\\d)(?=.*\\W).{8,}$") &&
+        if(userRegisterDto.getPassword().matches("^(?=.*[A-Z])(?=.*\\d)(?=.*\\W).{8,}$") &&
                 userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
             user.setPassword(this.passwordEncoder.encode(userRegisterDto.getPassword()));
         } else if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
             return "Password and confirm password are not equal.";
-        } else if (!userRegisterDto.getPassword().matches("^(?=.[A-Z])(?=.\\d)(?=.*\\W).{8,}$")){
+        } else if (!userRegisterDto.getPassword().matches("^(?=.*[A-Z])(?=.*\\d)(?=.*\\W).{8,}$")){
             return "Password is not valid! It must contain min 8 characters, one special and numbers";
         }
 
