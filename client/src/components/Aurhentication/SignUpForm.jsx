@@ -12,9 +12,10 @@ import { setAlert } from '../../redux/actions/alertActions';
 
 const SignUpForm = () => {
     const [username, setUsername] = useState('');
-    const [age, setAge] = useState('');
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [age, setAge] = useState(18);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const alert = useSelector(state => state.alert);
@@ -25,14 +26,17 @@ const SignUpForm = () => {
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
     }
-    const handleChangeAge = (event) => {
-        setAge(event.target.value);
+    const handleChangeFullName = (event) => {
+        setFullName(event.target.value);
     }
     const handleChangeEmail = (event) => {
         setEmail(event.target.value);
     }
     const handleChangePhone = (event) => {
         setPhone(event.target.value);
+    }
+    const handleChangeAge = (event) => {
+        setAge(event.target.value);
     }
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
@@ -49,6 +53,7 @@ const SignUpForm = () => {
         const content = {
             username: username,
             email: email,
+            fullName: fullName,
             years: age,
             mobilePhone: phone,
             password: password,
@@ -73,7 +78,7 @@ const SignUpForm = () => {
 
     return (
         <Grid container justifyContent='center' sx={{marginTop: '4vh'}}>
-            <Grid xs={10} sm={7.5} md={6.5} lg={4.5} xl={3.5}>
+            <Grid xs={10} sm={7.5} md={6.5} lg={4.5} xl={4}>
                 <Paper elevation={12} sx={{padding: '3em',overflow: 'auto', maxHeight: {xl:'94vh', lg: '85vh'}}}>
                     <Grid container spacing={4} justifyContent="center">
                         <Grid xs={12}>
@@ -98,6 +103,30 @@ const SignUpForm = () => {
                         <Grid xs={12}>
                             <TextField
                                 fullWidth
+                                label="Full name"
+                                value = {fullName}
+                                onChange ={handleChangeFullName}
+                            />
+                        </Grid>
+                        <Grid xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Email"
+                                value = {email}
+                                onChange ={handleChangeEmail}
+                            />
+                        </Grid>
+                        <Grid xs={9}>
+                            <TextField
+                                fullWidth
+                                label="Phone number"
+                                value = {phone}
+                                onChange ={handleChangePhone}
+                            />
+                        </Grid>
+                        <Grid xs={3}>
+                            <TextField
+                                fullWidth
                                 type="number"
                                 InputProps={{
                                     inputProps: { 
@@ -109,23 +138,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangeAge}
                             />
                         </Grid>
-                        <Grid xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Email"
-                                value = {email}
-                                onChange ={handleChangeEmail}
-                            />
-                        </Grid>
-                        <Grid xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Phone number"
-                                value = {phone}
-                                onChange ={handleChangePhone}
-                            />
-                        </Grid>
-                        <Grid xs={12}>
+                        <Grid xs={6}>
                             <TextField
                                 fullWidth
                                 label="Password"
@@ -134,7 +147,7 @@ const SignUpForm = () => {
                                 onChange ={handleChangePassword}
                             />
                         </Grid>
-                        <Grid xs={12}>
+                        <Grid xs={6}>
                             <TextField
                                 fullWidth
                                 label="Confirm password"

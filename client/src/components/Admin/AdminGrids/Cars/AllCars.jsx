@@ -2,7 +2,7 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Butto
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import AddCarForm from './AddCarForm';
@@ -13,6 +13,7 @@ import axios from 'axios';
 const AllCars = (props) => {
     const user = useSelector((state) => state.user);
     const [open, setOpen] = useState(false);
+    const [update, makeUpdate] = useReducer(x => x + 1, 0);
     const theme = useTheme();
 
     const[cars, setCars] = useState([]);
@@ -31,7 +32,6 @@ const AllCars = (props) => {
             const response = await axios.get('http://localhost:8086/car/all');
             if (response.status === 200) {
                 setCars(response.data)
-                console.log(response.data)
             }
         }
         catch (error) {
@@ -39,11 +39,20 @@ const AllCars = (props) => {
         } 
     }
 
+    const removeCar = async (id) => {
+        try {
+            const response = await axios.delete(`http://localhost:8086/car/${id}/delete`);
+            makeUpdate(); 
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        
+    }
+
     useEffect(() => {
         getCars();
-    }, [])
-
-
+    }, [update])
 
     const columns = [
         { 
@@ -130,20 +139,6 @@ const AllCars = (props) => {
         },
     ];
 
-    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-
-    const removeCar = async (id) => {
-        try {
-            const response = await axios.delete(`http://localhost:8086/car/${id}/delete`);
-            if (response.status === 200) {
-                console.log('Data deleted');
-            }
-        }
-        catch (error) {
-            console.error('Error fetching data:', error);
-        } 
-    }
-
     return(
         <Accordion expanded={props.expanded} onChange={props.handleChangeExpand}
             sx={{
@@ -188,7 +183,7 @@ const AllCars = (props) => {
                 <div
                     style={{ outline: 'none' }}
                 >
-                    <AddCarForm handleClose={handleClose} />
+                    <AddCarForm handleClose={handleClose} makeUpdate={makeUpdate}/>
                 </div>
             </Modal>
         </Accordion>

@@ -50,7 +50,7 @@ const AddCarForm = (props)  => {
         if (event.target.files[0]) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImg(reader.result.replace('data:image/jpeg;base64,', ''));
+                setImg(reader.result.substring(reader.result.indexOf(',') + 1));
                 setImgName(event.target.files[0].name);
             };
             reader.readAsDataURL(event.target.files[0]);
@@ -119,8 +119,9 @@ const AddCarForm = (props)  => {
             try {
                 const response = await axios.post('http://localhost:8086/car/add', content);
                 if (response.status === 200) {
-                    console.log("Succes")
+                    console.log("Succes");
                     props.handleClose();
+                    props.makeUpdate();
                 }
             }
             catch (error) {

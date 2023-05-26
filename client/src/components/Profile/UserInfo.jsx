@@ -66,7 +66,7 @@ const UserInfo = () => {
                 setUsername(response.data.username ? response.data.username : '');
                 setAge(response.data.age ? response.data.age : 18);
                 setEmail(response.data.email ? response.data.email : '');
-                setPhone(response.data.phone ? response.data.phone : '');
+                setPhone(response.data.mobilePhone ? response.data.mobilePhone : '');
                 setBudget(response.data.budget ? response.data.budget : 0.00);
             }
         }

@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers';
 
 import dayjs from 'dayjs';
+import axios from 'axios';
 
 import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
@@ -17,7 +18,6 @@ const SearchCarForm = () => {
     const handleChangePickUpDate = (value) => {
         setPickUpDate(value);
         setDropOffDate(dayjs(value).add(1, 'day'));
-
     }
 
     const handleChangeDropOffDate = (value) => {
@@ -25,8 +25,23 @@ const SearchCarForm = () => {
     }
 
     const searchCars = async () => {
-        console.log(pickUpDate.format("YYYY-MM-DD hh:mm:ss"))
-        console.log(pickUpDate.format("YYYY-MM-DD hh:mm:ss"))
+        const content = {
+            startDate: pickUpDate.format("YYYY-MM-DD hh:mm:ss"),
+            endDate: dropOffDate.format("YYYY-MM-DD hh:mm:ss")
+        }
+        console.log(content)
+        try {
+            const response = await axios.get('http://localhost:8086/rentals/all-unique-available', content);
+            if (response.status === 200) {
+                console.log(response)
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+
+        // console.log(pickUpDate.format("YYYY-MM-DD hh:mm:ss"))
+        // console.log(pickUpDate.format("YYYY-MM-DD hh:mm:ss"))
     }
 
     const theme = useTheme();
