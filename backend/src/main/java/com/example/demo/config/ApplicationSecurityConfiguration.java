@@ -107,8 +107,9 @@ public class ApplicationSecurityConfiguration{
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/","/user/register","/user/login").permitAll()
-                .requestMatchers("/car/add").authenticated()
-                .requestMatchers("/**").permitAll();
+                //.requestMatchers("/car/add").authenticated()
+                .requestMatchers("/**").permitAll()
+                .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
