@@ -115,9 +115,10 @@ public class CarServiceImpl implements CarService {
         } else {
             car.setPricePerDay(carDto.getPricePerDay());
         }
-
+        car.setCapacity(carDto.getCapacity());
         car.setCondition(carDto.getCarCondition());
-
+        car.setEngine(carDto.getEngine());
+        car.setTransmission(carDto.getTransmissionEnum());
         if(this.carRepository.findByRegistrationPlate(carDto.getRegistrationPlate()).isEmpty()){
             car.setRegistrationPlate(carDto.getRegistrationPlate());
         } else {

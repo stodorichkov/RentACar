@@ -67,15 +67,15 @@ public class CarController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                         Authentication authentication){
 
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String currentPrincipalName = authentication.getName();
-        String response = this.carService.addCar(carDto, userDetails.getUsername());
+        String response = this.carService.addCar(carDto, authentication.getName());
         if(!response.equals("Car is added successfully!")){
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(this.carService.addCar(carDto, userDetails.getUsername()));
+        return ResponseEntity.ok(this.carService.addCar(carDto, authentication.getName()));
     }
 
     @PatchMapping("/{carId}/edit")
