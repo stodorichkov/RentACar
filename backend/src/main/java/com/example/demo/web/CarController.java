@@ -4,11 +4,13 @@ import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.model.dto.EditConditionAndPriceDto;
+import com.example.demo.service.UserDetailsImpl;
 import com.example.demo.service.service.CarService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -64,16 +66,16 @@ public class CarController {
     }
 
     @PostMapping("/add")
-  //  @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> addCar(@RequestBody CarDto carDto){
+    public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        String response = this.carService.addCar(carDto, currentPrincipalName);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String currentPrincipalName = authentication.getName();
+        String response = this.carService.addCar(carDto, userDetails.getUsername());
         if(!response.equals("Car is added successfully!")){
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(this.carService.addCar(carDto, currentPrincipalName));
+        return ResponseEntity.ok(this.carService.addCar(carDto, userDetails.getUsername()));
     }
 
     @PatchMapping("/{carId}/edit")
