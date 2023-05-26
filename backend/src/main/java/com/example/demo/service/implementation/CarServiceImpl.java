@@ -119,7 +119,6 @@ public class CarServiceImpl implements CarService {
         car.setCondition(carDto.getCarCondition());
         car.setEngine(carDto.getEngine());
         car.setTransmission(carDto.getTransmissionEnum());
-        car.setPricePerDay(carDto.getPricePerDay());
         if(this.carRepository.findByRegistrationPlate(carDto.getRegistrationPlate()).isEmpty()){
             car.setRegistrationPlate(carDto.getRegistrationPlate());
         } else {
@@ -135,7 +134,6 @@ public class CarServiceImpl implements CarService {
         this.carRepository.save(car);
         return "Car is added successfully!";
     }
-
 
     //TODO: return condition info
     @Override
