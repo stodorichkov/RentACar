@@ -73,7 +73,7 @@ public class CarController {
 //        String currentPrincipalName = authentication.getName();
         String response = this.carService.addCar(carDto, authentication.getName());
         if(!response.equals("Car is added successfully!")){
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(response);
         }
         return ResponseEntity.ok(this.carService.addCar(carDto, authentication.getName()));
     }
