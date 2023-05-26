@@ -20,10 +20,12 @@ public class CarDto {
 
  private ConditionEnum carCondition;
 
+ private String fuelConsumption;
+
 
  public CarDto(Long id, String imageUrl, String model,
                String make, Integer capacity, String registrationPlate, EngineEnum engine, TransmissionEnum transmissionEnum,
-               Double pricePerDay, ConditionEnum carCondition) {
+               Double pricePerDay, ConditionEnum carCondition, String fuelConsumption) {
   this.id = id;
   this.imageUrl = imageUrl;
   this.model = model;
@@ -34,7 +36,7 @@ public class CarDto {
   this.transmissionEnum = transmissionEnum;
   this.pricePerDay = pricePerDay;
   this.carCondition = carCondition;
-
+  this.fuelConsumption = fuelConsumption;
  }
 
  public CarDto() {
@@ -141,4 +143,11 @@ public class CarDto {
  }
 
 
+ public String getFuelConsumption() {
+  return fuelConsumption;
+ }
+
+ public void setFuelConsumption(String fuelConsumption) {
+  this.fuelConsumption = fuelConsumption;
+ }
 }
