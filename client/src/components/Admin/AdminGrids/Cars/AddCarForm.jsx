@@ -2,25 +2,30 @@ import { Paper, Typography, TextField, Divider, Button, Select, MenuItem, InputL
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
 import { setAlert } from '../../../../redux/actions/alertActions';
+import { signOutAction } from '../../../../redux/actions/userActions';
 
 import axios from 'axios';
+
 
 const AddCarForm = (props)  => {
     const user = useSelector((state) => state.user);
     const alert = useSelector(state => state.alert);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [enums, setEnums] = useState(null);
-    
+
     const [brand, setBrand] = useState('');
     const [model, setModel] = useState('');
     const [plate, setPlate] = useState('');
     const [condition, setCondition] = useState('');
     const [price, setPrice] = useState('');
-    const [img, setImg] = useState(null);
+    const [img, setImg] = useState('');
+    const [imgName, setImgName] = useState('');
     const [seats, setSeats] = useState(2);
     const [transmission, setTransmission] = useState('');
     const [engine, setEngine] = useState('');
@@ -42,7 +47,17 @@ const AddCarForm = (props)  => {
         setPrice(event.target.value);
     };
     const handleChangeImg = (event) => {
-        setImg(event.target.files[0]);
+        if (event.target.files[0]) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImg(reader.result);
+                setImgName(event.target.files[0].name);
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        } else {
+            setImg('');
+            setImgName('');
+        }
     };
     const handleChangeSeats = (event) => {
         if(!parseInt(event.target.value) || parseInt(event.target.value) < 2) {
@@ -66,8 +81,9 @@ const AddCarForm = (props)  => {
         setFuelConsumption(event.target.value);
     };
 
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
-    const getEnums = async () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+    const getEnums = useCallback(async () => {
         try {
             const response = await axios.get('http://localhost:8086/car/enums');
             if (response.status === 200) {
@@ -77,31 +93,51 @@ const AddCarForm = (props)  => {
         catch (error) {
             console.error('Error fetching data:', error);
         } 
-    }
+    }, [])
+
     const addCar = async () => {
         const content = {
             make: brand,
             model: model,
             registrationPlate: plate,
             carCondition: condition,
-            pricePerDay: parseFloat(price),
+            pricePerDay: parseFloat(price).toFixed(2),
             imageUrl: img,
             capacity: seats,
-            transmission: transmission,
+            transmissionEnum: transmission,
             engine: engine,
             fuelConsumption: fuelConsumption
         }
-        if(Object.values(content).some(value => value === '' || value === null)) {
+        
+        if(Object.values(content).some(value => value === '')) {
             dispatch(setAlert('The form must be completed!'));
         }
-
-        console.log(content)
+        else if(isNaN(content.pricePerDay)) {
+            dispatch(setAlert('Price must be number'));
+        }
+        else {
+            try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+                const response = await axios.post('http://localhost:8086/car/add', content);
+                if (response.status === 200) {
+                    console.log("Succes")
+                }
+            }
+            catch (error) {
+                if(error.response.status ) {
+                    props.handleClose();
+                    dispatch(signOutAction());
+                    navigate('/signin');
+                }
+                dispatch(setAlert(error.response.data));
+            } 
+        }
     }
 
     useEffect(() => {
         getEnums();
         dispatch(setAlert(null));
-    }, [dispatch])
+    }, [dispatch, getEnums])
 
     return (
         <Grid container justifyContent='center' sx={{marginTop: '5vh'}}>
@@ -190,7 +226,7 @@ const AddCarForm = (props)  => {
                             />
                             <label htmlFor="image-upload">
                                 <Button variant="contained" size="large" color="button_secondary" component="span" fullWidth sx={{ textTransform: 'none' }} >
-                                    {img ? "Selected Image: " + img.name : "Upload Image"}
+                                    {img ? "Selected Image: " + imgName : "Upload Image"}
                                 </Button>
                             </label>
                         </Grid>
