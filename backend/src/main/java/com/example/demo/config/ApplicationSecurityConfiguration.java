@@ -65,38 +65,7 @@ public class ApplicationSecurityConfiguration{
     }
 
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//                .requestMatchers("/","/user/register","/user/login").permitAll()
-//                .requestMatchers("/**").permitAll()
-//                //add this when connection with front end is ready
-//                //.antMatchers("/**").authenticated()
-//                .and()
-//                .csrf().disable()
-//                .cors().configurationSource(request -> {
-//                    CorsConfiguration corsConfig = new CorsConfiguration();
-//                    corsConfig.addAllowedOrigin("http://localhost:3000");
-//                    corsConfig.addAllowedMethod("*");
-//                    corsConfig.addAllowedHeader("*");
-//                    return corsConfig;
-//                }).and()
-//                .formLogin()
-//                .loginProcessingUrl("/user/login")
-//            //    .usernameParameter("username")
-//            //    .passwordParameter("password")
-//                .defaultSuccessUrl("/user/login-success")
-//                .failureForwardUrl("/user/login-error")
-//                .and()
-//                .logout()
-//                .logoutUrl("/user/logout")
-//                .logoutSuccessUrl("/")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID");
-//        return http.build();
-//    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -127,10 +96,7 @@ public class ApplicationSecurityConfiguration{
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManagerBean() throws Exception{
-//        return authenticationManagerBean();
-//    }
+
 
 }
 

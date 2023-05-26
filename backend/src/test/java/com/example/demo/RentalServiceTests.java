@@ -10,6 +10,7 @@ import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.implementation.RentalServiceImpl;
 import com.example.demo.service.service.CarService;
+
 import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
 import org.junit.Assert;
@@ -95,12 +96,12 @@ import java.util.Optional;
 
 
     @Test
-    public void testCompleteRental_CancelAfterStartTime2() {
-
+    public void testCompleteRental_CancelBeforeStartTime(){
+        // Arrange
         Long rentalId = 1L;
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime startTime = currentTime.plusHours(1).plusMinutes(30);
-        LocalDateTime endTime = currentTime.plusHours(2);
+        LocalDateTime endTime = currentTime.plusHours(48);
 
         RentalEntity rental = new RentalEntity();
         rental.setId(rentalId);
@@ -128,6 +129,46 @@ import java.util.Optional;
 
         // assert
         Assert.assertEquals("Rental canceled, charged: 0", result);
+        //Assert.assertNull(rental.getStatus());
+    }
+
+
+    // Add more test cases for other scenarios
+
+    @Test
+    public void testCompleteRental_CompleteAfterStartTime(){
+        // Arrange
+        Long rentalId = 1L;
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime startTime = currentTime.plusHours(0).plusMinutes(30);
+        LocalDateTime endTime = currentTime.plusHours(48);
+
+        RentalEntity rental = new RentalEntity();
+        rental.setId(rentalId);
+        rental.setStartTime(startTime);
+        rental.setEndTime(endTime);
+
+        UserEntity renter = new UserEntity();
+        renter.setScore(1.5);
+        renter.setBudget(1000.0);
+
+        CarEntity car = new CarEntity();
+        car.setPricePerDay(60.00);
+
+        rental.setRenter(renter);
+        rental.setRentedCar(car);
+
+
+        Mockito.when(rentalRepository.findById(rentalId)).thenReturn(Optional.of(rental));
+        Mockito.when(rentalRepository.save(Mockito.any(RentalEntity.class))).thenReturn(rental);
+        Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(renter);
+        Mockito.when(statusService.findByStatus(StatusEnum.Canceled)).thenReturn(new StatusEntity(StatusEnum.Canceled));
+
+        // act
+        String result = rentalService.completeRental(rentalId);
+
+        // assert
+        Assert.assertEquals("Rental canceled, charged: 0",result );
         //Assert.assertNull(rental.getStatus());
     }
 
