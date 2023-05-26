@@ -116,7 +116,7 @@ public class ApplicationSecurityConfiguration{
                 .requestMatchers("/","/user/register","/user/login").permitAll()
                 .requestMatchers("/car/add").authenticated()
                 .requestMatchers("/**").permitAll();
-
+        http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
