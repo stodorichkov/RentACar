@@ -15,7 +15,7 @@ import { setAlert } from '../../redux/actions/alertActions';
 const SignUpForm = () => {
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
-    const [lasttName, setLastName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [age, setAge] = useState(18);
@@ -45,7 +45,7 @@ const SignUpForm = () => {
         setPhone(event.target.value);
     }
     const handleChangeAge = (event) => {
-        if(!parseInt(event.target.value) || parseInt(event.target.value) < 2) {
+        if(!parseInt(event.target.value) || parseInt(event.target.value) < 18) {
             setAge(18);
         }
         else if (parseInt(event.target.value) > 65) {
@@ -70,7 +70,7 @@ const SignUpForm = () => {
         const content = {
             username: username,
             email: email,
-            fullName: `${firstName} ${lasttName}`,
+            fullName: `${firstName} ${lastName}`,
             years: age,
             mobilePhone: phone,
             password: password,
@@ -129,7 +129,7 @@ const SignUpForm = () => {
                             <TextField
                                 fullWidth
                                 label="Last name"
-                                value = {lasttName}
+                                value = {lastName}
                                 onChange ={handleChangeLastName}
                             />
                         </Grid>

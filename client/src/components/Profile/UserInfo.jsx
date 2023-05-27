@@ -1,4 +1,4 @@
-import { Paper, TextField, Divider, Button, Avatar, InputAdornment, Stack }  from '@mui/material';
+import { Paper, TextField, Divider, Button, Avatar, InputAdornment, Stack, Rating }  from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useEffect, useState } from 'react';
@@ -11,7 +11,10 @@ const UserInfo = () => {
     const user = useSelector((state) => state.user);
     const theme = useTheme();
 
+    const [score, setScore] = useState(0);
     const [username, setUsername] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [age, setAge] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -23,8 +26,22 @@ const UserInfo = () => {
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
     }
+    const handleChangeFirstName = (event) => {
+        setFirstName(event.target.value);
+    }
+    const handleChangeLastName = (event) => {
+        setLastName(event.target.value);
+    }
     const handleChangeAge = (event) => {
-        setAge(event.target.value);
+        if(!parseInt(event.target.value) || parseInt(event.target.value) < 18) {
+            setAge(18);
+        }
+        else if (parseInt(event.target.value) > 65) {
+            setAge(65);
+        }
+        else {
+            setAge(event.target.value);
+        }
     }
     const handleChangeEmail = (event) => {
         setEmail(event.target.value);
@@ -33,7 +50,14 @@ const UserInfo = () => {
         setPhone(event.target.value);
     }
     const handleChangeTransfer = (event) => {
-        setTransfer(parseFloat(event.target.value));
+        const newTransfer = parseFloat(event.target.value)
+        if(isNaN(newTransfer) || newTransfer < 0) {
+            setTransfer("0.00");
+        }
+        else {
+            setTransfer(event.target.value);
+        }
+        
     }
     const switchEditMode = () => {
         setEditMode(!editMode);
@@ -50,7 +74,7 @@ const UserInfo = () => {
             const response = await axios.put('http://localhost:8086/user/add-money', {money: transfer});
             if (response.status === 200) {
                 console.log(response.data)
-                setBudget(budget + transfer)
+                setBudget(budget + parseFloat(transfer))
                 switchAddMoneyMode()
             }
         }
@@ -63,11 +87,16 @@ const UserInfo = () => {
         try {
             const response = await axios.get('http://localhost:8086/user/profile');
             if (response.status === 200) {
-                setUsername(response.data.username ? response.data.username : '');
-                setAge(response.data.age ? response.data.age : 18);
-                setEmail(response.data.email ? response.data.email : '');
-                setPhone(response.data.mobilePhone ? response.data.mobilePhone : '');
-                setBudget(response.data.budget ? response.data.budget : 0.00);
+                console.log(response.data)
+                const data = response.data;
+                setScore(data.score ? data.score : 0)
+                setUsername(data.username ? data.username : '');
+                setFirstName(data.fullName ? data.fullName.split(' ')[0] : '')
+                setLastName(data.fullName ? data.fullName.split(' ')[1] : '')
+                setAge(data.age ? data.age : 18);
+                setEmail(data.email ? data.email : '');
+                setPhone(data.mobilePhone ? data.mobilePhone : '');
+                setBudget(data.budget ? data.budget : 0.00);
             }
         }
         catch (error) {
@@ -83,7 +112,7 @@ const UserInfo = () => {
     return(
         <Grid xl={3.5} lg={4} md={5} sm={7} xs={10}>
             <Paper elevation={12} sx={{padding: '3.5rem'}}>    
-                <Grid container spacing={3} justifyContent="center">
+                <Grid container spacing={3} direction="column" alignItems="center">
                     <Grid>
                         <Avatar
                             sx={{
@@ -92,8 +121,11 @@ const UserInfo = () => {
                                 height: 100,
                             }}
                         >
-                            {username[0]}
+                            {`${firstName[0]}${lastName[0]}`}
                         </Avatar>
+                    </Grid>
+                    <Grid >
+                        <Rating value={score / 1.5 * 5} precision={0.5} readOnly />
                     </Grid>
                     <Grid xs={12}>
                         <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
@@ -109,7 +141,54 @@ const UserInfo = () => {
                             onChange={handleChangeUsername}
                         />
                     </Grid>
+                    <Grid container>
+                        <Grid xs={6}>
+                            <TextField
+                                fullWidth
+                                InputProps={{
+                                    readOnly: !editMode,
+                                }}
+                                label="First name"
+                                value = {firstName}
+                                onChange ={handleChangeFirstName}
+                            />
+                        </Grid>
+                        <Grid xs={6}>
+                            <TextField
+                                fullWidth
+                                InputProps={{
+                                    readOnly: !editMode,
+                                }}
+                                label="Last name"
+                                value = {lastName}
+                                onChange ={handleChangeLastName}
+                            />
+                        </Grid>
+                    </Grid>
                     <Grid xs={12}>
+                        <TextField
+                            fullWidth
+                            InputProps={{
+                                readOnly: !editMode,
+                            }}
+                            label="Email"
+                            value = {email}
+                            onChange ={handleChangeEmail}
+                        />
+                    </Grid>
+                    <Grid xs={12} container>
+                    <Grid xs={9}>
+                        <TextField
+                            fullWidth
+                            InputProps={{
+                                readOnly: !editMode,
+                            }}
+                            label="Phone number"
+                            value = {phone}
+                            onChange ={handleChangePhone}
+                        />
+                    </Grid>
+                    <Grid xs={3}>
                         <TextField
                             fullWidth
                             type="number"
@@ -126,32 +205,11 @@ const UserInfo = () => {
                             onChange ={handleChangeAge}
                         />
                     </Grid>
-                    <Grid xs={12}>
-                        <TextField
-                            fullWidth
-                            InputProps={{
-                                readOnly: !editMode,
-                            }}
-                            label="Email"
-                            value = {email}
-                            onChange ={handleChangeEmail}
-                        />
                     </Grid>
-                    <Grid xs={12}>
-                        <TextField
-                            fullWidth
-                            InputProps={{
-                                readOnly: !editMode,
-                            }}
-                            label="Phone number"
-                            value = {phone}
-                            onChange ={handleChangePhone}
-                        />
-                    </Grid>
-                    <Grid >
+                    <Grid>
                         {
                             !editMode ? (
-                                <Button variant="contained" size="large" color="button_primary" onClick={switchEditMode}>
+                                <Button variant="contained" size="large" color="button_primary" onClick={switchEditMode} >
                                     Edit
                                 </Button>
                             ) : (
@@ -166,45 +224,38 @@ const UserInfo = () => {
                             )
                         }
                     </Grid>
-                    <Grid xs={12}>
-                        <TextField
-                            fullWidth
-                            label="Budget"
-                            type="number"
-                            value={parseFloat(budget).toFixed(2)}
-                            InputProps={{
-                                startAdornment: (
-                                <InputAdornment position="start">
-                                    CC
-                                </InputAdornment>
-                                ),
-                                readOnly: true,
-                            }}
-                        />
-                    </Grid>
-                    <Grid >
+                    <Grid xs={12}>       
                         {
                             !addMoneyMode ? (
-                                <Button variant="contained" size="large" color="button_primary" onClick={switchAddMoneyMode}>
-                                    Trnasfer money
-                                </Button>
+                                <Stack direction="row" spacing={2} justifyContent="space-between">
+                                    <TextField
+                                        label="Budeget"
+                                        InputProps={{
+                                            readOnly: true,
+                                            endAdornment: (
+                                                <InputAdornment position='end'>
+                                                    CC
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        value={parseFloat(budget).toFixed(2)}
+                                    />
+                                    <Button variant="contained" size="large" color="button_primary" onClick={switchAddMoneyMode}>
+                                        Trnasfer
+                                    </Button>
+                                </Stack>
                             ) : (
-                                <Stack spacing={2} direction="row">
+                                <Stack direction="row" spacing={2} justifyContent="space-between">
                                     <TextField
                                         label="Transfer money"
-                                        type="number"
-                                        onChange={handleChangeTransfer }
-                                        value={parseFloat(transfer).toFixed(2)}
+                                        onChange={handleChangeTransfer}
+                                        value={transfer}
                                         InputProps={{
-                                            startAdornment: (
-                                            <InputAdornment position="start">
-                                                CC
-                                            </InputAdornment>
+                                            endAdornment: (
+                                                <InputAdornment position='end'>
+                                                    CC
+                                                </InputAdornment>
                                             ),
-                                            inputProps: { 
-                                                min: 0.00,
-                                                step: 0.01
-                                            }
                                         }}
                                     />
                                     <Button variant="contained"  color="button_primary" size="large" onClick={transferMoney}>
@@ -216,6 +267,11 @@ const UserInfo = () => {
                                 </Stack>
                             )
                         }
+                        
+                        
+                    </Grid>
+                    <Grid >
+                        
                     </Grid>
                 </Grid>
             </Paper>
