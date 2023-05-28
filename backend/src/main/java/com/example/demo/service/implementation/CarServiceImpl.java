@@ -199,7 +199,7 @@ public class CarServiceImpl implements CarService {
 
         Set<CarEntity> rentedCars = new HashSet<>();
         for(CarEntity c : allCars){
-            c.setImageUrl(Base64.getEncoder().encode(c.getImageUrl()));
+
             List<RentalEntity> currentRentals = c.getCarRental();
             for(RentalEntity r : currentRentals){
                 if(r.getEndTime().isAfter(startDate) && r.getStartTime().isBefore(endDate)) {
