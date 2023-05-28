@@ -223,6 +223,7 @@ public class CarServiceImpl implements CarService {
         for (CarEntity car : available) {
             CarDto dto = new CarDto();
             dto.setId(car.getId());
+            //ToDo REMOVE Make and Model from CarDto
             dto.setMakeModel(car.getMake() + " " + car.getModel());
             dto.setImageUrl(Base64.getEncoder().encodeToString(car.getImageUrl()));
             dto.setEngine(car.getEngine());
@@ -230,7 +231,6 @@ public class CarServiceImpl implements CarService {
             dto.setTransmissionEnum(car.getTransmission());
             dto.setPricePerDay(car.getPricePerDay());
 
-            // Set other properties here...
 
             availableDto.add(dto);
         }
