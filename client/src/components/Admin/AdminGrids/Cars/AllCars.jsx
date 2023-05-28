@@ -2,32 +2,44 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Butto
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useTheme } from '@mui/material/styles';
-import { useEffect, useReducer, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-import AddCarForm from './AddCarForm';
+import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
+import { signOutAction } from '../../../../redux/actions/userActions';
+
+import AddCarForm from './AddCarForm';
+import EditCar from './EditCar';
 
 const AllCars = (props) => {
     const user = useSelector((state) => state.user);
-    const [open, setOpen] = useState(false);
+    const [add, setAdd] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [car, setCar] = useState(null);
     const [update, makeUpdate] = useReducer(x => x + 1, 0);
     const theme = useTheme();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const[cars, setCars] = useState([]);
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpenAdd = () => setAdd(true);
+    const handleCloseAdd = () => setAdd(false);
+    const handleOpenEdit = (car) => {
+        setCar(car);
+        setEdit(true);
 
-    const curFormatter = new Intl.NumberFormat(undefined, {
-        maximumFractionDigits: 2,
-    });
+    }
+    const handleCloseEdit = () => {
+        setCar(null);
+        setEdit(false);
+    }
 
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
-    const getCars = async () => {
+    const getCars = useCallback(async () => {
         try {
             const response = await axios.get('http://localhost:8086/car/all');
             if (response.status === 200) {
@@ -36,12 +48,14 @@ const AllCars = (props) => {
         }
         catch (error) {
             console.error('Error fetching data:', error);
+            dispatch(signOutAction());
+            navigate("/");
         } 
-    }
+    }, [dispatch, navigate]);
 
     const removeCar = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8086/car/${id}/delete`);
+            await axios.delete(`http://localhost:8086/car/${id}/delete`);
             makeUpdate(); 
         }
         catch (error) {
@@ -52,7 +66,7 @@ const AllCars = (props) => {
 
     useEffect(() => {
         getCars();
-    }, [update])
+    }, [update, getCars])
 
     const columns = [
         { 
@@ -119,7 +133,7 @@ const AllCars = (props) => {
             type: 'number',
             align: 'center',
             headerAlign: 'center',
-            valueFormatter: ({ value }) => curFormatter.format(value) + " CC",
+            valueFormatter: (params) => parseFloat(params.value).toFixed(2) + " CC",
         },
         { 
             field: 'actions', 
@@ -128,10 +142,10 @@ const AllCars = (props) => {
             headerAlign: 'center',
             renderCell: (params) => (
                 <Stack direction="row"justifyContent="space-evenly" sx={{width: '100%'}}> 
-                    <Button variant="contained" size="large" color="button_secondary">
+                    <Button variant="contained" size="large" color="button_secondary" onClick={() => handleOpenEdit(params.row)}>
                         Edit
                     </Button>
-                    <Button variant="contained" size="large" color="button_primary" onClick={() => removeCar(params.id)}>
+                    <Button variant="contained" size="large" color="button_primary" onClick={() => removeCar(params.row.id)}>
                         Remove 
                     </Button>
                 </Stack>
@@ -157,7 +171,7 @@ const AllCars = (props) => {
             >
                 <Stack direction="row" justifyContent="space-between" alignContent="center" sx={{width: '100%'}}> 
                     <Typography color='white' textAlign="center">Cars</Typography>
-                    <Button variant="contained" size="large" color="button_primary" onClick={handleOpen}>
+                    <Button variant="contained" size="large" color="button_primary" onClick={handleOpenAdd}>
                         Add car
                     </Button>
                 </Stack>
@@ -178,12 +192,21 @@ const AllCars = (props) => {
                 />
             </AccordionDetails> 
             <Modal
-                open={open}
+                open={add}
             >
                 <div
                     style={{ outline: 'none' }}
                 >
-                    <AddCarForm handleClose={handleClose} makeUpdate={makeUpdate}/>
+                    <AddCarForm handleClose={handleCloseAdd} makeUpdate={makeUpdate}/>
+                </div>
+            </Modal>
+            <Modal
+                open={edit}
+            >
+                <div
+                    style={{ outline: 'none' }}
+                >
+                    <EditCar car={car} handleClose={handleCloseEdit} makeUpdate={makeUpdate}/>
                 </div>
             </Modal>
         </Accordion>

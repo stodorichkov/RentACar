@@ -1,13 +1,11 @@
-import { Paper, Typography, TextField, Divider, Button, Select, MenuItem, InputLabel, FormControl, IconButton, Stack, Skeleton, Input, Alert } from '@mui/material';
+import { Paper, Typography, TextField, Divider, Button, Select, MenuItem, InputLabel, FormControl, IconButton, Stack, Skeleton, Input, Alert, InputAdornment } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
 
 import { setAlert } from '../../../../redux/actions/alertActions';
-import { signOutAction } from '../../../../redux/actions/userActions';
 
 import axios from 'axios';
 
@@ -16,7 +14,6 @@ const AddCarForm = (props)  => {
     const user = useSelector((state) => state.user);
     const alert = useSelector(state => state.alert);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [enums, setEnums] = useState(null);
 
     const [brand, setBrand] = useState('');
@@ -125,11 +122,6 @@ const AddCarForm = (props)  => {
                 }
             }
             catch (error) {
-                // if(error.response.status ) {
-                //     props.handleClose();
-                //     dispatch(signOutAction());
-                //     navigate('/signin');
-                // }
                 console.log(error)
                 dispatch(setAlert(error.response.data));
             } 
@@ -212,6 +204,13 @@ const AddCarForm = (props)  => {
                             <TextField
                                 fullWidth
                                 label="Price per day"
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position='end'>
+                                            CC
+                                        </InputAdornment>
+                                    ),
+                                }}
                                 value={price} 
                                 onChange={handleChangePrice}
                             />

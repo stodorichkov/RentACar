@@ -16,8 +16,6 @@ const CarCard = (props) => {
             navigate('/signin');
         }
     }
-    
-
 
     return(
         <Grid xs={6}>
@@ -26,7 +24,7 @@ const CarCard = (props) => {
                     <Grid xs={6.5} >
                         <CardMedia 
                             component="img" 
-                            src={car.imageUrl} 
+                            src={`data:image/jpeg;base64,${car.imageUrl}`} 
                             alt="Alt text" 
                             sx={{
                                 height: "275px",
@@ -39,7 +37,7 @@ const CarCard = (props) => {
                             <Grid container spacing={1.3}>
                                 <Grid xs={12}>
                                     <Typography variant="h6" component="div">
-                                        {car.make + " " + car.model}
+                                        {car.makeModel}
                                     </Typography>
                                 </Grid>
                                 <Grid xs={12}>

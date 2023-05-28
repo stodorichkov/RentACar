@@ -1,7 +1,7 @@
 import { Paper, Divider } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
@@ -17,24 +17,32 @@ const ShowCars = () => {
 
     const [sortedCars, setSortedCars] = useState(targetCars);
 
-    const sortCars = () => {
-        let sorted = [...sortedCars].sort((a, b) => {
-            const comparison = order ? 1 : -1;
-            if (a[sort] > b[sort]) {
-                return comparison;
-            } else if (a[sort] < b[sort]) {
-                return -comparison;
-            } else {
-                return 0;
-            }
-        });
+    const sortCars = useCallback(() => {
+        if(sort) {
+            setSortedCars((prevSortedCars) => {
+                let sorted = [...prevSortedCars].sort((a, b) => {
+                    const comparison = order ? 1 : -1;
+                    if (a[sort] > b[sort]) {
+                        return comparison;
+                    } else if (a[sort] < b[sort]) {
+                        return -comparison;
+                    } else {
+                        return 0;
+                    }
+                });
+            
+                return sorted;
+            });
+        }
+        else {
+            setSortedCars(targetCars);
+        }
         
-        setSortedCars(sorted);
-    };
+    }, [sort, order, targetCars]);
 
     useEffect(() => {
-        sortCars()
-    }, [sort, order, sortCars])
+        sortCars();
+    }, [sortCars])
     
 
     return(

@@ -40,7 +40,7 @@ const SortBar = () => {
                 exclusive
                 onChange={(event, newVal) => dispatch(sortAction(newVal))}
             >
-                <ToggleButton value="name" sx={{...toggleButtonStyle}}>Name</ToggleButton>
+                <ToggleButton value="makeModel" sx={{...toggleButtonStyle}}>Name</ToggleButton>
                 <ToggleButton value="engine" sx={{...toggleButtonStyle}}>Engine type</ToggleButton>
                 <ToggleButton value="gearbox" sx={{...toggleButtonStyle}}>Gearbox</ToggleButton>
                 <ToggleButton value="fuelConsumption" sx={{...toggleButtonStyle}}>Fuel Consumption</ToggleButton>

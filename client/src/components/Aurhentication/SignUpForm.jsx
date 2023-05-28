@@ -77,7 +77,7 @@ const SignUpForm = () => {
             confirmPassword: confirmPassword
         };
         
-        if(Object.values(content).some(value => value === '')) {
+        if(Object.values(content).some(value => value === '') || firstName === '' || lastName === '') {
             dispatch(setAlert('The form must be completed!'));
         }
         else {

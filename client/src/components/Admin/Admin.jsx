@@ -13,7 +13,7 @@ const Admin = () => {
     const [expanded, setExpanded] = useState(null);
 
     const handleChangeExpand = (panel) => (event, isExpanded) => {
-        if (isExpanded || expanded !== panel) {
+        if (isExpanded || expanded !== panel ) {
             setExpanded(panel);
         }
     };
@@ -32,9 +32,9 @@ const Admin = () => {
                         <Grid xs={12}>
                             <AllCars handleChangeExpand={handleChangeExpand('panel1')} expanded={expanded === 'panel1'}/>
                         </Grid>
-                        <Grid xs={12}>
-                            
-                        </Grid>
+                        {/* <Grid xs={12}>
+                        <AllCars handleChangeExpand={handleChangeExpand('panel2')} expanded={expanded === 'panel2'}/>
+                        </Grid> */}
                     </Grid> 
                 </Paper>
             </Grid>

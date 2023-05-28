@@ -1,15 +1,22 @@
 import { Paper, TextField, Divider, Button, Avatar, InputAdornment, Stack, Rating }  from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useEffect, useState } from 'react';
+import { useReducer, useEffect, useState, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
+
+import { signOutAction } from '../../redux/actions/userActions';
+
 
 const UserInfo = () => {
     const user = useSelector((state) => state.user);
     const theme = useTheme();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [update, makeUpdate] = useReducer(x => x + 1, 0);
 
     const [score, setScore] = useState(0);
     const [username, setUsername] = useState('');
@@ -66,8 +73,40 @@ const UserInfo = () => {
         setAddMoneyMode(!addMoneyMode);
         setTransfer(0.00);
     }
+    const handleCancel = () => {
+        makeUpdate();
+    }
 
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+    const getUserInfo = useCallback(async () => {
+        try {
+            const response = await axios.get('http://localhost:8086/user/profile');
+            if (response.status === 200) {
+                const userInfo = response.data;
+                setScore(userInfo.score ? userInfo.score : 0)
+                setUsername(userInfo.username ? userInfo.username : '');
+                setFirstName(userInfo.fullName ? userInfo.fullName.split(' ')[0] : '')
+                setLastName(userInfo.fullName ? userInfo.fullName.split(' ')[1] : '')
+                setAge(userInfo.age ? userInfo.age : 18);
+                setEmail(userInfo.email ? userInfo.email : '');
+                setPhone(userInfo.mobilePhone ? userInfo.mobilePhone : '');
+                setBudget(userInfo.budget ? userInfo.budget : 0.00);
+                
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+            dispatch(signOutAction());
+            navigate("/");
+        } 
+    }, [dispatch, navigate]);
+
+    useEffect(() => {
+        setEditMode(false);
+        setAddMoneyMode(false);
+        getUserInfo();
+    }, [update, getUserInfo]);
 
     const transferMoney = async() => {
         try {
@@ -82,32 +121,6 @@ const UserInfo = () => {
             console.error('Error fetching data:', error);
         } 
     }
-
-    const getUserInfo = async () => {
-        try {
-            const response = await axios.get('http://localhost:8086/user/profile');
-            if (response.status === 200) {
-                console.log(response.data)
-                const data = response.data;
-                setScore(data.score ? data.score : 0)
-                setUsername(data.username ? data.username : '');
-                setFirstName(data.fullName ? data.fullName.split(' ')[0] : '')
-                setLastName(data.fullName ? data.fullName.split(' ')[1] : '')
-                setAge(data.age ? data.age : 18);
-                setEmail(data.email ? data.email : '');
-                setPhone(data.mobilePhone ? data.mobilePhone : '');
-                setBudget(data.budget ? data.budget : 0.00);
-            }
-        }
-        catch (error) {
-            console.error('Error fetching data:', error);
-        } 
-    }
-
-    useEffect(() => {
-        getUserInfo();
-    }, [])
-
 
     return(
         <Grid xl={3.5} lg={4} md={5} sm={7} xs={10}>
@@ -217,7 +230,7 @@ const UserInfo = () => {
                                     <Button variant="contained"  color="button_primary" size="large" >
                                         Save
                                     </Button>
-                                    <Button variant="contained"  color="button_secondary" size="large" onClick={switchEditMode}>
+                                    <Button variant="contained"  color="button_secondary" size="large" onClick={handleCancel}>
                                         Cancel
                                     </Button>
                                 </Stack>
@@ -267,11 +280,6 @@ const UserInfo = () => {
                                 </Stack>
                             )
                         }
-                        
-                        
-                    </Grid>
-                    <Grid >
-                        
                     </Grid>
                 </Grid>
             </Paper>
