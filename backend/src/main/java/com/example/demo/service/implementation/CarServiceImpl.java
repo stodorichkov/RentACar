@@ -44,7 +44,25 @@ public class CarServiceImpl implements CarService {
 
        Set<CarDto> filteredCars = new HashSet<>();
 
-       filteredCars.addAll(carToDisplay);
+       //filteredCars.addAll(carToDisplay);
+
+        Set<CarDto> allCarsDto = new HashSet<>();
+
+        for (CarEntity car : allCars) {
+            CarDto dto = new CarDto();
+            dto.setId(car.getId());
+            //ToDo REMOVE Make and Model from CarDto
+            dto.setMakeModel(car.getMake() + " " + car.getModel());
+            dto.setImageUrl(Base64.getEncoder().encodeToString(car.getImageUrl()));
+            dto.setEngine(car.getEngine());
+            dto.setCapacity(car.getCapacity());
+            dto.setTransmissionEnum(car.getTransmission());
+            dto.setPricePerDay(car.getPricePerDay());
+
+            allCarsDto.add(dto);
+        }
+        filteredCars.addAll(allCarsDto);
+
 
        return filteredCars;
     }
