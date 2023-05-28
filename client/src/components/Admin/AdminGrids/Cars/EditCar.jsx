@@ -12,6 +12,7 @@ import axios from 'axios';
 const EditCar = (props) => {
     const [enums, setEnums] = useState(null);
     const alert = useSelector(state => state.alert);
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     const [price, setPrice] = useState(props.car.pricePerDay ? props.car.pricePerDay.toFixed(2) : '');
@@ -23,6 +24,8 @@ const EditCar = (props) => {
     const handleChangeCondition = (event) => {
         setCondition(event.target.value);
     };
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
     const getEnums = useCallback(async () => {
         try {

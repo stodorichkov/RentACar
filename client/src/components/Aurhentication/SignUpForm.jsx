@@ -1,4 +1,4 @@
-import { Paper, Typography, TextField, Divider, Button, Alert, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton, Link } from '@mui/material';
+import { Paper, Typography, TextField, Divider, Button, Alert, InputAdornment, IconButton, Link } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -164,49 +164,42 @@ const SignUpForm = () => {
                             />
                         </Grid>
                         <Grid xs={6}>
-                            <FormControl variant="outlined" fullWidth>
-                                <InputLabel htmlFor="password">Password</InputLabel>
-                                <OutlinedInput
-                                    id="password"
+                            <TextField
+                                    fullWidth
+                                    label="Password"
                                     type={showPass ? 'text' : 'password'}
-                                    endAdornment={
+                                    value={password}
+                                    onChange={handleChangePassword}
+                                    InputProps={{
+                                        endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton
-                                            onClick={() => setShowPass(!showPass)}
-                                            edge="end"
-                                            >
+                                            <IconButton onClick={() => setShowPass(!showPass)} edge="end">
                                             {showPass ? <VisibilityOff /> : <Visibility />}
                                             </IconButton>
                                         </InputAdornment>
-                                    }
-                                    label="Password"
-                                    value = {password}
-                                    onChange ={handleChangePassword}
-                                />
-                            </FormControl>
+                                        ),
+                                    }}
+                                    variant="outlined"
+                            />
                         </Grid>
                         <Grid xs={6}>
-                            <FormControl variant="outlined" fullWidth>
-                                <InputLabel htmlFor="confPassword">Confirm password</InputLabel>
-                                <OutlinedInput
-                                    id="confPassword"
-                                    type={showConfPass ? 'text' : 'password'}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={() => setShowConfPass(!showConfPass)}
-                                            edge="end"
-                                            >
-                                            {showConfPass ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                    label="Confirm password"
-                                    value = {confirmPassword}
-                                    onChange ={handleChangeConfirmPassword}
-                                />
-                            </FormControl>
+                            <TextField
+                                fullWidth
+                                label="Confirm password"
+                                type={showConfPass ? 'text' : 'password'}
+                                value = {confirmPassword}
+                                onChange ={handleChangeConfirmPassword}
+                                InputProps={{
+                                    endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={() => setShowConfPass(!showConfPass)} edge="end">
+                                        {showConfPass ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                    ),
+                                }}
+                                variant="outlined"
+                            />
                         </Grid>
                         <Grid>
                             <Button variant="contained" size="large" color="button_secondary" onClick={addUser}>

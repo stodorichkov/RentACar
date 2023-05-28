@@ -42,7 +42,7 @@ const SortBar = () => {
             >
                 <ToggleButton value="makeModel" sx={{...toggleButtonStyle}}>Name</ToggleButton>
                 <ToggleButton value="engine" sx={{...toggleButtonStyle}}>Engine type</ToggleButton>
-                <ToggleButton value="gearbox" sx={{...toggleButtonStyle}}>Gearbox</ToggleButton>
+                <ToggleButton value="transmissionEnum" sx={{...toggleButtonStyle}}>Gearbox</ToggleButton>
                 <ToggleButton value="fuelConsumption" sx={{...toggleButtonStyle}}>Fuel Consumption</ToggleButton>
                 <ToggleButton value="capacity" sx={{...toggleButtonStyle}}>Seats</ToggleButton>
                 <ToggleButton value="pricePerDay" sx={{...toggleButtonStyle}}>Price per Day</ToggleButton>

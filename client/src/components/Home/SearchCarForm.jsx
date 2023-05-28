@@ -8,32 +8,36 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import axios from 'axios';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { searchTargetCars } from '../../redux/actions/targetCarsAction';
 import { sortAction } from '../../redux/actions/sortActions';
+import { setPickUpDate } from '../../redux/actions/pickUpDateAction';
+import { setDropOffDate } from '../../redux/actions/dropOffDateAction';
 
 const SearchCarForm = () => {
-    const [pickUpDate, setPickUpDate] = useState(dayjs());
-    const [dropOffDate, setDropOffDate] = useState(pickUpDate.add(1, 'day'));
+    const pickUpDate = useSelector((state) => state.pickUpDate);
+    const dropOffDate = useSelector((state) => state.dropOffDate);
 
     const dispatch = useDispatch();
 
     const handleChangePickUpDate = (value) => {
-        setPickUpDate(value);
-        setDropOffDate(dayjs(value).add(1, 'day'));
+        dispatch(setPickUpDate(value.format("YYYY-MM-DD HH:mm:ss")))
+        dispatch(setDropOffDate(value.add(1, 'day').format("YYYY-MM-DD HH:mm:ss")));
+        dispatch(searchTargetCars(null));
     }
 
     const handleChangeDropOffDate = (value) => {
-        setDropOffDate(value);
+        dispatch(setDropOffDate(value).format("YYYY-MM-DD HH:mm:ss"));
+        dispatch(searchTargetCars(null));
     }
 
     const searchCars = async () => {
         const content = {
-            startDate: pickUpDate.format("YYYY-MM-DD hh:mm:ss"),
-            endDate: dropOffDate.format("YYYY-MM-DD hh:mm:ss")
+            startDate: pickUpDate,
+            endDate: dropOffDate
         }
         try {
             const response = await axios.get('http://localhost:8086/rentals/all-unique-available', content);
@@ -49,6 +53,8 @@ const SearchCarForm = () => {
     useEffect(() => {
         dispatch(searchTargetCars(null));
         dispatch(sortAction(null));
+        dispatch(setPickUpDate(dayjs().format("YYYY-MM-DD HH:mm:ss")));
+        dispatch(setDropOffDate(dayjs().add(1, 'day').format("YYYY-MM-DD HH:mm:ss")));
     }, [dispatch]);
 
     const theme = useTheme();
@@ -71,7 +77,7 @@ const SearchCarForm = () => {
                                     format="DD/MM/YYYY HH:mm"
                                     ampm={false}
                                     minDate={dayjs()}
-                                    value={pickUpDate}
+                                    value={dayjs(pickUpDate)}
                                     onChange={(newValue) => handleChangePickUpDate(newValue)}
                                 />
                             </LocalizationProvider>  
@@ -80,8 +86,8 @@ const SearchCarForm = () => {
                                     label="Drop-off date"
                                     format="DD/MM/YYYY HH:mm"
                                     ampm={false}
-                                    minDate={pickUpDate.add(1, 'day')}
-                                    value={dropOffDate}
+                                    minDate={dayjs(pickUpDate).add(1, 'day')}
+                                    value={dayjs(dropOffDate)}
                                     onChange={(newValue) => handleChangeDropOffDate(newValue)}
                                 />
                             </LocalizationProvider>   

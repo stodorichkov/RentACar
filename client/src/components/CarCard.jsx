@@ -1,9 +1,12 @@
-import { Card, CardContent, CardMedia, Typography} from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Button, Modal } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useTheme, Button } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
+import Rent from './Home/Rent';
 
 const CarCard = (props) => {
     const theme = useTheme();
@@ -11,11 +14,17 @@ const CarCard = (props) => {
     const navigate = useNavigate();
     const car = props.car;
 
-    const rentCar = () => {
+    const [open, setOpen] = useState(false);
+
+    const handleRent = () => {
         if(!user) {
             navigate('/signin');
         }
+        else {
+            setOpen(true);
+        }
     }
+    const handleClose = () => setOpen(false);
 
     return(
         <Grid xs={6}>
@@ -65,16 +74,27 @@ const CarCard = (props) => {
                                         Price per Day: {parseFloat(car.pricePerDay).toFixed(2)} CC
                                     </Typography>
                                 </Grid>
-                                <Grid xs={12}>
-                                    <Button variant="contained" color="button_primary" sx={{ width: '100%' }} onClick={rentCar}>
-                                        Rent
-                                    </Button>
-                                </Grid>
+                                {props.isRent ?
+                                    <Grid xs={12}>
+                                        <Button variant="contained" color="button_primary" sx={{ width: '100%' }} onClick={handleRent}>
+                                            Rent
+                                        </Button>
+                                    </Grid>
+                                : null}
                             </Grid>  
                         </CardContent>
                     </Grid>
                 </Grid>
             </Card>
+            <Modal
+                open={open}
+            >
+                <div
+                    style={{ outline: 'none' }}
+                >
+                    <Rent handleClose={handleClose} car={car}/>
+                </div>
+            </Modal>
         </Grid>
     );
 }

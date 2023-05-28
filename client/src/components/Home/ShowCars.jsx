@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
-import CarCard from './CarCard';
+import CarCard from '../CarCard';
 import SortBar from './SortBar';
 
 
@@ -62,7 +62,7 @@ const ShowCars = () => {
                     </Grid>
                     <Grid xs={12}>
                         <Grid container justifyContent='space-evenly' sx={{overflow: 'auto', height: '47vh'}}>
-                            {sortedCars.map(car => (<CarCard key={car.id} car={car}/>))}
+                            {sortedCars.map(car => (<CarCard key={car.id} car={car} isRent/>))}
                         </Grid>
                     </Grid>
                 </Grid>    

@@ -1,4 +1,4 @@
-import { Paper, TextField, Divider, Button, Avatar, InputAdornment, Stack, Rating }  from '@mui/material';
+import { Paper, TextField, Divider, Button, Avatar, InputAdornment, Stack, Rating, Alert }  from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useReducer, useEffect, useState, useCallback } from 'react';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { signOutAction } from '../../redux/actions/userActions';
+import { setAlert } from '../../redux/actions/alertActions';
 
 
 const UserInfo = () => {
@@ -17,6 +18,7 @@ const UserInfo = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [update, makeUpdate] = useReducer(x => x + 1, 0);
+    const alert = useSelector((state) => state.alert);
 
     const [score, setScore] = useState(0);
     const [username, setUsername] = useState('');
@@ -26,7 +28,7 @@ const UserInfo = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [budget, setBudget] = useState(0.00);
-    const [transfer, setTransfer] = useState(0.00);
+    const [transfer, setTransfer] = useState(0);
     const [editMode, setEditMode] = useState(false);
     const [addMoneyMode, setAddMoneyMode] = useState(false);
 
@@ -57,14 +59,7 @@ const UserInfo = () => {
         setPhone(event.target.value);
     }
     const handleChangeTransfer = (event) => {
-        const newTransfer = parseFloat(event.target.value)
-        if(isNaN(newTransfer) || newTransfer < 0) {
-            setTransfer("0.00");
-        }
-        else {
-            setTransfer(event.target.value);
-        }
-        
+        setTransfer(event.target.value)
     }
     const switchEditMode = () => {
         setEditMode(!editMode);
@@ -105,21 +100,59 @@ const UserInfo = () => {
     useEffect(() => {
         setEditMode(false);
         setAddMoneyMode(false);
+        dispatch(setAlert(null));
         getUserInfo();
-    }, [update, getUserInfo]);
+    }, [update, getUserInfo, dispatch]);
 
-    const transferMoney = async() => {
-        try {
-            const response = await axios.put('http://localhost:8086/user/add-money', {money: transfer});
-            if (response.status === 200) {
-                console.log(response.data)
-                setBudget(budget + parseFloat(transfer))
-                switchAddMoneyMode()
+    const editUser = async() => {
+        const content = {
+            username: username,
+            fullName: `${firstName} ${lastName}`,
+            email: email,
+            mobilePhone: phone,
+            years: age,
+            budget: budget,
+            score: score
+        }
+        if(Object.values(content).some(value => value === '') || firstName === '' || lastName === '') {
+            dispatch(setAlert('The form must be completed!'));
+        }
+        else {
+            try {
+                const response = await axios.patch('http://localhost:8086/user/edit');
+                if (response.status === 200) {
+                    console.log(response.data)
+                    switchEditMode();
+                    makeUpdate();
+                }
+            }
+            catch (error) {
+                console.error('Error fetching data:', error);
+                console.log(error)
             }
         }
-        catch (error) {
-            console.error('Error fetching data:', error);
-        } 
+    }
+
+    const transferMoney = async() => {
+        const content = {
+            money: parseFloat(transfer).toFixed(2)
+        }
+        if(isNaN(content.money) || content.money < 0) {
+            dispatch(setAlert("Transfer must be number > 0!"));
+        }
+        else {
+            try {
+                const response = await axios.put('http://localhost:8086/user/add-money', content);
+                if (response.status === 200) {
+                    console.log(response.data)
+                    setBudget(budget + parseFloat(transfer))
+                    switchAddMoneyMode()
+                }
+            }
+            catch (error) {
+                console.error('Error fetching data:', error);
+            } 
+        }
     }
 
     return(
@@ -143,6 +176,11 @@ const UserInfo = () => {
                     <Grid xs={12}>
                         <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                     </Grid>
+                    {alert ? (
+                        <Grid xs={12}>
+                            <Alert severity="error" variant="filled">{alert}</Alert>
+                        </Grid>
+                    ) : null}
                     <Grid xs={12}>
                         <TextField
                             fullWidth
@@ -227,7 +265,7 @@ const UserInfo = () => {
                                 </Button>
                             ) : (
                                 <Stack spacing={4} direction="row">
-                                    <Button variant="contained"  color="button_primary" size="large" >
+                                    <Button variant="contained"  color="button_primary" size="large" onClick={editUser}>
                                         Save
                                     </Button>
                                     <Button variant="contained"  color="button_secondary" size="large" onClick={handleCancel}>
