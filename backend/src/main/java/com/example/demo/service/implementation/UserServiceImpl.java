@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
         if(editUser.getFullName()!=null && editUser.getFullName().equals(userProfileDto.getFullName())){
             return "Name you've changed is the same.";
-        } else if(!editUser.getFullName().matches("^[A-Za-z]{4,}\\s[A-Za-z]{4,}$")){
+        } else if(!editUser.getFullName().matches("^[A-Z][a-z]{2,}\\s[A-Z][a-z]{2,}$")){
             return "Your first and family name is not correct.At least 3 characters for each name and space between!";
         } else {
             editUser.setFullName(userProfileDto.getFullName());
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
             return "Password is not valid! It must contain min 8 characters, one special and numbers";
         }
 
-        if(userRegisterDto.getFullName().matches("^[A-Za-z]{4,}\\s[A-Za-z]{4,}$")){
+        if(userRegisterDto.getFullName().matches("^[A-Z][a-z]{2,}\\s[A-Z][a-z]{2,}$")){
             user.setFullName(userRegisterDto.getFullName());
         } else {
           return "Your first and family name is not correct.At least 3 characters for each name and space between!";

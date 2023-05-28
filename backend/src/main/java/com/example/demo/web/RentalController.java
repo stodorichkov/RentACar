@@ -52,6 +52,8 @@ public class RentalController {
         if(uniqueCars.isEmpty()){
             return ResponseEntity.noContent().build();
         }
+        //combine Make and Model for front-end temporary:
+        //for(CarDto c : uniqueCars){c.setMakeModel(c.getMake()+" "+c.getModel());}
         return ResponseEntity.ok(uniqueCars);
     }
 

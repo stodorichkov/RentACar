@@ -10,6 +10,8 @@ public class CarDto {
 
  private Long id;
  private String imageUrl;
+ private String makeModel;
+
  private String model;
  private String make;
  private Integer capacity;
@@ -23,11 +25,12 @@ public class CarDto {
  private String fuelConsumption;
 
 
- public CarDto(Long id, String imageUrl, String model,
+ public CarDto(Long id, String imageUrl,String makeModel, String model,
                String make, Integer capacity, String registrationPlate, EngineEnum engine, TransmissionEnum transmissionEnum,
                Double pricePerDay, ConditionEnum carCondition, String fuelConsumption) {
   this.id = id;
   this.imageUrl = imageUrl;
+  this.makeModel = makeModel;
   this.model = model;
   this.make = make;
   this.capacity = capacity;
@@ -41,7 +44,14 @@ public class CarDto {
 
  public CarDto() {
  }
+ public String getMakeModel() {
 
+  return makeModel;
+ }
+
+ public void setMakeModel(String makeModel) {
+  this.makeModel = makeModel;
+ }
  public Long getId() {
   return id;
  }

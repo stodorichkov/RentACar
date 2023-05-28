@@ -196,22 +196,28 @@ public class CarServiceImpl implements CarService {
     public Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate) {
 
         List<CarEntity> allCars = this.carRepository.findAll();
+
         Set<CarEntity> rentedCars = new HashSet<>();
         for(CarEntity c : allCars){
+            c.setImageUrl(Base64.getEncoder().encode(c.getImageUrl()));
             List<RentalEntity> currentRentals = c.getCarRental();
             for(RentalEntity r : currentRentals){
                 if(r.getEndTime().isAfter(startDate) && r.getStartTime().isBefore(endDate)) {
                     if (StatusEnum.Reserved.equals(r.getStatus().getStatus())
                             || StatusEnum.Active.equals(r.getStatus().getStatus())
                             || StatusEnum.Late.equals(r.getStatus().getStatus())) {
+                        ;//encode back to Base64
+
                         rentedCars.add(c);
                     }
                 }
             }
         }
 
+
         Set<CarEntity> available = new HashSet<>(allCars);
         available.removeAll(rentedCars);
+
 
         return this.modelMapper.map(available, new TypeToken<Set<CarDto>>(){}.getType());
 
