@@ -218,8 +218,24 @@ public class CarServiceImpl implements CarService {
         Set<CarEntity> available = new HashSet<>(allCars);
         available.removeAll(rentedCars);
 
+        Set<CarDto> availableDto = new HashSet<>();
 
-        return this.modelMapper.map(available, new TypeToken<Set<CarDto>>(){}.getType());
+        for (CarEntity car : available) {
+            CarDto dto = new CarDto();
+            dto.setId(car.getId());
+            dto.setMakeModel(car.getMake() + " " + car.getModel());
+            dto.setImageUrl(Base64.getEncoder().encodeToString(car.getImageUrl()));
+            dto.setEngine(car.getEngine());
+            dto.setCapacity(car.getCapacity());
+            dto.setTransmissionEnum(car.getTransmission());
+            dto.setPricePerDay(car.getPricePerDay());
+
+            // Set other properties here...
+
+            availableDto.add(dto);
+        }
+
+        return availableDto;
 
     }
 
