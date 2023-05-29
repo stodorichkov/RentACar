@@ -133,6 +133,7 @@ public class CarServiceImpl implements CarService {
         } else {
             car.setPricePerDay(carDto.getPricePerDay());
         }
+        car.setFuelConsumption(carDto.getFuelConsumption());
         car.setCapacity(carDto.getCapacity());
         car.setCondition(carDto.getCarCondition());
         car.setEngine(carDto.getEngine());
