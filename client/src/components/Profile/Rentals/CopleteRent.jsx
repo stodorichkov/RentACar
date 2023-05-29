@@ -16,7 +16,7 @@ const CompleteRent = (props) => {
 
     const rent = props.rent;
 
-    const [summmary, setSummary] = useState(null);
+    const [summary, setSummary] = useState(null);
 
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
@@ -68,37 +68,33 @@ const CompleteRent = (props) => {
                         <Grid xs={12}>
                             <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                         </Grid>
-                        { summmary ? (
-                            <>
-                                <Grid xs={12}>
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                    >
-                                        <Typography variant="body1" color="textPrimary" >Whithout discount: </Typography>
-                                        <Typography variant="h6" color="textPrimary" >{parseFloat(summmary.withoutDiscount).toFixed(2)} CC</Typography>
-                                    </Stack>
-                                </Grid>
-                                <Grid xs={12}>
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                    >
-                                        <Typography variant="body1" color="textPrimary" >Discount:</Typography>
-                                        <Typography variant="h6" color="textPrimary" >{parseFloat(summmary.discount).toFixed(2)} CC</Typography>
-                                    </Stack>
-                                </Grid>
-                                <Grid xs={12}>
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                    >
-                                        <Typography variant="body1" color="textPrimary" >Total: </Typography>
-                                        <Typography variant="h6" color="textPrimary" >{parseFloat(summmary.withDiscount).toFixed(2)} CC</Typography>
-                                    </Stack>
-                                </Grid>
-                            </>
-                        ) : null}
+                            <Grid xs={12}>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                >
+                                    <Typography variant="body1" color="textPrimary" >Whithout discount: </Typography>
+                                    <Typography variant="h6" color="textPrimary" >{summary ? parseFloat(summary.withoutDiscount).toFixed(2) : null} CC</Typography>
+                                </Stack>
+                            </Grid>
+                            <Grid xs={12}>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                >
+                                    <Typography variant="body1" color="textPrimary" >Discount:</Typography>
+                                    <Typography variant="h6" color="textPrimary" >{summary ? parseFloat(summary.discount).toFixed(2) : null} CC</Typography>
+                                </Stack>
+                            </Grid>
+                            <Grid xs={12}>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                >
+                                    <Typography variant="body1" color="textPrimary" >Total: </Typography>
+                                    <Typography variant="h6" color="textPrimary" >{summary ? parseFloat(summary.withDiscount).toFixed(2) : null} CC</Typography>
+                                </Stack>
+                            </Grid>
                         <Grid xs={12}>
                             <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                         </Grid>

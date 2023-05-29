@@ -3,12 +3,9 @@ import { DataGrid } from '@mui/x-data-grid';
 
 import { useTheme } from '@mui/material/styles';
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import axios from 'axios';
-
-import { signOutAction } from '../../../../redux/actions/userActions';
 
 import AddCarForm from './AddCarForm';
 import EditCar from './EditCar';
@@ -20,8 +17,6 @@ const AllCars = (props) => {
     const [car, setCar] = useState(null);
     const [update, makeUpdate] = useReducer(x => x + 1, 0);
     const theme = useTheme();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const[cars, setCars] = useState([]);
 
@@ -30,7 +25,6 @@ const AllCars = (props) => {
     const handleOpenEdit = (car) => {
         setCar(car);
         setEdit(true);
-
     }
     const handleCloseEdit = () => {
         setCar(null);
@@ -42,7 +36,6 @@ const AllCars = (props) => {
     const getCars = useCallback(async () => {
         try {
             const response = await axios.get('http://localhost:8086/car/all');
-            console.log(response)
             if (response.status === 200) {
                 setCars(response.data)
             }
@@ -50,7 +43,7 @@ const AllCars = (props) => {
         catch (error) {
             console.error('Error fetching data:', error);
         } 
-    }, [dispatch, navigate]);
+    }, []);
 
     const removeCar = async (id) => {
         try {

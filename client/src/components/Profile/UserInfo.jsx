@@ -4,11 +4,9 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useReducer, useEffect, useState, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
-import { signOutAction } from '../../redux/actions/userActions';
 import { setAlert } from '../../redux/actions/alertActions';
 
 
@@ -16,7 +14,6 @@ const UserInfo = () => {
     const user = useSelector((state) => state.user);
     const theme = useTheme();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [update, makeUpdate] = useReducer(x => x + 1, 0);
     const alert = useSelector((state) => state.alert);
 
@@ -94,7 +91,7 @@ const UserInfo = () => {
             console.error('Error fetching data:', error);
             console.log(error)
         } 
-    }, [dispatch, navigate]);
+    }, []);
 
     useEffect(() => {
         setEditMode(false);
@@ -116,7 +113,7 @@ const UserInfo = () => {
         }
         else {
             try {
-                const response = await axios.patch('http://localhost:8086/user/edit');
+                const response = await axios.patch('http://localhost:8086/user/edit', content);
                 if (response.status === 200) {
                     console.log(response.data)
                     switchEditMode();
@@ -125,7 +122,6 @@ const UserInfo = () => {
             }
             catch (error) {
                 console.error('Error fetching data:', error);
-                console.log(error)
             }
         }
     }
@@ -189,7 +185,7 @@ const UserInfo = () => {
                             onChange={handleChangeUsername}
                         />
                     </Grid>
-                    <Grid container>
+                    <Grid container xs={12}>
                         <Grid xs={6}>
                             <TextField
                                 fullWidth

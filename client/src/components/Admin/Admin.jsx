@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 
 import AllCars from './AdminGrids/Cars/AllCars';
+import AllUsers from './AdminGrids/Users/AllUsers';
 
 const Admin = () => {
     const theme = useTheme();
@@ -30,9 +31,9 @@ const Admin = () => {
                         <Grid xs={12}>
                             <AllCars handleChangeExpand={handleChangeExpand('panel1')} expanded={expanded === 'panel1'}/>
                         </Grid>
-                        {/* <Grid xs={12}>
-                        <AllCars handleChangeExpand={handleChangeExpand('panel2')} expanded={expanded === 'panel2'}/>
-                        </Grid> */}
+                        <Grid xs={12}>
+                            <AllUsers handleChangeExpand={handleChangeExpand('panel2')} expanded={expanded === 'panel2'}/>
+                        </Grid>
                     </Grid> 
                 </Paper>
             </Grid>
