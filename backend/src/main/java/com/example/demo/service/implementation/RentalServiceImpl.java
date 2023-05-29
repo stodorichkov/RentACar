@@ -263,12 +263,12 @@ public class RentalServiceImpl implements RentalService {
             for(RentalEntity r : all){
                 forAdmin.add(
                         new RentalForAdminDto(
+                                r.getId(),
                                 r.getRenter().getUsername(),
                                 r.getRentedCar().getRegistrationPlate(),
                                 r.getRentedCar().getMake() + " " +  r.getRentedCar().getModel(),
                                 r.getStatus().getStatus(),
                                 r.getTotalPrice()
-
                         )
                 );
             }

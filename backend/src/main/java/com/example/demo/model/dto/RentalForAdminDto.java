@@ -4,6 +4,7 @@ import com.example.demo.model.enums.StatusEnum;
 
 public class RentalForAdminDto {
 
+    private Long id;
     private String username;
 
     private String registrationPlate;
@@ -15,7 +16,8 @@ public class RentalForAdminDto {
     private Double totalPrice;
 
 
-    public RentalForAdminDto(String username, String registrationPlate, String carName, StatusEnum status, Double totalPrice) {
+    public RentalForAdminDto(Long id,String username, String registrationPlate, String carName, StatusEnum status, Double totalPrice) {
+        this.id = id;
         this.username = username;
         this.registrationPlate = registrationPlate;
         this.carName = carName;
@@ -63,5 +65,13 @@ public class RentalForAdminDto {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
