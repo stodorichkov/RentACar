@@ -145,4 +145,5 @@ public class CarDto {
   return Objects.hash(getId(), getImageUrl(), getModel(), getMake(),
           getCapacity(), getEngine(), getTransmissionEnum(), getPricePerDay());
  }
+
 }
