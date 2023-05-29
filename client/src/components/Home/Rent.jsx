@@ -1,13 +1,14 @@
-import { Paper, Typography, Divider, Button, IconButton, Stack } from '@mui/material';
+import { Paper, Typography, Divider, Button, IconButton, Stack, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useState, useEffect } from 'react';
-import { useSelector} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { setAlert } from '../../redux/actions/alertActions';
 
 
 const Rent = (props) => {
@@ -16,6 +17,8 @@ const Rent = (props) => {
     const theme = useTheme();
     const car = props.car;
     const user = useSelector((state) => state.user);
+    const alert = useSelector(state => state.alert);
+    const dispatch = useDispatch();
 
     const [cost, setCost] = useState(0.00.toFixed(2));
 
@@ -34,11 +37,13 @@ const Rent = (props) => {
         }
         catch (error) {
             console.error('Error fetching data:', error);
+            dispatch(setAlert(error.response.data));
         } 
     }
 
     useEffect(() => {
         getCost();
+        dispatch(setAlert(null));
     }, [getCost]);
 
     const rentCar = async () => {
@@ -76,6 +81,11 @@ const Rent = (props) => {
                         <Grid xs={12}>
                             <Divider sx={{backgroundColor: theme.palette.menu.main}}/>
                         </Grid>
+                        {alert ? (
+                            <Grid xs={12}>
+                                <Alert severity="error" variant="filled">{alert}</Alert>
+                            </Grid>
+                        ) : null}
                         <Grid xs={12}>
                             <Stack
                                 direction="row"

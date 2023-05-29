@@ -40,7 +40,7 @@ const SearchCarForm = () => {
             endDate: dropOffDate
         }
         try {
-            const response = await axios.get('http://localhost:8086/rentals/all-unique-available', content);
+            const response = await axios.get('http://localhost:8086/rentals/all-unique-available', {params: content});
             if (response.status === 200) {
                 dispatch(searchTargetCars(response.data))
             }
@@ -53,7 +53,7 @@ const SearchCarForm = () => {
     useEffect(() => {
         dispatch(searchTargetCars(null));
         dispatch(sortAction(null));
-        dispatch(setPickUpDate(dayjs().format("YYYY-MM-DD HH:mm:ss")));
+        dispatch(setPickUpDate(dayjs().add(1, 'hour').format("YYYY-MM-DD HH:mm:ss")));
         dispatch(setDropOffDate(dayjs().add(1, 'day').format("YYYY-MM-DD HH:mm:ss")));
     }, [dispatch]);
 
