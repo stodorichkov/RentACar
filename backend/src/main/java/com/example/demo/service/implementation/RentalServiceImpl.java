@@ -97,7 +97,7 @@ public class RentalServiceImpl implements RentalService {
                 }
             }
         }
-
+//ll
         rental.setStartTime(start);
         rental.setEndTime(end);
 
