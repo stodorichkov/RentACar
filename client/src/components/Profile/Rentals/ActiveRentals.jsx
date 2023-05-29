@@ -1,4 +1,4 @@
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Button } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Button, Modal } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useTheme } from '@mui/material/styles';
@@ -7,13 +7,30 @@ import { useSelector } from 'react-redux';
 
 import axios from 'axios';
 
-
+import CompleteRent from './CopleteRent';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const ActiveRentals = (props) => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
+    const [complete, setComplete] = useState(false);
+
+    const [rent, setRent] = useState(null);
 
     const [allRentals, setAllRentals] = useState([]);
+
+    const handleOpenComplete = (rent) => {
+        if(rent.status === "Reserved") {
+            payRent(rent.id);
+            navigate(0);
+        }
+        else {
+            setRent(rent);
+            setComplete(true);
+        }
+    }
+    const handleCloseComplete = () => setComplete(false);
 
     const columns = [
         { 
@@ -67,11 +84,8 @@ const ActiveRentals = (props) => {
             headerAlign: 'center',
             renderCell: (params) => (
                 <Stack direction="row"justifyContent="space-evenly" sx={{width: '100%'}}> 
-                    <Button variant="contained" size="large" color="button_secondary">
-                        Reject
-                    </Button>
-                    <Button variant="contained" size="large" color="button_primary">
-                        Finish
+                    <Button variant="contained" size="large" color="button_primary" onClick={() => handleOpenComplete(params.row)}>
+                        {params.row.status !== "Reserved" ? 'Finish' : 'Reject'}
                     </Button>
                 </Stack>
             ) 
@@ -85,6 +99,17 @@ const ActiveRentals = (props) => {
             const response = await axios.get(`http://localhost:8086/rentals/active-history`);
             if (response.status === 200) {
                 setAllRentals(response.data)
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+    }
+    const payRent = async (id) => {
+        try {
+            const response = await axios.post(`http://localhost:8086/rentals/${id}/complete`);
+            if (response.status === 200) {
+                
             }
         }
         catch (error) {
@@ -128,6 +153,15 @@ const ActiveRentals = (props) => {
                     pageSizeOptions={[5]}
                     disableRowSelectionOnClick
                 />
+                <Modal
+                    open={complete}
+                >
+                    <div
+                        style={{ outline: 'none' }}
+                    >
+                        <CompleteRent rent={rent} handleClose={handleCloseComplete}/>
+                    </div>
+                </Modal>
             </AccordionDetails> 
         </Accordion>
     );

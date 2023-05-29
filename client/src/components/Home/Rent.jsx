@@ -2,7 +2,7 @@ import { Paper, Typography, Divider, Button, IconButton, Stack, Alert } from '@m
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
@@ -25,7 +25,7 @@ const Rent = (props) => {
 
     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 
-    const getCost = async () => {
+    const getCost = useCallback(async () => {
         const content = {
             startDate: pickUpDate,
             endDate: dropOffDate
@@ -39,7 +39,7 @@ const Rent = (props) => {
         catch (error) {
             console.error('Error fetching data:', error);
         } 
-    }
+    }, [car.id, pickUpDate, dropOffDate])
 
     useEffect(() => {
         getCost();

@@ -78,7 +78,6 @@ const RentalsHistory = (props) => {
 
     useEffect(() => {
         getHistory();
-        console.log(allRentals)
     }, []);
 
     return(

@@ -6,8 +6,6 @@ import { useState } from 'react';
 
 import AllCars from './AdminGrids/Cars/AllCars';
 
-
-
 const Admin = () => {
     const theme = useTheme();
     const [expanded, setExpanded] = useState(null);
