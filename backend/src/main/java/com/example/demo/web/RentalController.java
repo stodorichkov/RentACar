@@ -87,12 +87,12 @@ public class RentalController {
     }
 
     @GetMapping("/{rentalId}/summary")
-    public ResponseEntity<HashMap<String,Double>> summary(@PathVariable Long rentalId){
-        HashMap<String,Double> map = this.rentalService.rentalCostSummary(rentalId);
-        if(map.isEmpty()){
+    public ResponseEntity<PaySummaryDto> summary(@PathVariable Long rentalId){
+        PaySummaryDto summary = this.rentalService.rentalCostSummary(rentalId);
+        if(summary == null){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(map);
+        return ResponseEntity.ok(summary);
     }
 
     @GetMapping("/{carId}/showCost")

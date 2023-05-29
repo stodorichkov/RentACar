@@ -230,7 +230,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public HashMap<String,Double> rentalCostSummary(Long rentalId){
+    public PaySummaryDto rentalCostSummary(Long rentalId){
 
         RentalEntity r = this.getRentalById(rentalId);
         UserEntity user = r.getRenter();
@@ -242,11 +242,11 @@ public class RentalServiceImpl implements RentalService {
         //calculate price without discount
         double totalWithoutDiscount = totalWithDiscount/(1-discount);
 
-        HashMap<String,Double> summary = new LinkedHashMap<>();
+        PaySummaryDto summary = new PaySummaryDto();
+        summary.setDiscount(discount);
+        summary.setWithDiscount(totalWithDiscount);
+        summary.setWithoutDiscount(totalWithoutDiscount);
 
-        summary.put("without discount",totalWithoutDiscount);
-        summary.put("discount",discount);
-        summary.put("total",totalWithDiscount);
         return summary;
     }
 

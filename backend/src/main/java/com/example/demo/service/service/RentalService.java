@@ -22,7 +22,7 @@ public interface RentalService {
     Double calculateMonthlyRevenue(int month,int year);
     void changeStatus(Long id);
     RentalEntity findById(Long id);
-    HashMap<String,Double> rentalCostSummary(Long rentalId);
+    PaySummaryDto rentalCostSummary(Long rentalId);
     List<RentalForAdminDto> findRentalsInfoForAdmin();
 
 }
