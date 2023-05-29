@@ -42,14 +42,13 @@ const AllCars = (props) => {
     const getCars = useCallback(async () => {
         try {
             const response = await axios.get('http://localhost:8086/car/all');
+            console.log(response)
             if (response.status === 200) {
                 setCars(response.data)
             }
         }
         catch (error) {
             console.error('Error fetching data:', error);
-            dispatch(signOutAction());
-            navigate("/");
         } 
     }, [dispatch, navigate]);
 

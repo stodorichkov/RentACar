@@ -23,16 +23,13 @@ const Rent = (props) => {
 
     const getCost = async () => {
         const content = {
-            startTime: pickUpDate,
-            endTime: dropOffDate,
-            carId: car.id
+            startDate: pickUpDate,
+            endDate: dropOffDate
         }
-        console.log(content)
         try {
-            const response = await axios.get('http://localhost:8086/rentals/showCost', content);
+            const response = await axios.get(`http://localhost:8086/rentals/${car.id}/showCost`, {params: content});
             if (response.status === 200) {
-                // dispatch(searchTargetCars(response.data))
-                console.log(response)
+                setCost(response.data.toFixed(2))
             }
         }
         catch (error) {
@@ -45,7 +42,19 @@ const Rent = (props) => {
     }, [getCost]);
 
     const rentCar = async () => {
-
+        const content = {
+            startTime: pickUpDate,
+            endTime: dropOffDate
+        }
+        try {
+            const response = await axios.post(`http://localhost:8086/rentals/${car.id}/add`, content);
+            if (response.status === 200) {
+                console.log(response)
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        } 
     }
 
     return (

@@ -30,7 +30,7 @@ const SearchCarForm = () => {
     }
 
     const handleChangeDropOffDate = (value) => {
-        dispatch(setDropOffDate(value).format("YYYY-MM-DD HH:mm:ss"));
+        dispatch(setDropOffDate(value.format("YYYY-MM-DD HH:mm:ss")));
         dispatch(searchTargetCars(null));
     }
 

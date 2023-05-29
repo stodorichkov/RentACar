@@ -115,6 +115,7 @@ const AddCarForm = (props)  => {
         else {
             try {
                 const response = await axios.post('http://localhost:8086/car/add', content);
+                console.log(response)
                 if (response.status === 200) {
                     console.log("Succes");
                     props.handleClose();

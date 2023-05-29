@@ -92,8 +92,6 @@ const UserInfo = () => {
         }
         catch (error) {
             console.error('Error fetching data:', error);
-            dispatch(signOutAction());
-            navigate("/");
         } 
     }, [dispatch, navigate]);
 
@@ -110,9 +108,7 @@ const UserInfo = () => {
             fullName: `${firstName} ${lastName}`,
             email: email,
             mobilePhone: phone,
-            years: age,
-            budget: budget,
-            score: score
+            years: age
         }
         if(Object.values(content).some(value => value === '') || firstName === '' || lastName === '') {
             dispatch(setAlert('The form must be completed!'));
