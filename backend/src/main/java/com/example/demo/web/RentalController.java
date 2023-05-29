@@ -33,7 +33,7 @@ public class RentalController {
     public ResponseEntity<List<RentalCarDto>> getUserHistory(Authentication authentication){
         List<RentalCarDto> rental = this.rentalService.getUserRentalHistory(authentication.getName(),false);
         if(rental.isEmpty()){
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(rental);
     }
@@ -42,7 +42,7 @@ public class RentalController {
     public ResponseEntity<List<RentalCarDto>> getUserActiveHistory(Authentication authentication){
         List<RentalCarDto> activeRental = this.rentalService.getUserRentalHistory(authentication.getName(),true);
         if(activeRental.isEmpty()){
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(activeRental);
     }

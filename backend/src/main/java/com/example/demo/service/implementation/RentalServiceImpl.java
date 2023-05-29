@@ -199,10 +199,11 @@ public class RentalServiceImpl implements RentalService {
             }
 
             payment -= payment*discount;
-            Double total = balance - payment;
+            double total = balance - payment;
             renter.setBudget(total);
             renter.setScore(calculateUserScore(renter.getUsername()));
             rental.setTotalPrice(payment);
+
         }
 
            this.userRepository.save(renter);
@@ -238,7 +239,7 @@ public class RentalServiceImpl implements RentalService {
 
         //discount
         double discount = calculateDiscount(user.getScore());
-        //totalPrice with discount
+        //total Price with discount
         double totalWithDiscount = r.getTotalPrice();
         //calculate price without discount
         double totalWithoutDiscount = totalWithDiscount/(1-discount);
@@ -260,8 +261,8 @@ public class RentalServiceImpl implements RentalService {
                 forAdmin.add(
                         new RentalForAdminDto(
                                 r.getRenter().getUsername(),
-                                r.getRentedCar().getMake() + r.getRentedCar().getModel(),
                                 r.getRentedCar().getRegistrationPlate(),
+                                r.getRentedCar().getMake() + " " +  r.getRentedCar().getModel(),
                                 r.getStatus().getStatus(),
                                 r.getTotalPrice()
 
