@@ -1,14 +1,19 @@
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Button } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-
 import { DataGrid } from '@mui/x-data-grid';
+
+import { useTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import axios from 'axios';
+
+
 
 const ActiveRentals = (props) => {
     const theme = useTheme();
+    const user = useSelector((state) => state.user);
 
-    const curFormatter = new Intl.NumberFormat(undefined, {
-        maximumFractionDigits: 2,
-    });
+    const [allRentals, setAllRentals] = useState([]);
 
     const columns = [
         { 
@@ -21,37 +26,39 @@ const ActiveRentals = (props) => {
         { 
             field: 'startDate', 
             headerName: 'Start date', 
-            width: 150,
+            width: 200,
             align: 'center',
             headerAlign: 'center'  
         },
         { 
-            field: 'endtDate', 
+            field: 'endDate', 
             headerName: 'End date', 
-            width: 150,
+            width: 200,
             align: 'center',
             headerAlign: 'center'  
         },
         { 
-            field: 'car', 
+            field: 'carName', 
             headerName: 'Car', 
             width: 200,
             align: 'center',
             headerAlign: 'center', 
-            renderCell: (params) => (
-                <div>
-                    {params.row.brand} {params.row.model}
-                </div>
-            ),
         },
         { 
-            field: 'totalPrice', 
+            field: 'price', 
             headerName: 'Total price', 
             width: 150, 
             type: 'number',
             align: 'center',
             headerAlign: 'center',
-            valueFormatter: ({ value }) => curFormatter.format(value) + " CC",
+            valueFormatter: ({ value }) => parseFloat(value).toFixed(2) + " CC",
+        },
+        { 
+            field: 'status', 
+            headerName: 'Status', 
+            width: 150,
+            headerAlign: 'center',
+            align: 'center',
         },
         { 
             field: 'actions', 
@@ -69,12 +76,26 @@ const ActiveRentals = (props) => {
                 </Stack>
             ) 
         },
-
     ]
 
-    const rows = [
-        {'id': 1, 'totalPrice': 122.33114, 'brand': 'Mercedes', 'model': 'A class'},
-    ]
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+    const getActive = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8086/rentals/active-history`);
+            if (response.status === 200) {
+                setAllRentals(response.data)
+            }
+        }
+        catch (error) {
+            console.error('Error fetching data:', error);
+        } 
+    }
+
+    useEffect(() => {
+        getActive();
+    }, []);
+
 
     return(
         <Accordion expanded={props.expanded} onChange={props.handleChangeExpand}
@@ -96,7 +117,7 @@ const ActiveRentals = (props) => {
             <AccordionDetails >
                 <DataGrid 
                     columns={columns}
-                    rows={rows}
+                    rows={allRentals}
                     initialState={{
                         pagination: {
                             paginationModel: {

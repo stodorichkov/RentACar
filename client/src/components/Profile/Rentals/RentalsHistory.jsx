@@ -12,10 +12,6 @@ const RentalsHistory = (props) => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
 
-    const curFormatter = new Intl.NumberFormat(undefined, {
-        maximumFractionDigits: 2,
-    });
-
     const [allRentals, setAllRentals] = useState([]);
 
     const columns = [
@@ -55,7 +51,7 @@ const RentalsHistory = (props) => {
             type: 'number',
             align: 'center',
             headerAlign: 'center',
-            valueFormatter: ({ value }) => curFormatter.format(value) + " CC",
+            valueFormatter: ({ value }) => parseFloat(value).toFixed(2) + " CC",
         },
         { 
             field: 'status', 

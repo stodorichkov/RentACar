@@ -37,7 +37,6 @@ const Rent = (props) => {
         }
         catch (error) {
             console.error('Error fetching data:', error);
-            dispatch(setAlert(error.response.data));
         } 
     }
 
@@ -59,6 +58,7 @@ const Rent = (props) => {
         }
         catch (error) {
             console.error('Error fetching data:', error);
+            dispatch(setAlert(error.response.data));
         } 
     }
 
