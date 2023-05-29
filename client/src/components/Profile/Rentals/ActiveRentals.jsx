@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import CompleteRent from './CopleteRent';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ActiveRentals = (props) => {
     const theme = useTheme();

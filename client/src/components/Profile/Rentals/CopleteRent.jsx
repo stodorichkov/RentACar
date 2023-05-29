@@ -41,6 +41,7 @@ const CompleteRent = (props) => {
             const response = await axios.post(`http://localhost:8086/rentals/${rent.id}/complete`);
             if (response.status === 200) {
                 props.handleClose();
+                navigate(0);
             }
         }
         catch (error) {
