@@ -85,6 +85,8 @@ public class RentalServiceImpl implements RentalService {
         LocalDateTime start = LocalDateTime.parse(addRentalDto.getStartTime(), formatter);
         LocalDateTime end = LocalDateTime.parse(addRentalDto.getEndTime(), formatter);
 
+        rental.setStatus(this.statusService.findByStatus(StatusEnum.Reserved));
+
 
         for(RentalEntity r : currentCar.getCarRental()){
             if(StatusEnum.Active.equals(r.getStatus().getStatus()) ||
@@ -97,7 +99,7 @@ public class RentalServiceImpl implements RentalService {
                 }
             }
         }
-//ll
+
         rental.setStartTime(start);
         rental.setEndTime(end);
 
@@ -179,6 +181,7 @@ public class RentalServiceImpl implements RentalService {
                 return "Not enough money to complete the rental";
             }
            rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedEarly));
+            this.rentalRepository.save(rental);
 
         } else {
 
@@ -267,8 +270,6 @@ public class RentalServiceImpl implements RentalService {
         }
         return forAdmin;
     }
-
-
 
     @Override
     public double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime, double pricePerDay) {
