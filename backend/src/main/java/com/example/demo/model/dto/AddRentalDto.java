@@ -1,11 +1,15 @@
 package com.example.demo.model.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 public class AddRentalDto {
 
+    @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm:ss")
     private LocalDateTime startTime;
 
+    @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm:ss")
     private LocalDateTime endTime;
 
     public AddRentalDto(LocalDateTime startTime, LocalDateTime endTime) {
