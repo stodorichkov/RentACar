@@ -244,9 +244,9 @@ public class RentalServiceImpl implements RentalService {
 
         HashMap<String,Double> summary = new LinkedHashMap<>();
 
-        summary.put("Without discount",totalWithoutDiscount);
-        summary.put("Discount",discount);
-        summary.put("With discount",totalWithDiscount);
+        summary.put("without discount",totalWithoutDiscount);
+        summary.put("discount",discount);
+        summary.put("total",totalWithDiscount);
         return summary;
     }
 
@@ -313,7 +313,8 @@ public class RentalServiceImpl implements RentalService {
         for(RentalEntity r : currentRental){
             if(active == true){
                 if(r.getStatus().getStatus().equals(StatusEnum.Active)
-                        || r.getStatus().getStatus().equals(StatusEnum.Reserved)){
+                        || r.getStatus().getStatus().equals(StatusEnum.Reserved)
+                        || r.getStatus().getStatus().equals(StatusEnum.Late)){
                     userRentalHistory.add(
                             new RentalCarDto(
                                     r.getId(),
@@ -328,7 +329,8 @@ public class RentalServiceImpl implements RentalService {
 
             }else{
                 if(!r.getStatus().getStatus().equals(StatusEnum.Active)
-                        && !r.getStatus().getStatus().equals(StatusEnum.Reserved)){
+                        && !r.getStatus().getStatus().equals(StatusEnum.Reserved)
+                        && !r.getStatus().getStatus().equals(StatusEnum.Late)){
                     userRentalHistory.add(
                             new RentalCarDto(
                                     r.getId(),
