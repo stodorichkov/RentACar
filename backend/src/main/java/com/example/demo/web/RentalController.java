@@ -87,8 +87,10 @@ public class RentalController {
     }
 
     @GetMapping("/showCost")
-    public ResponseEntity<Double> calculateRentalPrice(@RequestBody ShowRentalCostDto showRentalCostDto) {
-        return new ResponseEntity<>(rentalService.showTotalCost(showRentalCostDto), HttpStatus.OK);
+    public ResponseEntity<Double> calculateRentalPrice(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                                                       @RequestParam Long carId) {
+        return new ResponseEntity<>(rentalService.showTotalCost(startDate,endDate,carId), HttpStatus.OK);
     }
 
 

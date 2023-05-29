@@ -61,13 +61,12 @@ public class RentalServiceImpl implements RentalService {
 
 
     @Override
-    public Double showTotalCost(ShowRentalCostDto showRentalCostDto) {
+    public Double showTotalCost(LocalDateTime startDate,LocalDateTime endDate,Long carId) {
 
-        CarEntity car = carRepository.findById(showRentalCostDto.getCarId())
-                .orElseThrow(() -> new ObjectNotFoundException("Car with:" + showRentalCostDto.getCarId() + " was not found!"));
-        Double price = calculateRentalPrice(showRentalCostDto.getStartTime(), showRentalCostDto.getEndTime(), car.getPricePerDay());
+        CarEntity car = carRepository.findById(carId)
+                .orElseThrow(() -> new ObjectNotFoundException("Car with:" + carId + " was not found!"));
+        Double price = calculateRentalPrice(startDate, endDate, car.getPricePerDay());
         return price;
-
     }
 
 
