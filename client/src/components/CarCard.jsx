@@ -2,16 +2,18 @@ import { Card, CardContent, CardMedia, Typography, Button, Modal } from '@mui/ma
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useTheme } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import Rent from './Home/Rent';
+import { setAlert } from '../redux/actions/alertActions';
 
 const CarCard = (props) => {
     const theme = useTheme();
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const car = props.car;
 
     const [open, setOpen] = useState(false);
@@ -21,6 +23,7 @@ const CarCard = (props) => {
             navigate('/signin');
         }
         else {
+            dispatch(setAlert(null));
             setOpen(true);
         }
     }

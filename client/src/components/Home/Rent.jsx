@@ -2,13 +2,14 @@ import { Paper, Typography, Divider, Button, IconButton, Stack, Alert } from '@m
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { setAlert } from '../../redux/actions/alertActions';
+import { searchTargetCars } from '../../redux/actions/targetCarsAction';
 
 
 const Rent = (props) => {
@@ -42,7 +43,6 @@ const Rent = (props) => {
 
     useEffect(() => {
         getCost();
-        dispatch(setAlert(null));
     }, [getCost]);
 
     const rentCar = async () => {
@@ -53,7 +53,8 @@ const Rent = (props) => {
         try {
             const response = await axios.post(`http://localhost:8086/rentals/${car.id}/add`, content);
             if (response.status === 200) {
-                console.log(response)
+                props.handleClose();
+                dispatch(searchTargetCars(null));
             }
         }
         catch (error) {

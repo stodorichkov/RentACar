@@ -25,7 +25,7 @@ const SearchCarForm = () => {
 
     const handleChangePickUpDate = (value) => {
         dispatch(setPickUpDate(value.format("YYYY-MM-DD HH:mm:ss")))
-        dispatch(setDropOffDate(value.add(1, 'day').format("YYYY-MM-DD HH:mm:ss")));
+        dispatch(setDropOffDate(value.add(70, 'minute').format("YYYY-MM-DD HH:mm:ss")));
         dispatch(searchTargetCars(null));
     }
 
@@ -53,7 +53,7 @@ const SearchCarForm = () => {
     useEffect(() => {
         dispatch(searchTargetCars(null));
         dispatch(sortAction(null));
-        dispatch(setPickUpDate(dayjs().add(1, 'hour').format("YYYY-MM-DD HH:mm:ss")));
+        dispatch(setPickUpDate(dayjs().add(70, 'minute').format("YYYY-MM-DD HH:mm:ss")));
         dispatch(setDropOffDate(dayjs().add(1, 'day').format("YYYY-MM-DD HH:mm:ss")));
     }, [dispatch]);
 
