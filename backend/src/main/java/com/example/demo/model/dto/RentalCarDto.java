@@ -9,9 +9,9 @@ public class RentalCarDto {
 
     private String carName;
 
-    private LocalDateTime startDate;
+    private String startDate;
 
-    private LocalDateTime endDate;
+    private String endDate;
 
     private Double price;
 
@@ -19,7 +19,7 @@ public class RentalCarDto {
 
     public RentalCarDto(){}
 
-    public RentalCarDto(String carName, LocalDateTime startDate, LocalDateTime endDate, Double price, StatusEnum status) {
+    public RentalCarDto(String carName, String startDate, String endDate, Double price, StatusEnum status) {
         this.carName = carName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -35,19 +35,19 @@ public class RentalCarDto {
         this.carName = carName;
     }
 
-    public LocalDateTime getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

@@ -31,11 +31,20 @@ public class RentalController {
 
     @GetMapping("/history")
     public ResponseEntity<List<RentalCarDto>> getUserHistory(Authentication authentication){
-        List<RentalCarDto> rental = this.rentalService.getUserRentalHistory(authentication.getName());
+        List<RentalCarDto> rental = this.rentalService.getUserRentalHistory(authentication.getName(),false);
         if(rental.isEmpty()){
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(rental);
+    }
+
+    @GetMapping("/active-history")
+    public ResponseEntity<List<RentalCarDto>> getUserActiveHistory(Authentication authentication){
+        List<RentalCarDto> activeRental = this.rentalService.getUserRentalHistory(authentication.getName(),true);
+        if(activeRental.isEmpty()){
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok(activeRental);
     }
 
     @GetMapping("/{month}/{year}/total")

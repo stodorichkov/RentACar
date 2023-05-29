@@ -14,6 +14,7 @@ import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
+import jakarta.transaction.Status;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -300,22 +301,45 @@ public class RentalServiceImpl implements RentalService {
 
 
     @Override
-    public List<RentalCarDto> getUserRentalHistory(String username) {
+    public List<RentalCarDto> getUserRentalHistory(String username,boolean active) {
 
         UserEntity currentUser = this.userService.findUserByName(username);
         List<RentalEntity> currentRental = currentUser.getRentals();
         List<RentalCarDto> userRentalHistory = new ArrayList<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         //ToDo: return status
         for(RentalEntity r : currentRental){
-            userRentalHistory.add(
-                    new RentalCarDto(
-                            r.getRentedCar().getMake() + " " + r.getRentedCar().getModel(),
-                            r.getStartTime(),
-                            r.getEndTime(),
-                            r.getTotalPrice(),
-                            r.getStatus().getStatus()
-                    )
-            );
+            if(active == true){
+                if(r.getStatus().getStatus().equals(StatusEnum.Active)
+                        || r.getStatus().getStatus().equals(StatusEnum.Reserved)){
+                    userRentalHistory.add(
+                            new RentalCarDto(
+                                    r.getRentedCar().getMake() + " " + r.getRentedCar().getModel(),
+                                    r.getStartTime().format(formatter),
+                                    r.getEndTime().format(formatter),
+                                    r.getTotalPrice(),
+                                    r.getStatus().getStatus()
+                            )
+                    );
+                }
+
+            }else{
+                if(!r.getStatus().getStatus().equals(StatusEnum.Active)
+                        && !r.getStatus().getStatus().equals(StatusEnum.Reserved)){
+                    userRentalHistory.add(
+                            new RentalCarDto(
+                                    r.getRentedCar().getMake() + " " + r.getRentedCar().getModel(),
+                                    r.getStartTime().format(formatter),
+                                    r.getEndTime().format(formatter),
+                                    r.getTotalPrice(),
+                                    r.getStatus().getStatus()
+                            )
+                    );
+                }
+            }
+
         }
         return userRentalHistory;
 
