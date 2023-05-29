@@ -57,6 +57,7 @@ public class CarServiceImpl implements CarService {
             dto.setEngine(car.getEngine());
             dto.setCapacity(car.getCapacity());
             dto.setTransmissionEnum(car.getTransmission());
+            dto.setFuelConsumption(car.getFuelConsumption());
             dto.setPricePerDay(car.getPricePerDay());
 
             allCarsDto.add(dto);
@@ -247,6 +248,7 @@ public class CarServiceImpl implements CarService {
             dto.setEngine(car.getEngine());
             dto.setCapacity(car.getCapacity());
             dto.setTransmissionEnum(car.getTransmission());
+            dto.setFuelConsumption(car.getFuelConsumption());
             dto.setPricePerDay(car.getPricePerDay());
 
 
