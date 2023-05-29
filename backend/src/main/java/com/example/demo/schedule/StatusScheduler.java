@@ -36,7 +36,7 @@ public class StatusScheduler {
         List<RentalEntity> lateRentals = this.rentalRepository.findAllByStatus(StatusEnum.Late);
 
         for(RentalEntity reserved : reservedRentals){
-            if(reserved.getStartTime().plusHours(1).isAfter(now)){
+            if(reserved.getStartTime().plusHours(1).isBefore(now)){
                 reserved.setStatus(this.statusService.findByStatus(StatusEnum.Active));
                 this.rentalRepository.save(reserved);
             }
@@ -44,23 +44,23 @@ public class StatusScheduler {
 
 
         for(RentalEntity active : activeRentals){
-            if(active.getEndTime().plusHours(2).isAfter(now)) {
-                active.setEndTime(now.plusDays(1));
+            if(active.getEndTime().plusHours(2).isBefore(now)) {
+                active.setEndTime(active.getEndTime().plusHours(2).plusDays(1));
                 active.setStatus(this.statusService.findByStatus(StatusEnum.Late));
                 this.rentalRepository.save(active);
             }
         }
 
         for(RentalEntity late : lateRentals){
-            if(late.getEndTime().isAfter(now)){
+            if(late.getEndTime().isBefore(now)){
 
-                late.setEndTime(now.plusDays(1));
+                late.setEndTime(late.getEndTime().plusDays(1));
 
                 CarEntity currentCar = late.getRentedCar();
                 List<RentalEntity> carRentals = currentCar.getCarRental();
                 for(RentalEntity r : carRentals){
                     if(StatusEnum.Reserved.equals(r.getStatus().getStatus())){
-                        if(late.getEndTime().isAfter(r.getStartTime())){
+                        if(late.getEndTime().isBefore(r.getStartTime())){
                             r.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
                             this.rentalRepository.save(r);
                         }
