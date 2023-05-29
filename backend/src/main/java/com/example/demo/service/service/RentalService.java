@@ -26,5 +26,6 @@ public interface RentalService {
     HashMap<String,Double> rentalCostSummary(Long rentalId);
 
     List<RentalForAdminDto> findRentalsInfoForAdmin();
+
 }
 

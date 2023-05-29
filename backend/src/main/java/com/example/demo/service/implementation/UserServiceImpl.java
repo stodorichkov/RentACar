@@ -109,14 +109,8 @@ public class UserServiceImpl implements UserService {
             editUser.setEmail(userProfileDto.getEmail());
         }
 
-        if(editUser.getBudget()!=null && editUser.getBudget().equals(userProfileDto.getBudget())){
-            return "Budget already exists!";
-        } else {
-            editUser.setBudget(userProfileDto.getBudget());
-        }
-
         if(editUser.getYears()!=null &&  editUser.getYears().equals(userProfileDto.getYears())){
-            return "Budget already exists!";
+            return "Years already exists!";
         }else {
             editUser.setYears(userProfileDto.getYears());
         }

@@ -260,6 +260,8 @@ public class RentalServiceImpl implements RentalService {
         return forAdmin;
     }
 
+
+
     @Override
     public double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime, double pricePerDay) {
 

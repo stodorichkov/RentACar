@@ -93,6 +93,8 @@ public class RentalController {
 
 
 
+
+
     @PatchMapping("/{id}/change-status")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> changeStatus(@PathVariable Long id){

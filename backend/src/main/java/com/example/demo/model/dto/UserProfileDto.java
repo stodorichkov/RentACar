@@ -8,9 +8,7 @@ public class UserProfileDto {
 
     private String fullName;
     private String email;
-
     private Double budget;
-
     private Integer years;
 
     private Double score;
