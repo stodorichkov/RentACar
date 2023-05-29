@@ -273,7 +273,7 @@ const UserInfo = () => {
                             !addMoneyMode ? (
                                 <Stack direction="row" spacing={2} justifyContent="space-between">
                                     <TextField
-                                        label="Budeget"
+                                        label="Budget"
                                         InputProps={{
                                             readOnly: true,
                                             endAdornment: (
@@ -285,7 +285,7 @@ const UserInfo = () => {
                                         value={parseFloat(budget).toFixed(2)}
                                     />
                                     <Button variant="contained" size="large" color="button_primary" onClick={switchAddMoneyMode}>
-                                        Trnasfer
+                                        Transfer
                                     </Button>
                                 </Stack>
                             ) : (
