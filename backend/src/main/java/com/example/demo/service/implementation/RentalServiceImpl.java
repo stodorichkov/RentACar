@@ -198,10 +198,11 @@ public class RentalServiceImpl implements RentalService {
                 rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedOnTime));
             }
 
-            Double total = balance - (payment - (payment * discount));
+            payment -= payment*discount;
+            Double total = balance - payment;
             renter.setBudget(total);
             renter.setScore(calculateUserScore(renter.getUsername()));
-            rental.setTotalPrice(total);
+            rental.setTotalPrice(payment);
         }
 
            this.userRepository.save(renter);
