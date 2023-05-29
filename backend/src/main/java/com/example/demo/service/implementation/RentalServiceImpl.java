@@ -80,21 +80,25 @@ public class RentalServiceImpl implements RentalService {
 
         RentalEntity rental = new RentalEntity();
         CarEntity currentCar = this.carService.getCarById(carId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime start = LocalDateTime.parse(addRentalDto.getStartTime(), formatter);
+        LocalDateTime end = LocalDateTime.parse(addRentalDto.getEndTime(), formatter);
+
 
         for(RentalEntity r : currentCar.getCarRental()){
             if(StatusEnum.Active.equals(r.getStatus().getStatus()) ||
                     StatusEnum.Reserved.equals(r.getStatus().getStatus()) ||
                     StatusEnum.Late.equals(r.getStatus().getStatus())) {
-                if(r.getEndTime().isAfter(addRentalDto.getStartTime())
-                        && r.getStartTime().isBefore(addRentalDto.getEndTime())) {
+                if(r.getEndTime().isAfter(start)
+                        && r.getStartTime().isBefore(end)) {
 
                     return "Your selected car was reserved.";
                 }
             }
         }
 
-        rental.setStartTime(addRentalDto.getStartTime());
-        rental.setEndTime(addRentalDto.getEndTime());
+        rental.setStartTime(start);
+        rental.setEndTime(end);
 
         LocalDateTime currentTime = LocalDateTime.now();
 
@@ -108,7 +112,7 @@ public class RentalServiceImpl implements RentalService {
         }
 
         double price = this.calculateRentalPrice
-                (addRentalDto.getStartTime(), addRentalDto.getEndTime(), currentCar.getPricePerDay());
+                (start, end, currentCar.getPricePerDay());
 
 
         List<RentalEntity> activeUserReservations =
