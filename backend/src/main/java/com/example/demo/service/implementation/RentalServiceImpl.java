@@ -181,6 +181,7 @@ public class RentalServiceImpl implements RentalService {
                 return "Not enough money to complete the rental";
             }
            rental.setStatus(this.statusService.findByStatus(StatusEnum.CompletedEarly));
+            rental.setTotalPrice(payment);
             this.rentalRepository.save(rental);
 
         } else {
