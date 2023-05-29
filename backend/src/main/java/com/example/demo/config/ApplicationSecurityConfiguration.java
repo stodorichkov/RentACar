@@ -82,12 +82,12 @@ public class ApplicationSecurityConfiguration{
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/","/user/register","/user/login").permitAll()
                 .requestMatchers("/car/add").authenticated()
-                .requestMatchers("/car/{id}/edit","/car/add","/car/{id}/delete","/car/all").hasRole("ROLE_ADMIN")
+                .requestMatchers("/car/{id}/edit","/car/add","/car/{id}/delete","/car/all").hasRole("ADMIN")
                 .requestMatchers("/user/profile","/user/edit","/user/add-money").authenticated()
-                .requestMatchers("/user/{id}/set-admin","/user/{id}/delete").hasRole("ROLE_ADMIN")
+                .requestMatchers("/user/{id}/set-admin","/user/{id}/delete").hasRole("ADMIN")
                 .requestMatchers("/rentals/history","/rentals/active-history","/rentals/{carId}/add","/rentals/{rentalId}/complete").authenticated()
                 .requestMatchers("/rentals/{rentalId}/summary","/rentals/{carId}/showCost").authenticated()
-                .requestMatchers("/rentals/all-admin","/rentals/{id}/change-status").hasRole("ROLE_ADMIN")
+                .requestMatchers("/rentals/all-admin","/rentals/{id}/change-status").hasRole("ADMIN")
                 .requestMatchers("/rentals/all-unique-available").permitAll();
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class);
