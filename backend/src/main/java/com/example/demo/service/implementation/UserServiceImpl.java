@@ -236,15 +236,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void setAsAdmin(String username) {
-       UserEntity user =  this.findUserByName(username);
+    public void setAsAdmin(Long id) {
+       UserEntity user =  this.findById(id);
        RoleEntity administrator = this.roleRepository.findById(1l).orElseThrow(
                () -> new ObjectNotFoundException("Role with requested id=" + 1 + " not fond,")
        );
-       user.setRoles(List.of(administrator));
+       user.setRoles(List.of(administrator,user.getRoles().get(0)));
        this.userRepository.save(user);
     }
 
-    //TODO: update DTO to return score of user
+
 
 }

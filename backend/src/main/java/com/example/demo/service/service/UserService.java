@@ -27,7 +27,7 @@ public interface UserService {
 
     List<UserProfileDto> findAllUsers();
 
-    void setAsAdmin(String username);
+    void setAsAdmin(Long id);
 
 
 
