@@ -136,8 +136,7 @@ public class CarDto {
  public boolean equals(Object o) {
   if (this == o) return true;
   if (!(o instanceof CarDto carDto)) return false;
-  return Objects.equals(getId(),
-          carDto.getId()) && Objects.equals(getImageUrl(),
+  return  Objects.equals(getImageUrl(),
           carDto.getImageUrl()) && Objects.equals(getModel(),
           carDto.getModel()) && Objects.equals(getMake(),
           carDto.getMake()) && Objects.equals(getCapacity(),
@@ -148,7 +147,7 @@ public class CarDto {
 
  @Override
  public int hashCode() {
-  return Objects.hash(getId(), getImageUrl(), getModel(), getMake(),
+  return Objects.hash(getImageUrl(), getModel(), getMake(),
           getCapacity(), getEngine(), getTransmissionEnum(), getPricePerDay());
  }
 

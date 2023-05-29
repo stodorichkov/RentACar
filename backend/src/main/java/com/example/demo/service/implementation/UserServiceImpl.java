@@ -241,7 +241,10 @@ public class UserServiceImpl implements UserService {
        RoleEntity administrator = this.roleRepository.findById(1l).orElseThrow(
                () -> new ObjectNotFoundException("Role with requested id=" + 1 + " not fond,")
        );
-       user.setRoles(List.of(administrator,user.getRoles().get(0)));
+
+       List<RoleEntity> updatedRoles = new ArrayList<>(user.getRoles());
+       updatedRoles.add(administrator);
+       user.setRoles(updatedRoles);
        this.userRepository.save(user);
     }
 
