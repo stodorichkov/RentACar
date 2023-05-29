@@ -33,7 +33,7 @@ public interface RentalRepository extends JpaRepository<RentalEntity, Long> {
     @Query("SELECT r FROM RentalEntity r JOIN r.status s WHERE s.status = :currentStatus")
     List<RentalEntity> findAllByStatus(@Param("currentStatus") StatusEnum currentStatus);
 
-    @Query("SELECT r FROM RentalEntity r JOIN r.renter u JOIN r.status s WHERE .username = :username " +
+    @Query("SELECT r FROM RentalEntity r JOIN r.renter u JOIN r.status s WHERE u.username = :username " +
             "AND " +
             "s.status IN ('CompletedOnTime', 'CompletedLate', 'CompletedEarly', 'Canceled')")
     List<RentalEntity> findByRenterUsernameWithStatusCompleted(@Param("username") String username);

@@ -36,7 +36,7 @@ public class StatusScheduler {
         List<RentalEntity> lateRentals = this.rentalRepository.findAllByStatus(StatusEnum.Late);
 
         for(RentalEntity reserved : reservedRentals){
-            if(reserved.getStartTime().plusHours(1).isBefore(now)){
+            if(reserved.getStartTime().isBefore(now)){
                 reserved.setStatus(this.statusService.findByStatus(StatusEnum.Active));
                 this.rentalRepository.save(reserved);
             }
