@@ -274,26 +274,16 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public double calculateRentalPrice(LocalDateTime startTime, LocalDateTime endTime, double pricePerDay) {
-        LocalDateTime endTimeWithGracePeriod = endTime.plusHours(2);
         LocalDateTime currentTime = LocalDateTime.now();
 
-        long rentalDays = startTime.until(endTimeWithGracePeriod, ChronoUnit.DAYS);
+        long rentalDurationHours = startTime.until(endTime, ChronoUnit.HOURS);
 
-        if (startTime.plusDays(rentalDays).isAfter(endTimeWithGracePeriod)) {
-            rentalDays--;
+        if (rentalDurationHours < 24) {
+            return pricePerDay;  // Price for less than 24 hours is the cost of one day
         }
 
-        long overdueDays = 0;
-
-        if (currentTime.isAfter(endTimeWithGracePeriod)) {
-            overdueDays = endTimeWithGracePeriod.until(currentTime, ChronoUnit.DAYS);
-
-            if (endTimeWithGracePeriod.plusDays(overdueDays).isBefore(currentTime)) {
-                overdueDays++;
-            }
-        }
-
-        return (rentalDays + overdueDays) * pricePerDay;
+        long roundedDays = (long) Math.ceil((double) rentalDurationHours / 24);
+        return roundedDays * pricePerDay;
     }
 
 

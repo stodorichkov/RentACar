@@ -18,7 +18,7 @@ public interface RentalRepository extends JpaRepository<RentalEntity, Long> {
     List<RentalEntity> findByRenterUsername(String username);
 
 
-    @Query("SELECT r FROM RentalEntity r WHERE r.renter.username = :username AND r.status != 'CompletedOnTime' OR r.status != 'CompletedLate' OR r.status != 'CompletedEarly'")
+    @Query("SELECT r FROM RentalEntity r JOIN r.renter u JOIN r.status s WHERE u.username = :username AND s.status NOT IN ('CompletedEarly', 'CompletedOnTime', 'CompletedLate')")
     List<RentalEntity> findByRenterUserNameActive(String username);
 
 
