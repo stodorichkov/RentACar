@@ -308,7 +308,7 @@ public class RentalServiceImpl implements RentalService {
         List<RentalEntity> currentRental = currentUser.getRentals();
         List<RentalCarDto> userRentalHistory = new ArrayList<>();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("DD/MM/YYYY HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         for(RentalEntity r : currentRental){
             if(active == true){
