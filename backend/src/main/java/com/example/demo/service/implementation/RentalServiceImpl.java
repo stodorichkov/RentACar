@@ -357,7 +357,7 @@ public class RentalServiceImpl implements RentalService {
     public void changeStatus(Long id) {
         RentalEntity rental = this.findById(id);
         if(StatusEnum.Active.equals(rental.getStatus().getStatus())
-        & StatusEnum.Reserved.equals(rental.getStatus().getStatus())){
+        || StatusEnum.Reserved.equals(rental.getStatus().getStatus())){
             rental.setStatus(this.statusService.findByStatus(StatusEnum.Canceled));
         }
         this.rentalRepository.save(rental);
