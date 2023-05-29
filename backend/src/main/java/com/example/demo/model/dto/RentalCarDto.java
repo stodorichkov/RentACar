@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public class RentalCarDto {
 
 
+    private Long rentalId;
     private String carName;
 
     private String startDate;
@@ -19,7 +20,8 @@ public class RentalCarDto {
 
     public RentalCarDto(){}
 
-    public RentalCarDto(String carName, String startDate, String endDate, Double price, StatusEnum status) {
+    public RentalCarDto(Long rentalId, String carName, String startDate, String endDate, Double price, StatusEnum status) {
+        this.rentalId = rentalId;
         this.carName = carName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -65,5 +67,13 @@ public class RentalCarDto {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public Long getRentalId() {
+        return rentalId;
+    }
+
+    public void setRentalId(Long rentalId) {
+        this.rentalId = rentalId;
     }
 }

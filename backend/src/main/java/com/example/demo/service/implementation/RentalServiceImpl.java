@@ -309,13 +309,13 @@ public class RentalServiceImpl implements RentalService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        //ToDo: return status
         for(RentalEntity r : currentRental){
             if(active == true){
                 if(r.getStatus().getStatus().equals(StatusEnum.Active)
                         || r.getStatus().getStatus().equals(StatusEnum.Reserved)){
                     userRentalHistory.add(
                             new RentalCarDto(
+                                    r.getId(),
                                     r.getRentedCar().getMake() + " " + r.getRentedCar().getModel(),
                                     r.getStartTime().format(formatter),
                                     r.getEndTime().format(formatter),
@@ -330,6 +330,7 @@ public class RentalServiceImpl implements RentalService {
                         && !r.getStatus().getStatus().equals(StatusEnum.Reserved)){
                     userRentalHistory.add(
                             new RentalCarDto(
+                                    r.getId(),
                                     r.getRentedCar().getMake() + " " + r.getRentedCar().getModel(),
                                     r.getStartTime().format(formatter),
                                     r.getEndTime().format(formatter),
