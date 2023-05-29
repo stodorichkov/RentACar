@@ -13,7 +13,7 @@ public interface UserService {
 
     UserProfileDto getUserProfileInfo(String username);
 
-    void deleteUser(String username);
+    void deleteUser(Long id);
 
     String editUserProfile(String username,UserProfileDto userProfileDto);
 

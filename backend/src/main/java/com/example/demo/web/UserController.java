@@ -9,6 +9,7 @@ import com.example.demo.security.jwt.JwtUtils;
 import com.example.demo.security.response.JwtResponse;
 import com.example.demo.service.UserDetailsImpl;
 import com.example.demo.service.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.modelmapper.ModelMapper;
@@ -49,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserProfileInfo(authentication.getName()));
     }
 
-    @GetMapping("/all-users")
+    @GetMapping("/all")
     public ResponseEntity<List<UserProfileDto>> allUsersForAdmin(Authentication authentication){
 
        List<UserProfileDto> all =  this.userService.findAllUsers();
@@ -59,9 +60,10 @@ public class UserController {
        return ResponseEntity.ok(all);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteUser(Authentication authentication){
-        this.userService.deleteUser(authentication.getName());
+    @DeleteMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+        this.userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -15,9 +15,11 @@ public class UserProfileDto {
 
     private String mobilePhone;
 
+    private boolean isAdmin;
+
 
     public UserProfileDto(Long id, String username, String fullName, String email, Double budget,
-                          Integer years, Double score, String mobilePhone) {
+                          Integer years, Double score, String mobilePhone, boolean isAdmin) {
         this.id = id;
         this.fullName = fullName;
         this.username = username;
@@ -26,6 +28,7 @@ public class UserProfileDto {
         this.years = years;
         this.score = score;
         this.mobilePhone = mobilePhone;
+        this.isAdmin = isAdmin;
     }
 
     public UserProfileDto(){}
@@ -92,5 +95,13 @@ public class UserProfileDto {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

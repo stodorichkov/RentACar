@@ -235,21 +235,23 @@ public class RentalServiceImpl implements RentalService {
     public PaySummaryDto rentalCostSummary(Long rentalId){
 
         RentalEntity r = this.getRentalById(rentalId);
-        UserEntity user = r.getRenter();
-
-        //discount
-        double discount = calculateDiscount(user.getScore());
-        //total Price with discount
-        double totalWithDiscount = r.getTotalPrice();
-        //calculate price without discount
-        double totalWithoutDiscount = totalWithDiscount/(1-discount);
+        double discount = 0.0;
+        double withoutDiscount = 0.0;
+        double total = r.getTotalPrice();
+        StatusEnum status = r.getStatus().getStatus();
+        if(status.equals(StatusEnum.CompletedEarly)) {
+            withoutDiscount = total*2;
+        } else {
+            withoutDiscount = total / (1 - this.calculateDiscount(r.getRenter().getScore()));
+            discount = withoutDiscount - total;
+        }
 
         PaySummaryDto summary = new PaySummaryDto();
+        summary.setWithoutDiscount(withoutDiscount);
         summary.setDiscount(discount);
-        summary.setWithDiscount(totalWithDiscount);
-        summary.setWithoutDiscount(totalWithoutDiscount);
+        summary.setWithDiscount(total);
 
-        return summary;
+        return  summary;
     }
 
     @Override

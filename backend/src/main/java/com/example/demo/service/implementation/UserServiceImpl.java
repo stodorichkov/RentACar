@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -74,44 +75,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String username) {
-        this.userRepository.deleteByUsername(username);
+    public void deleteUser(Long id) {
+        this.userRepository.deleteById(id);
     }
 
 
-    //TODO: change implementation, because there are situations where user can input the same information
+
     @Override
     public String editUserProfile(String username,UserProfileDto userProfileDto) {
 
         UserEntity editUser = this.findUserByName(username);
 
-        if(editUser.getUsername()!=null && editUser.getUsername().equals(userProfileDto.getUsername())){
-            return "Username already exists.";
-        }else if(editUser.getUsername().length()<3){
+        if(editUser.getUsername().length()<=3){
             return "Username must contain at least 4 characters.";
         } else {
             editUser.setUsername(userProfileDto.getUsername());
         }
 
-        if(editUser.getFullName()!=null && editUser.getFullName().equals(userProfileDto.getFullName())){
-            return "Name you've changed is the same.";
-        } else if(!editUser.getFullName().matches("^[A-Z][a-z]{2,}\\s[A-Z][a-z]{2,}$")){
+        if(!editUser.getFullName().matches("^[A-Z][a-z]{2,}\\s[A-Z][a-z]{2,}$")){
             return "Your first and family name is not correct.At least 3 characters for each name and space between!";
         } else {
             editUser.setFullName(userProfileDto.getFullName());
         }
 
-        if(editUser.getEmail()!=null && editUser.getEmail().equals(userProfileDto.getEmail())){
-            return "Email already exists!";
-        }else if(!editUser.getEmail().matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")) {
+       if(!editUser.getEmail().matches("^[^\\s@]+@[^\\s@]+.[^\\s@]+$")) {
             return "Email format is not correct.";
         } else {
             editUser.setEmail(userProfileDto.getEmail());
         }
 
-        if(editUser.getYears()!=null &&  editUser.getYears().equals(userProfileDto.getYears())){
-            return "Years already exists!";
-        }else {
+        if(userProfileDto.getYears() < 18){
+            return "You need to be at least 18 year old!";
+        } else {
             editUser.setYears(userProfileDto.getYears());
         }
 
@@ -218,6 +213,24 @@ public class UserServiceImpl implements UserService {
         if(all.isEmpty()){
             return null;
         }
+        List<UserProfileDto> userInfo = new ArrayList<>();
+        for(UserEntity u : all){
+            userInfo.add(
+                    new UserProfileDto(
+                            u.getId(),
+                            u.getUsername(),
+                            u.getFullName(),
+                            u.getEmail(),
+                            u.getBudget(),
+                            u.getYears(),
+                            u.getScore(),
+                            u.getMobilePhone(),
+                            u.getRoles().size() > 1 ? true : false
+                    )
+            );
+        }
+
+
         return this.modelMapper.map(all,new TypeToken<List<UserProfileDto>>(){}.getType());
     }
 
