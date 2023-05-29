@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        return this.modelMapper.map(all,new TypeToken<List<UserProfileDto>>(){}.getType());
+        return userInfo;
     }
 
 
