@@ -1,13 +1,13 @@
 package com.example.demo.model.dto;
 
+import com.example.demo.model.enums.StatusEnum;
+
 import java.time.LocalDateTime;
 
 public class RentalCarDto {
 
 
-    private String carMake;
-
-    private String carModel;
+    private String carName;
 
     private LocalDateTime startDate;
 
@@ -15,30 +15,24 @@ public class RentalCarDto {
 
     private Double price;
 
+    private StatusEnum status;
+
     public RentalCarDto(){}
 
-    public RentalCarDto(String carMake, String carModel, LocalDateTime startDate, LocalDateTime endDate, Double price) {
-        this.carMake = carMake;
-        this.carModel = carModel;
+    public RentalCarDto(String carName, LocalDateTime startDate, LocalDateTime endDate, Double price, StatusEnum status) {
+        this.carName = carName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
+        this.status = status;
     }
 
-    public String getCarMake() {
-        return carMake;
+    public String getCarName() {
+        return carName;
     }
 
-    public void setCarMake(String carMake) {
-        this.carMake = carMake;
-    }
-
-    public String getCarModel() {
-        return carModel;
-    }
-
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setCarName(String carName) {
+        this.carName = carName;
     }
 
     public LocalDateTime getStartDate() {
@@ -63,5 +57,13 @@ public class RentalCarDto {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 }

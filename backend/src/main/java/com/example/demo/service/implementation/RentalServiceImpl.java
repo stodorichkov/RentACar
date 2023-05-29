@@ -309,11 +309,11 @@ public class RentalServiceImpl implements RentalService {
         for(RentalEntity r : currentRental){
             userRentalHistory.add(
                     new RentalCarDto(
-                            r.getRentedCar().getMake(),
-                            r.getRentedCar().getModel(),
+                            r.getRentedCar().getMake() + " " + r.getRentedCar().getModel(),
                             r.getStartTime(),
                             r.getEndTime(),
-                            r.getTotalPrice()
+                            r.getTotalPrice(),
+                            r.getStatus().getStatus()
                     )
             );
         }
