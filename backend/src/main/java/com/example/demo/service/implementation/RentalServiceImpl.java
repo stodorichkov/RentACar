@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
@@ -61,11 +62,14 @@ public class RentalServiceImpl implements RentalService {
 
 
     @Override
-    public Double showTotalCost(LocalDateTime startDate,LocalDateTime endDate,Long carId) {
+    public Double showTotalCost(String startDate,String endDate,Long carId) {
 
         CarEntity car = carRepository.findById(carId)
                 .orElseThrow(() -> new ObjectNotFoundException("Car with:" + carId + " was not found!"));
-        Double price = calculateRentalPrice(startDate, endDate, car.getPricePerDay());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime end = LocalDateTime.parse(endDate, formatter);
+        Double price = calculateRentalPrice(start, end, car.getPricePerDay());
         return price;
     }
 

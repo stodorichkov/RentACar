@@ -86,15 +86,12 @@ public class RentalController {
         return ResponseEntity.ok(map);
     }
 
-    @GetMapping("/showCost")
-    public ResponseEntity<Double> calculateRentalPrice(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-                                                       @RequestParam Long carId) {
+    @GetMapping("/{carId}/showCost")
+    public ResponseEntity<Double> calculateRentalPrice(@RequestParam("startDate") String startDate,
+                                                       @RequestParam("endDate") String endDate,
+                                                       @PathVariable Long carId) {
         return new ResponseEntity<>(rentalService.showTotalCost(startDate,endDate,carId), HttpStatus.OK);
     }
-
-
-
 
 
     @PatchMapping("/{id}/change-status")
