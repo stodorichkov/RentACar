@@ -13,7 +13,6 @@ public interface RentalService {
     List<RentalEntity> getAllRentals();
     RentalEntity getRentalById(Long id);
     String addRental(String username,AddRentalDto addRentalDto,Long carId);
-
     double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
     List<RentalCarDto> getUserRentalHistory(String username,boolean active);
     Double calculateUserScore(String username);
@@ -24,7 +23,6 @@ public interface RentalService {
     void changeStatus(Long id);
     RentalEntity findById(Long id);
     HashMap<String,Double> rentalCostSummary(Long rentalId);
-
     List<RentalForAdminDto> findRentalsInfoForAdmin();
 
 }

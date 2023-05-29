@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -212,9 +213,13 @@ public class CarServiceImpl implements CarService {
 
 
     @Override
-    public Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate) {
+    public Set<CarDto> getUniqueAvailableCarsByDate(String start, String end) {
 
         List<CarEntity> allCars = this.carRepository.findAll();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDate = LocalDateTime.parse(start,formatter);
+        LocalDateTime endDate = LocalDateTime.parse(end,formatter);
 
         Set<CarEntity> rentedCars = new HashSet<>();
         for(CarEntity c : allCars){

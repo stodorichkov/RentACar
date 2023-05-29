@@ -2,12 +2,10 @@ package com.example.demo.model.dto;
 
 import com.example.demo.model.enums.StatusEnum;
 
-import java.time.LocalDateTime;
-
 public class RentalCarDto {
 
 
-    private Long rentalId;
+    private Long id;
     private String carName;
 
     private String startDate;
@@ -20,8 +18,8 @@ public class RentalCarDto {
 
     public RentalCarDto(){}
 
-    public RentalCarDto(Long rentalId, String carName, String startDate, String endDate, Double price, StatusEnum status) {
-        this.rentalId = rentalId;
+    public RentalCarDto(Long id, String carName, String startDate, String endDate, Double price, StatusEnum status) {
+        this.id = id;
         this.carName = carName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -69,11 +67,11 @@ public class RentalCarDto {
         this.status = status;
     }
 
-    public Long getRentalId() {
-        return rentalId;
+    public Long getId() {
+        return id;
     }
 
-    public void setRentalId(Long rentalId) {
-        this.rentalId = rentalId;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

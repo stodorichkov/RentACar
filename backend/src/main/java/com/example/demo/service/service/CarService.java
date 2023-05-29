@@ -28,7 +28,7 @@ public interface CarService {
     List<CarAdminDto> findCarsForAdmin(String username);
 
 
-    Set<CarDto> getUniqueAvailableCarsByDate(LocalDateTime startDate, LocalDateTime endDate);
+    Set<CarDto> getUniqueAvailableCarsByDate(String startDate, String endDate);
 
     String editConditionAndPrice(EditConditionAndPriceDto editConditionAndPriceDto, Long carId);
 }

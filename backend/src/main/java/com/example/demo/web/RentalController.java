@@ -54,8 +54,8 @@ public class RentalController {
     }
 
     @GetMapping("/all-unique-available")
-    public ResponseEntity<Set<CarDto>> getUniqueAvailableCarsByDate(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                                                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+    public ResponseEntity<Set<CarDto>> getUniqueAvailableCarsByDate(@RequestParam("startDate") String startDate,
+                                                                    @RequestParam("endDate") String endDate) {
 
         Set<CarDto> uniqueCars = this.carService.getUniqueAvailableCarsByDate(startDate,endDate);
         if(uniqueCars.isEmpty()){
