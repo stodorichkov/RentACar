@@ -11,8 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.service.CarService;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -61,8 +59,6 @@ public class RentalController {
         if(uniqueCars.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        //combine Make and Model for front-end temporary:
-        //for(CarDto c : uniqueCars){c.setMakeModel(c.getMake()+" "+c.getModel());}
         return ResponseEntity.ok(uniqueCars);
     }
 

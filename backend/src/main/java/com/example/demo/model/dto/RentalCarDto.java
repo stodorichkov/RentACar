@@ -3,8 +3,6 @@ package com.example.demo.model.dto;
 import com.example.demo.model.enums.StatusEnum;
 
 public class RentalCarDto {
-
-
     private Long id;
     private String carName;
 

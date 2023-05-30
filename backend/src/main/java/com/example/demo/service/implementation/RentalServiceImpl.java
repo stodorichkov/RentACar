@@ -2,7 +2,6 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.CarEntity;
-import com.example.demo.model.StatusEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
@@ -14,17 +13,15 @@ import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
-import jakarta.transaction.Status;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -44,7 +41,6 @@ public class RentalServiceImpl implements RentalService {
         this.carRepository = carRepository;
         this.userRepository = userRepository;
         this.statusService = statusService;
-
         this.userService = userService;
         this.carService = carService;
 
@@ -236,23 +232,30 @@ public class RentalServiceImpl implements RentalService {
     public PaySummaryDto rentalCostSummary(Long rentalId){
 
         RentalEntity r = this.getRentalById(rentalId);
+        LocalDateTime start = r.getStartTime();
+        LocalDateTime end = r.getEndTime();
+        LocalDateTime now = LocalDateTime.now();
+
+        long rentalDays = ChronoUnit.DAYS.between(r.getStartTime().toLocalDate(), r.getEndTime().toLocalDate());
+        long currentRentalDays = ChronoUnit.DAYS.between(r.getStartTime().toLocalDate(), LocalDate.now());
+
+        double withoutDiscount = r.getTotalPrice();
+        double total = 0.0;
         double discount = 0.0;
-        double withoutDiscount = 0.0;
-        double total = r.getTotalPrice();
-        StatusEnum status = r.getStatus().getStatus();
-        if(status.equals(StatusEnum.CompletedEarly)) {
-            withoutDiscount = total*2;
+
+        if (currentRentalDays < (rentalDays / 2)){
+            total = withoutDiscount / 2;
         } else {
-            withoutDiscount = total / (1 - this.calculateDiscount(r.getRenter().getScore()));
-            discount = withoutDiscount - total;
+            discount = withoutDiscount*this.calculateDiscount(r.getRenter().getScore());
+            total = withoutDiscount - discount;
         }
 
         PaySummaryDto summary = new PaySummaryDto();
+        summary.setWithDiscount(total);
         summary.setWithoutDiscount(withoutDiscount);
         summary.setDiscount(discount);
-        summary.setWithDiscount(total);
 
-        return  summary;
+        return summary;
     }
 
     @Override
@@ -392,22 +395,5 @@ public class RentalServiceImpl implements RentalService {
 
         return userScore;
     }
-
-
-
-    @Override
-    public void addTestRental() {
-
-        if(this.rentalRepository.count()==0) {
-            RentalEntity rental = new RentalEntity();
-            rental.setStartTime(LocalDateTime.parse("2023-05-18T12:00:00"));
-            rental.setEndTime(LocalDateTime.parse("2023-05-20T15:00:00"));
-            rental.setTotalPrice(200.00);
-            this.rentalRepository.save(rental);
-        }
-
-    }
-
-
 
 }

@@ -94,12 +94,9 @@ public class ApplicationSecurityConfiguration{
         return http.build();
     }
 
-
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
-
-
 
 }

@@ -16,7 +16,7 @@ public interface RentalService {
     double calculateRentalPrice(LocalDateTime startTime,LocalDateTime endTime,double pricePerDay);
     List<RentalCarDto> getUserRentalHistory(String username,boolean active);
     Double calculateUserScore(String username);
-    void addTestRental();
+
     Double  showTotalCost(String startDate,String endDate,Long carId);
     String completeRental(Long rentalId);
     Double calculateMonthlyRevenue(int month,int year);

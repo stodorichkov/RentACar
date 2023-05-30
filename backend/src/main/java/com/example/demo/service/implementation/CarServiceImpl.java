@@ -2,7 +2,6 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.model.CarEntity;
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
@@ -10,13 +9,11 @@ import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.model.dto.EditConditionAndPriceDto;
 import com.example.demo.model.enums.*;
 import com.example.demo.repository.CarRepository;
-import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import com.example.demo.exception.ObjectNotFoundException;
-import org.modelmapper.TypeToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -41,18 +38,11 @@ public class CarServiceImpl implements CarService {
     public Set<CarDto> getAllUniqueCars() {
 
        List<CarEntity> allCars = this.carRepository.findAll();
-       List<CarDto> carToDisplay = this.modelMapper.map(allCars,new TypeToken<List<CarDto>>(){}.getType());
-
-       Set<CarDto> filteredCars = new HashSet<>();
-
-       //filteredCars.addAll(carToDisplay);
-
-        Set<CarDto> allCarsDto = new HashSet<>();
+       Set<CarDto> allCarsDto = new HashSet<>();
 
         for (CarEntity car : allCars) {
             CarDto dto = new CarDto();
             dto.setId(car.getId());
-            //ToDo REMOVE Make and Model from CarDto
             dto.setMakeModel(car.getMake() + " " + car.getModel());
             dto.setImageUrl(Base64.getEncoder().encodeToString(car.getImageUrl()));
             dto.setEngine(car.getEngine());
@@ -60,13 +50,10 @@ public class CarServiceImpl implements CarService {
             dto.setTransmissionEnum(car.getTransmission());
             dto.setFuelConsumption(car.getFuelConsumption());
             dto.setPricePerDay(car.getPricePerDay());
-
             allCarsDto.add(dto);
         }
-        filteredCars.addAll(allCarsDto);
 
-
-       return filteredCars;
+       return allCarsDto;
     }
 
 
@@ -84,20 +71,6 @@ public class CarServiceImpl implements CarService {
         return this.modelMapper.map(car,CarDto.class);
     }
 
-    @Override
-    public void addTestCar() {
-
-        if(this.carRepository.count() != 0){
-            return;
-        }
-
-        CarEntity car = new CarEntity();
-        car.setMake("Audi");
-        car.setModel("A7");
-        car.setPricePerDay(60.00);
-        this.carRepository.save(car);
-
-    }
 
     @Override
     public CarEntity getCarById(Long id){
@@ -106,8 +79,7 @@ public class CarServiceImpl implements CarService {
         );
     }
 
-    //TODO: add conditon of the car(PERFECT,GOOD,POOR)
-    //TODO: add method for updating condition of the car and price
+
     @Override
     @Transactional
     public String addCar(CarDto carDto, String username) {
@@ -153,7 +125,7 @@ public class CarServiceImpl implements CarService {
         return "Car is added successfully!";
     }
 
-    //TODO: return condition info
+
     @Override
     public CarEnumDto findCarEnumInfo() {
 
@@ -186,7 +158,7 @@ public class CarServiceImpl implements CarService {
 
 
 
-    //TODO: return condition here
+
 
     @Override
     public List<CarAdminDto> findCarsForAdmin(String username) {
@@ -231,8 +203,6 @@ public class CarServiceImpl implements CarService {
                     if (StatusEnum.Reserved.equals(r.getStatus().getStatus())
                             || StatusEnum.Active.equals(r.getStatus().getStatus())
                             || StatusEnum.Late.equals(r.getStatus().getStatus())) {
-                        ;//encode back to Base64
-
                         rentedCars.add(c);
                     }
                 }
@@ -246,9 +216,9 @@ public class CarServiceImpl implements CarService {
         Set<CarDto> availableDto = new HashSet<>();
 
         for (CarEntity car : available) {
+
             CarDto dto = new CarDto();
             dto.setId(car.getId());
-            //ToDo REMOVE Make and Model from CarDto
             dto.setMakeModel(car.getMake() + " " + car.getModel());
             dto.setImageUrl(Base64.getEncoder().encodeToString(car.getImageUrl()));
             dto.setEngine(car.getEngine());
@@ -256,7 +226,6 @@ public class CarServiceImpl implements CarService {
             dto.setTransmissionEnum(car.getTransmission());
             dto.setFuelConsumption(car.getFuelConsumption());
             dto.setPricePerDay(car.getPricePerDay());
-
 
             availableDto.add(dto);
         }

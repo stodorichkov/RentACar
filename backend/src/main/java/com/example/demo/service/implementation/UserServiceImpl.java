@@ -183,12 +183,6 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.save(user);
 
-        //TODO: delete this later
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(user.getUsername());
-        Authentication auth = new UsernamePasswordAuthenticationToken(
-                userDetails,user.getPassword(),userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
         return "Registration was successful";
     }
 

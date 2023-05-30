@@ -3,7 +3,6 @@ package com.example.demo.model.dto;
 import com.example.demo.model.enums.StatusEnum;
 
 public class RentalForAdminDto {
-
     private Long id;
     private String username;
 
@@ -14,7 +13,6 @@ public class RentalForAdminDto {
     private StatusEnum status;
 
     private Double totalPrice;
-
 
     public RentalForAdminDto(Long id,String username, String registrationPlate, String carName, StatusEnum status, Double totalPrice) {
         this.id = id;

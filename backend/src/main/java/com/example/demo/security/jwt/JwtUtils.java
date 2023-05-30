@@ -21,9 +21,6 @@ public class JwtUtils {
 
    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-
-
-
     public String generateJwtToken(Authentication authentication){
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
         Date now = new Date();
