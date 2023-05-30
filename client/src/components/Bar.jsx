@@ -2,7 +2,9 @@ import { AppBar, Toolbar, Button, Stack, Typography, Avatar, Box }  from '@mui/m
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+
 import { signOutAction } from '../redux/actions/userActions';
+
 
 const Bar = () => {
 	const navigate = useNavigate();
@@ -13,6 +15,7 @@ const Bar = () => {
 	const signOutUser = () => {
 		dispatch(signOutAction());
 		navigate('/');
+		navigate(0);
 	}
 
 	const renderButtons = () => {
@@ -62,6 +65,11 @@ const Bar = () => {
 						</Typography>
 					</Button>
 					<Stack spacing={3} direction="row">
+						<Button sx={{textTransform: "none"}} onClick={() => navigate('/cars')}>
+							<Typography variant="h6" color="white">
+								All Cars
+							</Typography>
+						</Button>
 						{renderButtons()}
 					</Stack>
 				</Box>

@@ -2,14 +2,15 @@ import './App.css';
 
 import { BrowserRouter as Router ,Routes, Route, Navigate } from 'react-router-dom';
 
+import { useSelector } from 'react-redux';
+
 import Bar from './components/Bar';
 import SignInForm from './components/Aurhentication/SignInForm';
 import SignUpForm from './components/Aurhentication/SignUpForm';
 import Home from './components/Home/Home';
 import Profile from './components/Profile/Profile';
 import Admin from './components/Admin/Admin';
-
-import { useSelector } from 'react-redux';
+import ShowAllCars from './components/ShowCars/ShowAllCars';
 
 const App = () => {
 	const user = useSelector((state) => state.user);
@@ -39,6 +40,7 @@ const App = () => {
 				<Bar />
 				<Routes>
 					<Route path='/' element={<Home/>}/>
+					<Route path='/cars' element={<ShowAllCars/>}/>
 					{renderRoutes()}
 					<Route path="*" element={<Navigate to="/" />} />
 				</Routes>
