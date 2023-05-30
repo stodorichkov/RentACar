@@ -17,7 +17,7 @@ public interface CarService {
 
     CarDto getCarInfo(Long id);
 
-    void addTestCar();
+
 
     CarEntity getCarById(Long id);
 
