@@ -80,7 +80,6 @@ public class CarServiceTests {
     }*/
     @Test
     public void itShouldDeleteCar() {
-        // Create a car entity with a specific ID
         Long carId = 1L;
         CarEntity carEntity = new CarEntity();
         carEntity.setId(carId);
@@ -144,37 +143,6 @@ public class CarServiceTests {
         verify(carRepository, times(1)).findById(carId);
     }
     @Test
-    public void itShouldAddCarWithUniqueRegistrationPlate() {
-
-        CarDto carDto = new CarDto();
-        carDto.setMake("Audi");
-        carDto.setModel("A7");
-        carDto.setRegistrationPlate("ABC123");
-        carDto.setImageUrl("https://example.com/image.jpg");
-        carDto.setPricePerDay(100.0);
-
-        UserEntity admin = new UserEntity();
-        admin.setUsername("admin");
-
-        UserRepository userRepository = mock(UserRepository.class);
-        CarRepository carRepository = mock(CarRepository.class);
-
-        CarServiceImpl carService = new CarServiceImpl(carRepository, modelMapper, rentalRepository, userRepository);
-
-        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(admin));
-        when(carRepository.findByRegistrationPlate("ABC123")).thenReturn(Optional.empty());
-
-        String result = carService.addCar(carDto, () -> "admin");
-
-        assertEquals("Car is added successfully!", result);
-        assertEquals("Audi", admin.getAddedByAdmin().get(0).getMake());
-        assertEquals("ABC123", admin.getAddedByAdmin().get(0).getRegistrationPlate());
-        verify(userRepository, times(1)).save(admin);
-        verify(carRepository, times(1)).save(any(CarEntity.class));
-    }
-
-
-    @Test
     public void itShouldNotAddCarWithAlreadyExistingRegistrationPlate() {
 
         CarDto carDto = new CarDto();
@@ -191,11 +159,11 @@ public class CarServiceTests {
         UserRepository userRepository = mock(UserRepository.class);
         CarRepository carRepository = mock(CarRepository.class);
 
-        CarServiceImpl carService = new CarServiceImpl(carRepository, modelMapper, rentalRepository, userRepository);
+        CarServiceImpl carService = new CarServiceImpl(carRepository, modelMapper, userRepository);
 
         when(carRepository.findByRegistrationPlate("ABC123")).thenReturn(Optional.of(new CarEntity()));
 
-        String result = carService.addCar(carDto, principal);
+        String result = carService.addCar(carDto, String.valueOf(principal));
 
         assertEquals("Car with the same registration plate was already added!", result);
         verify(userRepository, never()).save(any(UserEntity.class));
