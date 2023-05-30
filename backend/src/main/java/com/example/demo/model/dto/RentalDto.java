@@ -3,8 +3,6 @@ package com.example.demo.model.dto;
 import java.time.LocalDateTime;
 
 public class RentalDto {
-
-
     private Long id;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

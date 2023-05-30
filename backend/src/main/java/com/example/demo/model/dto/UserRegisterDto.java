@@ -1,21 +1,13 @@
 package com.example.demo.model.dto;
 
-
 public class UserRegisterDto {
-
     private Long id;
-
     private String username;
-
     private String fullName;
     private String email;
-
     private Integer years;
-
     private String mobilePhone;
-
     private String password;
-
     private String confirmPassword;
 
     public UserRegisterDto(Long id, String username, String fullName, String email, Integer years, String mobilePhone, String password, String confirmPassword) {

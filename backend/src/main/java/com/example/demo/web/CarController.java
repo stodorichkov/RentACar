@@ -4,15 +4,11 @@ import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
 import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.model.dto.EditConditionAndPriceDto;
-import com.example.demo.service.UserDetailsImpl;
 import com.example.demo.service.service.CarService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -27,9 +23,6 @@ public class CarController {
         this.carService = carService;
         this.modelMapper = modelMapper;
     }
-
-
-
 
     @GetMapping("/all-unique")
     public ResponseEntity<Set<CarDto>> getAllUnique(){
@@ -75,8 +68,7 @@ public class CarController {
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto,
                                          Authentication authentication){
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String currentPrincipalName = authentication.getName();
+
         String response = this.carService.addCar(carDto, authentication.getName());
         if(!response.equals("Car is added successfully!")){
             return ResponseEntity.internalServerError().body(response);
@@ -94,10 +86,5 @@ public class CarController {
         }
         return ResponseEntity.ok(response);
     }
-
-
-
-
-
 
 }

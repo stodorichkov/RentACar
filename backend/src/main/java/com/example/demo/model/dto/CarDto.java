@@ -7,11 +7,9 @@ import com.example.demo.model.enums.TransmissionEnum;
 import java.util.Objects;
 
 public class CarDto {
-
  private Long id;
  private String imageUrl;
  private String makeModel;
-
  private String model;
  private String make;
  private Integer capacity;

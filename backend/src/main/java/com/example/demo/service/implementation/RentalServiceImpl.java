@@ -2,7 +2,6 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.exception.ObjectNotFoundException;
 import com.example.demo.model.CarEntity;
-import com.example.demo.model.StatusEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.*;
 import com.example.demo.model.RentalEntity;
@@ -14,7 +13,6 @@ import com.example.demo.service.service.CarService;
 import com.example.demo.service.service.RentalService;
 import com.example.demo.service.service.StatusService;
 import com.example.demo.service.service.UserService;
-import jakarta.transaction.Status;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -45,7 +41,6 @@ public class RentalServiceImpl implements RentalService {
         this.carRepository = carRepository;
         this.userRepository = userRepository;
         this.statusService = statusService;
-
         this.userService = userService;
         this.carService = carService;
 

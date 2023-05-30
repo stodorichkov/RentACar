@@ -2,7 +2,6 @@ package com.example.demo.service.implementation;
 
 import com.example.demo.model.CarEntity;
 import com.example.demo.model.RentalEntity;
-import com.example.demo.model.RoleEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.dto.CarAdminDto;
 import com.example.demo.model.dto.CarDto;
@@ -10,13 +9,11 @@ import com.example.demo.model.dto.CarEnumDto;
 import com.example.demo.model.dto.EditConditionAndPriceDto;
 import com.example.demo.model.enums.*;
 import com.example.demo.repository.CarRepository;
-import com.example.demo.repository.RentalRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.service.CarService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import com.example.demo.exception.ObjectNotFoundException;
-import org.modelmapper.TypeToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -206,8 +203,6 @@ public class CarServiceImpl implements CarService {
                     if (StatusEnum.Reserved.equals(r.getStatus().getStatus())
                             || StatusEnum.Active.equals(r.getStatus().getStatus())
                             || StatusEnum.Late.equals(r.getStatus().getStatus())) {
-                        ;//encode back to Base64
-
                         rentedCars.add(c);
                     }
                 }
@@ -221,9 +216,9 @@ public class CarServiceImpl implements CarService {
         Set<CarDto> availableDto = new HashSet<>();
 
         for (CarEntity car : available) {
+
             CarDto dto = new CarDto();
             dto.setId(car.getId());
-            //ToDo REMOVE Make and Model from CarDto
             dto.setMakeModel(car.getMake() + " " + car.getModel());
             dto.setImageUrl(Base64.getEncoder().encodeToString(car.getImageUrl()));
             dto.setEngine(car.getEngine());
@@ -231,7 +226,6 @@ public class CarServiceImpl implements CarService {
             dto.setTransmissionEnum(car.getTransmission());
             dto.setFuelConsumption(car.getFuelConsumption());
             dto.setPricePerDay(car.getPricePerDay());
-
 
             availableDto.add(dto);
         }

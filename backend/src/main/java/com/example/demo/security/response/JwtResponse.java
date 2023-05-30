@@ -6,7 +6,6 @@ public class JwtResponse {
 
     private String token;
 
-    //todo : change string here
     private String type = "Bearer ";
 
     private Long id;

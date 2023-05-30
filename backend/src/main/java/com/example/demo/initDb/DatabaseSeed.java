@@ -11,8 +11,6 @@ public class DatabaseSeed implements CommandLineRunner {
 
     private final UserService userService;
 
-
-
     private final StatusService statusService;
 
     public DatabaseSeed(RoleService roleService, UserService userService, StatusService statusService) {

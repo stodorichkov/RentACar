@@ -3,20 +3,14 @@ package com.example.demo.model.dto;
 public class UserProfileDto {
 
     private Long id;
-
     private String username;
-
     private String fullName;
     private String email;
     private Double budget;
     private Integer years;
-
     private Double score;
-
     private String mobilePhone;
-
     private boolean isAdmin;
-
 
     public UserProfileDto(Long id, String username, String fullName, String email, Double budget,
                           Integer years, Double score, String mobilePhone, boolean isAdmin) {
