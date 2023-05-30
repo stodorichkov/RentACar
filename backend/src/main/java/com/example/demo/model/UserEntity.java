@@ -13,6 +13,8 @@ public class UserEntity extends Base{
 
     private String username;
 
+    private String fullName;
+
     private String email;
 
     private String password;
@@ -21,19 +23,28 @@ public class UserEntity extends Base{
 
     private Integer years;
 
+    private String mobilePhone;
+
+    private Double score;
+
     @ManyToMany
     private List<RoleEntity> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "renter")
     private List<RentalEntity> rentals;
 
-    public UserEntity(String username, String email, String password,
-                      Double budget, Integer years, List<RoleEntity> roles, List<RentalEntity> rentals) {
+    public UserEntity(String username, String fullName, String email, String password,
+                      Double budget, Integer years, String mobilePhone, Double score,
+                      List<RoleEntity> roles, List<RentalEntity> rentals) {
+
         this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.budget = budget;
         this.years = years;
+        this.mobilePhone = mobilePhone;
+        this.score = score;
         this.roles = roles;
         this.rentals = rentals;
     }
@@ -96,5 +107,29 @@ public class UserEntity extends Base{
 
     public void setYears(Integer years) {
         this.years = years;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -20,6 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
+
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -27,17 +30,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        UserEntity authUser = this.userRepository.findByUsername(username).orElseThrow(
-                () ->  new UsernameNotFoundException("User with requested name:" + username + " not found.")
+        UserEntity user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("User with name:" + username + " not found")
         );
-
-        List<GrantedAuthority> authorities = authUser
-                .getRoles()
-                .stream()
-                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRole().name()))
-                .collect(Collectors.toList());
-
-        return new User(authUser.getUsername(),authUser.getPassword(),authorities);
+        return UserDetailsImpl.build(user);
     }
 }
